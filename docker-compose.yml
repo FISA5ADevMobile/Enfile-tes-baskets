@@ -30,5 +30,6 @@ services:
     depends_on:
       - pgdb
     environment:
-      POSTGRES_HOST: pgdb
-      POSTGRES_PORT: 5432
+      #ENVIRONMENT: local
+      ENVIRONMENT: dev
+      #ENVIRONMENT: prod
