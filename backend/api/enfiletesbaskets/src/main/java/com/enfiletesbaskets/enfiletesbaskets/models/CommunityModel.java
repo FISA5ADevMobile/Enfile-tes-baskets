@@ -1,5 +1,4 @@
 package com.enfiletesbaskets.enfiletesbaskets.models;
-
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +6,7 @@ import java.util.List;
 
 @Entity
 public class CommunityModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -52,76 +52,10 @@ public class CommunityModel {
     )
     private List<UserModel> bannedUsers = new ArrayList<>();
 
-    // Getters and Setters
-    public String getNom() {
-        return nom;
-    }
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoryModel category;
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getBanDate() {
-        return banDate;
-    }
-
-    public void setBanDate(Date banDate) {
-        this.banDate = banDate;
-    }
-
-    public Boolean getPublic() {
-        return isPublic;
-    }
-
-    public void setPublic(Boolean aPublic) {
-        isPublic = aPublic;
-    }
-
-    public UserModel getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(UserModel admin) {
-        this.admin = admin;
-    }
-
-    public List<UserModel> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<UserModel> users) {
-        this.users = users;
-    }
-
-    public List<UserModel> getModerators() {
-        return moderators;
-    }
-
-    public void setModerators(List<UserModel> moderators) {
-        this.moderators = moderators;
-    }
-
-    public List<PostModel> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<PostModel> posts) {
-        this.posts = posts;
-    }
-
-    public List<UserModel> getBannedUsers() {
-        return bannedUsers;
-    }
-
-    public void setBannedUsers(List<UserModel> bannedUsers) {
-        this.bannedUsers = bannedUsers;
-    }
+    // Getters et Setters
 }
+
