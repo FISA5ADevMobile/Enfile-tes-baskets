@@ -24,7 +24,7 @@ CREATE TABLE Post (
     id SERIAL PRIMARY KEY,
     description TEXT,
     datePost DATE NOT NULL,
-    image BLOB,
+    image BYTEA,
     related INT REFERENCES Post(id),
     nbLike INT DEFAULT 0,
     nbPost INT DEFAULT 0,
@@ -70,7 +70,14 @@ CREATE TABLE Actuality (
     creator INT REFERENCES User(id),
     title VARCHAR(255),
     description TEXT,
-    image BLOB
+    image BYTEA,
+    event BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE User_Actualities (
+    user_id INT REFERENCES User(id) ON DELETE CASCADE,
+    actuality_id INT REFERENCES Actuality(id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, actuality_id)
 );
 
 CREATE TABLE User_Tags (
