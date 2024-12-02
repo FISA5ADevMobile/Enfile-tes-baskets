@@ -24,7 +24,7 @@ CREATE TABLE Post (
     id SERIAL PRIMARY KEY,
     description TEXT,
     datePost DATE NOT NULL,
-    image BLOB,
+    image bytea,
     related INT REFERENCES Post(id),
     nbLike INT DEFAULT 0,
     nbPost INT DEFAULT 0,
@@ -34,8 +34,8 @@ CREATE TABLE Post (
 
 CREATE TABLE Category (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-)
+    name VARCHAR(255) NOT NULL
+);
 
 CREATE TABLE Community (
     id SERIAL PRIMARY KEY,
@@ -70,7 +70,7 @@ CREATE TABLE Actuality (
     creator INT REFERENCES User(id),
     title VARCHAR(255),
     description TEXT,
-    image BLOB
+    image bytea
 );
 
 CREATE TABLE User_Tags (
