@@ -2,31 +2,46 @@ package com.enfiletesbaskets.enfiletesbaskets.config;
 
 import com.enfiletesbaskets.enfiletesbaskets.security.JwtAuthenticationFilter;
 import com.enfiletesbaskets.enfiletesbaskets.security.JwtTokenProvider;
+import com.enfiletesbaskets.enfiletesbaskets.services.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @EnableWebSecurity
 public class SecurityConfig {
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
 
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+    @Autowired
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userService = userService;
+        logger.info("SecurityConfig initialized");
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Désactive la protection CSRF
-                .authorizeRequests(authorize -> authorize
+                .csrf(AbstractHttpConfigurer::disable) // Désactivez CSRF
+                .cors(AbstractHttpConfigurer::disable) // Désactivez CORS si nécessaire
+                .sessionManagement(sessionManagementConfigurer
+                        -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/reset-password").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

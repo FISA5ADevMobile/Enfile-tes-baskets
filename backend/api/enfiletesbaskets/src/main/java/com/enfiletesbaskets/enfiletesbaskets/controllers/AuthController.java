@@ -18,8 +18,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        return authService.register(request);
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
+        System.out.println("Received registration request for: " + registerRequest.getUsername());
+        authService.register(registerRequest);
+        return ResponseEntity.ok("User  registered successfully");
     }
 
     @PostMapping("/login")
