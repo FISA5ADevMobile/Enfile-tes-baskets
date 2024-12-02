@@ -1,14 +1,15 @@
 package com.enfiletesbaskets.enfiletesbaskets.controllers;
-import com.enfiletesbaskets.enfiletesbaskets.services.CommunityService;
+
+import com.enfiletesbaskets.enfiletesbaskets.services.ClassService;
 import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
 
 @RestController
-@RequestMapping("/communities")
-public class CommunityController {
+@RequestMapping("/classes")
+public class ClassController {
 
     @Resource
-    private CommunityService communityService;
+    private ClassService classService;
 
     // Ajoutez des endpoints (méthodes REST) si nécessaire
 }

@@ -1,0 +1,36 @@
+version: "3.5"
+services:
+
+  pgdb:
+    image: postgres:16
+    container_name: db-enfiletesbaskets
+    hostname: postgres_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=enfiletesbaskets
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    expose:
+      - 5432
+    ports:
+      - 5435:5432/tcp
+    volumes:
+      - "./pg_db:/var/lib/postgresql/data"
+      - "./database/init.sql:/docker-entrypoint-initdb.d/create-db.sql"
+
+  enfiletesbaskets-server:
+    image: enfiletesbaskets-server
+    restart: always
+    build:
+      context: ./backend/api/enfiletesbaskets
+      dockerfile: Dockerfile
+    expose:
+      - 8080
+    ports:
+      - 8081:8080
+    depends_on:
+      - pgdb
+    environment:
+      ENVIRONMENT: docker
+      #ENVIRONMENT: dev
+      #ENVIRONMENT: prod
