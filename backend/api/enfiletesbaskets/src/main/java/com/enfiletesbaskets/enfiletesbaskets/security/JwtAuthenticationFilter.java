@@ -26,9 +26,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        // Ignore les endpoints qui ne nécessitent pas d'authentification
         String path = request.getServletPath();
+        System.out.println("Processing request for path: " + path);
+
+        // Ignore les endpoints publics
         if (path.equals("/api/auth/register") || path.equals("/api/auth/login") || path.equals("/api/auth/reset-password")) {
+            System.out.println("Skipping JWT filter for path: " + path);
             chain.doFilter(request, response);
             return;
         }
@@ -38,16 +41,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
             String username = jwtTokenProvider.getUsernameFromToken(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username); // Correction ici
+            System.out.println("Token valid for username: " + username);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             // Authentifiez l'utilisateur
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else {
+            System.out.println("Invalid or missing token for path: " + path);
         }
 
         chain.doFilter(request, response);
     }
+
 
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");

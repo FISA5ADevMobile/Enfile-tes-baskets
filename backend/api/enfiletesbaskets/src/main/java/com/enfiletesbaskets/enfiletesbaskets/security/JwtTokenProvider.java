@@ -12,7 +12,7 @@ import java.util.Map;
 @Component
 public class JwtTokenProvider {
 
-    private final String SECRET_KEY = "your_secret_key";
+    private final String SECRET_KEY = "kOfadKTPmnQlBP1p40mbracqvf7kjsGH/KwZOT9O6mA=";
     private final long EXPIRATION_TIME = 86400000; // 1 jour
 
     public String generateToken(String email) {
