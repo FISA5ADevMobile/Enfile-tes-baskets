@@ -16,6 +16,7 @@ services:
       - 5435:5432/tcp
     volumes:
       - "./pg_db:/var/lib/postgresql/data"
+      - "./database/init.sql:/docker-entrypoint-initdb.d/create-db.sql"
 
   enfiletesbaskets-server:
     image: enfiletesbaskets-server
@@ -26,10 +27,10 @@ services:
     expose:
       - 8080
     ports:
-      - 8080:8080
+      - 8081:8080
     depends_on:
       - pgdb
     environment:
-      #ENVIRONMENT: local
-      ENVIRONMENT: dev
+      ENVIRONMENT: docker
+      #ENVIRONMENT: dev
       #ENVIRONMENT: prod
