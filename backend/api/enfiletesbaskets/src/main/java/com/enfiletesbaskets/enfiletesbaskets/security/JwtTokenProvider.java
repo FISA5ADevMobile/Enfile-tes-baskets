@@ -19,6 +19,7 @@ public class JwtTokenProvider {
     public String generateToken(UserModel user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("isAdmin", user.getRole().equals("ADMIN"));
+        claims.put("isBanned", user.getBanDate() != null);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getEmail())
