@@ -2,6 +2,7 @@ package com.enfiletesbaskets.enfiletesbaskets.security;
 
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ public class JwtTokenProvider {
         Map<String, Object> claims = new HashMap<>();
         claims.put("isAdmin", user.getRole().equals("ADMIN"));
         claims.put("isBanned", user.getBanDate() != null);
+        claims.put("id", user.getId());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getEmail())
@@ -45,7 +47,13 @@ public class JwtTokenProvider {
                 .getBody();
         return claims.getSubject(); // Le nom d'utilisateur est généralement stocké dans le sujet
     }
-
+    public Long getUserIdFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+            return claims.get("id", Long.class);
+    }
     public Boolean getIsAdminFromToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(SECRET_KEY)
