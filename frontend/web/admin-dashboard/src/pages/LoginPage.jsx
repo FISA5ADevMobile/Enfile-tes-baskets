@@ -16,13 +16,13 @@ const LoginPage = () => {
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center"
       style={{
-        backgroundImage: `url('https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`, // Lien vers une image aléatoire
+        backgroundImage: `url('https://images.unsplash.com/photo-1546717003-caee5f93a9db?q=80&w=2878&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`, // Lien vers une image aléatoire
       }}
     >
-      <div className="bg-white  rounded-lg shadow-lg p-8 w-full max-w-md">
+      <div className="bg-gray-800 bg-opacity-50 rounded-lg shadow-lg p-8 w-full max-w-md">
         {/* bg-opacity-90 */}
         <img
-          src="./../../public/images/app-logo.png"
+          src="/images/app-logo.png"
           alt="Logo"
           className="mx-auto mb-6 bg-opacity-90"
           width={100}
@@ -64,7 +64,7 @@ const LoginPage = () => {
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
             />
-            <p className="text-gray-600">Se souvenir de moi</p>
+            <p className="text-white-600">Se souvenir de moi</p>
           </div>
           <Button
             variant="contained"
@@ -77,22 +77,22 @@ const LoginPage = () => {
             Se connecter
           </Button>
         </form>
-        <p className="mt-6 text-center text-sm text-gray-600">
+        <p className="mt-6 text-center text-sm text-white-600">
           Mot de passe oublié?{" "}
           <a
-            href="/signup"
-            className="text-blue-600 hover:underline"
+            href="/mot-de-passe-oublie"
+            className="text-yellow-600 hover:underline"
           >
             Cliquez ici
           </a>
         </p>
-        <p className="mt-6 text-center text-sm text-gray-600">
-          Vous n'avez pas de compte?{" "}
+        <p className="mt-6 text-center text-sm text-white-600">
+          Pas de compte?{" "}
           <a
-            href="/signup"
-            className="text-blue-600 hover:underline"
+            href="/inscription"
+            className="text-yellow-600 hover:underline"
           >
-            S'inscrire
+            Contactez un administrateur
           </a>
         </p>
       </div>

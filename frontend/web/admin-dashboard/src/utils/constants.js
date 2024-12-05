@@ -1,0 +1,1 @@
+export const DATA_GRID_COLUMN_DEFAULT_WIDTH = 200;
