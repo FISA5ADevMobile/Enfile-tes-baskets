@@ -1,26 +1,38 @@
 package com.enfiletesbaskets.enfiletesbaskets.models;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
+@Table(name = "Class")
 public class ClassModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
+    @Column(nullable = false)
     private String name;
+
     private String description;
-    private String password;
-    private Integer time;
-    private Date beginDate;
-    private Date endDate;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner")
     private UserModel owner;
+
+    private String password;
+    private Integer time;
+
+    @Column(name = "begin_date")
+    private LocalDate beginDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @ManyToMany
     @JoinTable(
@@ -28,7 +40,8 @@ public class ClassModel {
             joinColumns = @JoinColumn(name = "class_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private List<TagModel> tags = new ArrayList<>();
+    @JsonManagedReference // Indicates this side is the parent
+    private List<TagModel> tags;
 
     @ManyToMany
     @JoinTable(
@@ -36,9 +49,18 @@ public class ClassModel {
             joinColumns = @JoinColumn(name = "class_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
-    private List<CourseModel> courses = new ArrayList<>();
+    @JsonManagedReference // Indicates this side is the parent
+    private List<CourseModel> courses;
 
-    // Getters and Setters
+    // Getters and setters
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -53,6 +75,14 @@ public class ClassModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public UserModel getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UserModel owner) {
+        this.owner = owner;
     }
 
     public String getPassword() {
@@ -71,28 +101,20 @@ public class ClassModel {
         this.time = time;
     }
 
-    public Date getBeginDate() {
+    public LocalDate getBeginDate() {
         return beginDate;
     }
 
-    public void setBeginDate(Date beginDate) {
+    public void setBeginDate(LocalDate beginDate) {
         this.beginDate = beginDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
-    }
-
-    public UserModel getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserModel owner) {
-        this.owner = owner;
     }
 
     public List<TagModel> getTags() {

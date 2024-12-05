@@ -2,13 +2,26 @@ package com.enfiletesbaskets.enfiletesbaskets.services;
 
 import com.enfiletesbaskets.enfiletesbaskets.repositories.CourseRepository;
 import org.springframework.stereotype.Service;
-import jakarta.annotation.Resource;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class CourseService {
+    private final CourseRepository courseRepository;
 
-    @Resource
-    private CourseRepository courseRepository;
+    public CourseService(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
+    }
 
-    // Ajoutez des méthodes et des dépendances si nécessaire
+    @Transactional
+    public void resetTagsForCourse(Integer courseId) {
+        courseRepository.resetTagsForCourse(courseId);
+    }
+
+    public Integer getCourseIdForUserAndClass(Integer userId, Integer classId) {
+        return courseRepository.findCourseIdByUserAndClass(userId, classId)
+                .orElseThrow(() -> new IllegalArgumentException("No course found for the user in this class."));
+    }
+    
+    
 }

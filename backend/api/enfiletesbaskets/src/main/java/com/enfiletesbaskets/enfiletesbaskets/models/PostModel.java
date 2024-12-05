@@ -7,7 +7,7 @@ import java.util.Date;
 public class PostModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String description;
     private Date datePost;

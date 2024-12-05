@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ActualityRepository extends JpaRepository<ActualityModel, Long> {
+public interface ActualityRepository extends JpaRepository<ActualityModel, Integer> {
     // Ajoutez des méthodes personnalisées si nécessaire
 }

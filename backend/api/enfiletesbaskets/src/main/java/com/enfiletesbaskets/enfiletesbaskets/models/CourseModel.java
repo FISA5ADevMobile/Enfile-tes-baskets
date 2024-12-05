@@ -1,22 +1,52 @@
 package com.enfiletesbaskets.enfiletesbaskets.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import java.util.Date;
 
+import java.time.LocalDate;
+import java.util.List;
 @Entity
+@Table(name = "Course")
 public class CourseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userdb")
     private UserModel user;
 
-    private Date beginDate;
-    private Date endDate;
+    @Column(name = "begin_date")
+    private LocalDate beginDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
+    @ManyToMany(mappedBy = "courses")
+    @JsonBackReference // Prevent serialization of this side
+    private List<ClassModel> classes;
+    
+
+    @ManyToMany
+    @JoinTable(
+            name = "Course_Tags",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    @JsonManagedReference // Control serialization for tags
+    private List<TagModel> tags;
 
     // Getters and Setters
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public UserModel getUser() {
         return user;
     }
@@ -25,19 +55,35 @@ public class CourseModel {
         this.user = user;
     }
 
-    public Date getBeginDate() {
+    public LocalDate getBeginDate() {
         return beginDate;
     }
 
-    public void setBeginDate(Date beginDate) {
+    public void setBeginDate(LocalDate beginDate) {
         this.beginDate = beginDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public List<ClassModel> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<ClassModel> classes) {
+        this.classes = classes;
+    }
+
+    public List<TagModel> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<TagModel> tags) {
+        this.tags = tags;
     }
 }

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class ActualityModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String title;
     private String description;

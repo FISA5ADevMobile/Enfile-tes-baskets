@@ -1,25 +1,35 @@
 package com.enfiletesbaskets.enfiletesbaskets.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Table(name = "UserDB")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String pseudo;
+
     private String name;
     private String firstName;
     private String password;
     private byte[] profilPicture;
     private String role;
-    private Integer nbPostDeleted;
-    private Date banDate;
+
+    @Column(name = "nbPostDeleted")
+    private Integer nbPostDeleted = 0;
+
+    private LocalDate banDate;
 
     @ManyToMany
     @JoinTable(
@@ -27,12 +37,31 @@ public class UserModel {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private List<TagModel> tagsValidated = new ArrayList<>();
+    @JsonIgnoreProperties("users") // Prevent infinite loop with TagModel
+    private List<TagModel> tags;
 
-    @OneToMany(mappedBy = "user")
-    private List<CourseModel> courses = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "User_Courses",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    @JsonIgnoreProperties("users") // Prevent infinite loop with CourseModel
+    private List<CourseModel> courses;
 
-    // Getters and Setters
+    public UserModel() {}
+
+    public UserModel(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;
@@ -98,20 +127,20 @@ public class UserModel {
         this.nbPostDeleted = nbPostDeleted;
     }
 
-    public Date getBanDate() {
+    public LocalDate getBanDate() {
         return banDate;
     }
 
-    public void setBanDate(Date banDate) {
+    public void setBanDate(LocalDate banDate) {
         this.banDate = banDate;
     }
 
-    public List<TagModel> getTagsValidated() {
-        return tagsValidated;
+    public List<TagModel> getTags() {
+        return tags;
     }
 
-    public void setTagsValidated(List<TagModel> tagsValidated) {
-        this.tagsValidated = tagsValidated;
+    public void setTags(List<TagModel> tags) {
+        this.tags = tags;
     }
 
     public List<CourseModel> getCourses() {
