@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -41,12 +42,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
             String username = jwtTokenProvider.getUsernameFromToken(token);
+            Boolean isAdmin = jwtTokenProvider.getIsAdminFromToken(token);
             System.out.println("Token valid for username: " + username);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             // Authentifiez l'utilisateur
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            authentication.setDetails(Map.of("isAdmin", isAdmin));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else {
             System.out.println("Invalid or missing token for path: " + path);
