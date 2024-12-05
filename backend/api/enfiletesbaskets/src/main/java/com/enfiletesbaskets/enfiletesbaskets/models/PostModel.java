@@ -18,6 +18,10 @@ public class PostModel {
     private Date banDate;
 
     @ManyToOne
+    @JoinColumn(name = "creator")
+    private UserModel creator;
+
+    @ManyToOne
     @JoinColumn(name = "related")
     private PostModel related;
 

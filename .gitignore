@@ -8,6 +8,7 @@ Thumbs.db
 # Docker
 docker-compose.override.yml
 .env
+pg_db
 
 # IDE-specific
 .idea/

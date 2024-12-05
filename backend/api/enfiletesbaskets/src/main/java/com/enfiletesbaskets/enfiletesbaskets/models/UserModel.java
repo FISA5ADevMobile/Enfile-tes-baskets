@@ -2,12 +2,17 @@ package com.enfiletesbaskets.enfiletesbaskets.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "UserDB")
+@Table(name = "users")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserModel {
     @Id
@@ -149,5 +154,11 @@ public class UserModel {
 
     public void setCourses(List<CourseModel> courses) {
         this.courses = courses;
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(role)); //
+        return authorities;
     }
 }

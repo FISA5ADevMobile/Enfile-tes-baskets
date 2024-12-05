@@ -1,16 +1,16 @@
 package com.enfiletesbaskets.enfiletesbaskets.repositories;
 
 import com.enfiletesbaskets.enfiletesbaskets.models.TagModel;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TagRepository extends JpaRepository<TagModel, Integer> {
+public interface TagRepository extends CrudRepository<TagModel, Integer> {
 
     // Fetch all tags for a specific class
     @Query(value = """
