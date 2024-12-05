@@ -42,4 +42,8 @@ public class ActualityService {
         UserActualityModel userActuality = new UserActualityModel(userId, actualityId);
         userActualityRepository.save(userActuality);
     }
+
+    public ActualityModel saveActuality(ActualityModel actuality) {
+        return actualityRepository.save(actuality);
+    }
 }

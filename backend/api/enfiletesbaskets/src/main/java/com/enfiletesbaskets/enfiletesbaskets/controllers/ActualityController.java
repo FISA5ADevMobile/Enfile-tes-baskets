@@ -27,9 +27,10 @@ public class ActualityController {
         return ResponseEntity.ok(actualities);
     }
 
-    @PostMapping("/subscribe_to_event/{id}")
-    public ResponseEntity<String> subscribeToEvent(@PathVariable Long id, @RequestParam Long userId) {
-        actualityService.subscribeToEvent(id, userId);
-        return ResponseEntity.ok("Successfully subscribed to the event.");
+
+    @PostMapping("/add_actuality")
+    public ResponseEntity<ActualityModel> addActuality(@RequestBody ActualityModel actuality) {
+        ActualityModel savedActuality = actualityService.saveActuality(actuality);
+        return ResponseEntity.ok(savedActuality);
     }
 }
