@@ -15,7 +15,6 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String email;
     private String pseudo;
     private String name;
@@ -131,5 +130,9 @@ public class UserModel {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role)); //
         return authorities;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
