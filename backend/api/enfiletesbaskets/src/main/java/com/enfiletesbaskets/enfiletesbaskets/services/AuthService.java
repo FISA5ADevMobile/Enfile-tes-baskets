@@ -11,6 +11,8 @@ import com.enfiletesbaskets.enfiletesbaskets.util.PasswordUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class AuthService {
 
@@ -49,8 +51,12 @@ public class AuthService {
         }
 
         // Générer un token JWT
-        String token = jwtTokenProvider.generateToken(user.getEmail());
-        return ResponseEntity.ok(token);
+        String token = jwtTokenProvider.generateToken(user);
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "role", user.getRole(),
+                "isBanned", user.getBanDate() != null
+        ));
     }
 
     public ResponseEntity<?> resetPassword(PasswordResetRequest request) {
