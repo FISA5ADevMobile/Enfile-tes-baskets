@@ -132,4 +132,8 @@ public class UserModel {
         authorities.add(new SimpleGrantedAuthority(role)); //
         return authorities;
     }
+
+    public Long getId() {
+        return id;
+    }
 }
