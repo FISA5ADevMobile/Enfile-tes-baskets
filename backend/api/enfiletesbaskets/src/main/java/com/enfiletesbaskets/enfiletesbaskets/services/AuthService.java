@@ -54,7 +54,8 @@ public class AuthService {
         String token = jwtTokenProvider.generateToken(user);
         return ResponseEntity.ok(Map.of(
                 "token", token,
-                "role", user.getRole()
+                "role", user.getRole(),
+                "isBanned", user.getBanDate() != null
         ));
     }
 
