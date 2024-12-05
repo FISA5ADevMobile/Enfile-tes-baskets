@@ -17,9 +17,15 @@ import java.util.List;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
+
     private UserRepository userRepository;
-    private JwtTokenProvider jwtService;
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    public UserService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
+        this.userRepository = userRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
 
     public List<UserModel> getAllUsers() {
@@ -45,6 +51,6 @@ public class UserService implements UserDetailsService {
     }
 
     public UserModel authenticate(Authentication authentication) {
-        return userRepository.findById(jwtService.getUserIdFromToken(authentication.getPrincipal().toString())).orElseThrow(() -> new UsernameNotFoundException("Invalid token"));
+        return userRepository.findById(jwtTokenProvider.getUserIdFromToken(authentication.getPrincipal().toString())).orElseThrow(() -> new UsernameNotFoundException("Invalid token"));
     }
 }
