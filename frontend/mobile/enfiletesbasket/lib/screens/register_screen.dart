@@ -1,11 +1,111 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/primary_button.dart';
+import 'package:provider/provider.dart';
+import 'package:enfiletesbasket/services/auth_provider.dart';
+import 'package:enfiletesbasket/widgets/custom_text_field.dart';
+import 'package:enfiletesbasket/widgets/primary_button.dart';
 import 'package:enfiletesbasket/screens/login_screen.dart';
+import 'package:enfiletesbasket/widgets/custom_popup.dart';
 
-
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
+
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  bool isLoading = false;
+
+  // États pour gérer les erreurs visuelles
+  bool isUsernameEmpty = false;
+  bool isEmailEmpty = false;
+  bool isPasswordEmpty = false;
+  bool isConfirmPasswordEmpty = false;
+  bool isPasswordMismatch = false;
+
+  // Fonction d'inscription
+  Future<void> _register(BuildContext context) async {
+    final username = usernameController.text.trim();
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
+
+    // Validation des champs
+    setState(() {
+      isUsernameEmpty = username.isEmpty;
+      isEmailEmpty = email.isEmpty;
+      isPasswordEmpty = password.isEmpty;
+      isConfirmPasswordEmpty = confirmPassword.isEmpty;
+      isPasswordMismatch = password != confirmPassword;
+    });
+
+    if (isUsernameEmpty || isEmailEmpty || isPasswordEmpty || isConfirmPasswordEmpty || isPasswordMismatch) {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      await Provider.of<AuthProvider>(context, listen: false).register(
+        username: username,
+        email: email,
+        password: password,
+      );
+
+      // Affiche la popup de succès
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomPopup(
+            title: "Inscription réussie",
+            description: "Votre compte a été créé avec succès !",
+            actions: [
+              PrimaryButton(
+                text: "Ok",
+                onPressed: () {
+                  Navigator.of(context).pop(); // Ferme la popup
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      // Affiche la popup d'erreur
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomPopup(
+            title: "Erreur",
+            description: "Une erreur s'est produite : ${e.toString()}",
+            actions: [
+              PrimaryButton(
+                text: "Ok",
+                onPressed: () {
+                  Navigator.of(context).pop(); // Ferme la popup
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +117,7 @@ class RegisterScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Logo
               Center(
                 child: Image.asset(
                   'assets/images/logo_enfiletesbaskets_transparent.png',
@@ -27,6 +128,7 @@ class RegisterScreen extends StatelessWidget {
 
               const SizedBox(height: 16),
 
+              // Titre
               const Text(
                 'Inscription',
                 style: TextStyle(
@@ -37,35 +139,66 @@ class RegisterScreen extends StatelessWidget {
 
               const SizedBox(height: 32),
 
-              const CustomTextField(
+              // Champ pseudo
+              CustomTextField(
                 labelText: 'pseudo *',
-                obscureText: false,
+                controller: usernameController,
+                borderColor: isUsernameEmpty ? Colors.red : null,
               ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
 
-              const CustomTextField(
+              // Champ email
+              CustomTextField(
                 labelText: 'adresse e-mail *',
-                obscureText: false,
+                controller: emailController,
+                borderColor: isEmailEmpty ? Colors.red : null,
               ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
 
-              const CustomTextField(
+              // Champ mot de passe
+              CustomTextField(
                 labelText: 'mot de passe *',
                 obscureText: true,
+                controller: passwordController,
+                borderColor: isPasswordEmpty ? Colors.red : null,
               ),
 
+              const SizedBox(height: 24),
+
+              // Champ confirmation mot de passe
+              CustomTextField(
+                labelText: 'confirmer le mot de passe *',
+                obscureText: true,
+                controller: confirmPasswordController,
+                borderColor: isConfirmPasswordEmpty || isPasswordMismatch ? Colors.red : null,
+              ),
+
+              if (isPasswordMismatch)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "Les mots de passe ne correspondent pas.",
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
+
               const SizedBox(height: 32),
+
+              // Bouton d'inscription ou indicateur de chargement
               Center(
-                child: PrimaryButton(
-                  text: 'Se connecter',
-                  onPressed: () {
-                  },
+                child: isLoading
+                    ? const CircularProgressIndicator()
+                    : PrimaryButton(
+                  text: 'S’inscrire',
+                  onPressed: () => _register(context),
                 ),
               ),
 
               const SizedBox(height: 40),
+
+              // Lien vers l'écran de connexion
               Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -79,9 +212,9 @@ class RegisterScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginScreen()),
+                          MaterialPageRoute(builder: (context) => const LoginScreen()),
                         );
                       },
                       child: const Text(

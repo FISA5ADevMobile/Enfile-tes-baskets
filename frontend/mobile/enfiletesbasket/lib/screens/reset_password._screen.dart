@@ -1,10 +1,68 @@
-import 'package:enfiletesbasket/screens/login_screen.dart';
 import 'package:flutter/material.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/primary_button.dart';
+import 'package:enfiletesbasket/services/auth_service.dart';
+import 'package:enfiletesbasket/widgets/custom_text_field.dart';
+import 'package:enfiletesbasket/widgets/primary_button.dart';
+import 'package:enfiletesbasket/screens/login_screen.dart';
 
-class ResetPassword extends StatelessWidget {
+class ResetPassword extends StatefulWidget {
   const ResetPassword({Key? key}) : super(key: key);
+
+  @override
+  _ResetPasswordState createState() => _ResetPasswordState();
+}
+
+class _ResetPasswordState extends State<ResetPassword> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+  final AuthService authService = AuthService();
+
+  bool isLoading = false;
+  bool isEmailEmpty = false;
+  bool isPasswordEmpty = false;
+  bool isConfirmPasswordEmpty = false;
+  bool isPasswordMismatch = false;
+
+  Future<void> _resetPassword() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
+
+    setState(() {
+      isEmailEmpty = email.isEmpty;
+      isPasswordEmpty = password.isEmpty;
+      isConfirmPasswordEmpty = confirmPassword.isEmpty;
+      isPasswordMismatch = password != confirmPassword;
+    });
+
+    if (isEmailEmpty || isPasswordEmpty || isConfirmPasswordEmpty || isPasswordMismatch) {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      await authService.resetPassword(email);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Un lien de réinitialisation a été envoyé à votre adresse e-mail."),
+        ),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    } catch (e) {
+      print("Erreur lors de la réinitialisation : $e");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,17 +94,46 @@ class ResetPassword extends StatelessWidget {
 
               const SizedBox(height: 32),
 
-              const CustomTextField(
+              CustomTextField(
                 labelText: 'adresse e-mail *',
-                obscureText: false,
+                controller: emailController,
+                borderColor: isEmailEmpty ? Colors.red : null,
               ),
+
+              const SizedBox(height: 24),
+
+              CustomTextField(
+                labelText: 'Nouveau mot de passe *',
+                controller: passwordController,
+                obscureText: true,
+                borderColor: isPasswordEmpty ? Colors.red : null,
+              ),
+
+              const SizedBox(height: 24),
+
+              CustomTextField(
+                labelText: 'Confirmer le mot de passe *',
+                controller: confirmPasswordController,
+                obscureText: true,
+                borderColor: isConfirmPasswordEmpty || isPasswordMismatch ? Colors.red : null,
+              ),
+
+              if (isPasswordMismatch)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "Les mots de passe ne correspondent pas.",
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
 
               const SizedBox(height: 50),
               Center(
-                child: PrimaryButton(
+                child: isLoading
+                    ? const CircularProgressIndicator()
+                    : PrimaryButton(
                   text: 'Réinitialiser le mot de passe',
-                  onPressed: () {
-                  },
+                  onPressed: _resetPassword,
                 ),
               ),
 
@@ -54,9 +141,9 @@ class ResetPassword extends StatelessWidget {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
                     );
                   },
                   child: const Text(

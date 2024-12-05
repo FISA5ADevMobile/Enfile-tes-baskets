@@ -1,11 +1,57 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:enfiletesbasket/services/auth_provider.dart';
+import 'package:enfiletesbasket/widgets/custom_text_field.dart';
+import 'package:enfiletesbasket/widgets/primary_button.dart';
 import 'package:enfiletesbasket/screens/register_screen.dart';
 import 'package:enfiletesbasket/screens/reset_password._screen.dart';
-import 'package:flutter/material.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/primary_button.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
+
+  // États pour gérer les erreurs visuelles
+  bool isEmailEmpty = false;
+  bool isPasswordEmpty = false;
+
+  Future<void> _login(BuildContext context) async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    setState(() {
+      isEmailEmpty = email.isEmpty;
+      isPasswordEmpty = password.isEmpty;
+    });
+
+    if (isEmailEmpty || isPasswordEmpty) {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      await Provider.of<AuthProvider>(context, listen: false).login(email, password);
+      print("Connexion réussie !");
+      //Navigator.pushReplacementNamed(context, '/home'); // Redirection vers l'écran principal
+    } catch (e) {
+      print("Erreur de connexion : $e");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,24 +83,28 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 32),
 
-              const CustomTextField(
+              CustomTextField(
                 labelText: 'adresse e-mail *',
-                obscureText: false,
+                controller: emailController,
+                borderColor: isEmailEmpty ? Colors.red : null,
               ),
 
               const SizedBox(height: 24),
 
-              const CustomTextField(
+              CustomTextField(
                 labelText: 'mot de passe *',
                 obscureText: true,
+                controller: passwordController,
+                borderColor: isPasswordEmpty ? Colors.red : null,
               ),
 
               const SizedBox(height: 32),
               Center(
-                child: PrimaryButton(
+                child: isLoading
+                    ? const CircularProgressIndicator()
+                    : PrimaryButton(
                   text: 'Se connecter',
-                  onPressed: () {
-                  },
+                  onPressed: () => _login(context),
                 ),
               ),
 
@@ -64,7 +114,7 @@ class LoginScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ResetPassword()),
+                      MaterialPageRoute(builder: (context) => const ResetPassword()),
                     );
                   },
                   child: const Text(
@@ -95,7 +145,7 @@ class LoginScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => RegisterScreen()),
+                          MaterialPageRoute(builder: (context) => const RegisterScreen()),
                         );
                       },
                       child: const Text(
