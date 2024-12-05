@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:enfiletesbasket/services/auth_provider.dart';
+import 'package:enfiletesbasket/screens/login_screen.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import Google Fonts
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
   @override
