@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 
 @Repository
-public interface UserRepository extends CrudRepository<UserModel, Integer> {
+public interface UserRepository extends CrudRepository<UserModel, Long> {
 
     @Modifying
     @Query(value = "INSERT INTO User_Courses (user_id, course_id) VALUES (:userId, :courseId)", nativeQuery = true)
-    void addCourseToUser(@Param("userId") Integer userId, @Param("courseId") Integer courseId);
+    void addCourseToUser(@Param("userId") Long userId, @Param("courseId") Long courseId);
 
     UserModel findByEmail(String email);
     Optional<UserModel> findByPseudo(String pseudo);

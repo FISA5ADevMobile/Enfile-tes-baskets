@@ -14,11 +14,11 @@ public class CourseService {
     }
 
     @Transactional
-    public void resetTagsForCourse(Integer courseId) {
+    public void resetTagsForCourse(Long courseId) {
         courseRepository.resetTagsForCourse(courseId);
     }
 
-    public Integer getCourseIdForUserAndClass(Integer userId, Integer classId) {
+    public Long getCourseIdForUserAndClass(Long userId, Long classId) {
         return courseRepository.findCourseIdByUserAndClass(userId, classId)
                 .orElseThrow(() -> new IllegalArgumentException("No course found for the user in this class."));
     }

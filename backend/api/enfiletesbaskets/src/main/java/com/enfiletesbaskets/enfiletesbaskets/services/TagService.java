@@ -23,12 +23,12 @@ public class TagService {
     //     courseRepository.resetTagsForCourse(courseId, classId);
     // }
 
-    public String getTagDescription(Integer tagId) {
+    public String getTagDescription(Long tagId) {
         return tagRepository.findTagDescriptionById(tagId);
     }
     
     @Transactional
-    public void validateTag(Integer courseId, Integer classId, Integer tagId) {
+    public void validateTag(Long courseId, Long classId, Long tagId) {
         // Validate the tag
         int rowsInserted = courseRepository.validateTag(courseId, classId, tagId);
         if (rowsInserted == 0) {

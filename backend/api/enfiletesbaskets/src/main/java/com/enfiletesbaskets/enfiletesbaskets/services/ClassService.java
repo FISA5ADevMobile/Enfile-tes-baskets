@@ -29,7 +29,7 @@ public class ClassService {
     }
 
     // Fetch all subscribed classes and return filtered fields
-    public List<Map<String, String>> getSubscribedClasses(Integer userId) {
+    public List<Map<String, String>> getSubscribedClasses(Long userId) {
         return classRepository.findSubscribedClassesByUserId(userId).stream()
                 .map(classModel -> Map.of(
                         "id", String.valueOf(classModel.getId()), // Include ID
@@ -40,17 +40,17 @@ public class ClassService {
     }
 
     // Fetch all subscribed classes as full ClassModel objects
-    public List<ClassModel> getFullSubscribedClasses(Integer userId) {
+    public List<ClassModel> getFullSubscribedClasses(Long userId) {
         return classRepository.findSubscribedClassesByUserId(userId);
     }
 
-    public Integer getCourseIdForUserAndClass(Integer userId, Integer classId) {
+    public Long getCourseIdForUserAndClass(Long userId, Long classId) {
         return courseRepository.findCourseIdByUserAndClass(userId, classId)
                 .orElseThrow(() -> new IllegalArgumentException("Course not found for the user in this class"));
     }
 
     // Subscribe a user to a class with known classId
-    public void subscribeToClass(Integer userId, Integer classId, String password) {
+    public void subscribeToClass(Long userId, Long classId, String password) {
         Optional<ClassModel> classOptional = classRepository.findById(classId);
         if (classOptional.isEmpty() || !classOptional.get().getPassword().equals(password)) {
             throw new IllegalArgumentException("Invalid class password");
@@ -74,13 +74,13 @@ public class ClassService {
 
     // Subscribe a user to a class using password
     @Transactional
-    public void subscribeToClassByPassword(Integer userId, String password) {
+    public void subscribeToClassByPassword(Long userId, String password) {
         Optional<ClassModel> classOptional = classRepository.findByPassword(password);
         if (classOptional.isEmpty()) {
             throw new IllegalArgumentException("No class found with the provided password.");
         }
 
-        Integer classId = classOptional.get().getId();
+        Long classId = classOptional.get().getId();
 
         if (courseRepository.existsByUserAndClass(userId, classId)) {
             throw new IllegalStateException("User is already enrolled in this class.");

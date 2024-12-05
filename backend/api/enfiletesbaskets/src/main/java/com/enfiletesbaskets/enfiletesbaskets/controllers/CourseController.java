@@ -26,11 +26,11 @@ public class CourseController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Integer> getCourseIdByUserAndClass(
-        @PathVariable Integer userId,
-        @RequestParam Integer classId
+    public ResponseEntity<Long> getCourseIdByUserAndClass(
+        @PathVariable Long userId,
+        @RequestParam Long classId
     ) {
-        Optional<Integer> courseId = courseRepository.findCourseIdByUserAndClass(userId, classId);
+        Optional<Long> courseId = courseRepository.findCourseIdByUserAndClass(userId, classId);
         return courseId.map(ResponseEntity::ok)
                        .orElse(ResponseEntity.notFound().build());
     }

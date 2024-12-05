@@ -27,7 +27,7 @@ public class TagController {
 
     // Récupérer tous les tags d'une classe
     @GetMapping("/class/{classId}")
-    public ResponseEntity<List<Map<String, Object>>> getTagsByClass(@PathVariable Integer classId) {
+    public ResponseEntity<List<Map<String, Object>>> getTagsByClass(@PathVariable Long classId) {
         List<Object[]> results = tagRepository.findAllByClassId(classId);
                 // Safely map the query result to a list of key-value pairs
                 List<Map<String, Object>> tags = results.stream().map(row -> {
@@ -49,7 +49,7 @@ public class TagController {
 
     // Récupérer tous les tags validés d'un utilisateur pour un parcours
     @GetMapping("/course/{courseId}")
-    public ResponseEntity<List<Map<String, Object>>> getTags(@PathVariable Integer courseId) {
+    public ResponseEntity<List<Map<String, Object>>> getTags(@PathVariable Long courseId) {
         List<Object[]> results = tagRepository.findAllByCourseId(courseId);
     
         // Safely map the query result to a list of key-value pairs
@@ -70,7 +70,7 @@ public class TagController {
     }
     
     @GetMapping("/{tagId}/description")
-    public ResponseEntity<String> getTagDescription(@PathVariable Integer tagId) {
+    public ResponseEntity<String> getTagDescription(@PathVariable Long tagId) {
         return ResponseEntity.ok(tagService.getTagDescription(tagId));
     }
 
@@ -78,8 +78,8 @@ public class TagController {
     // // Récupérer tous les tags d'une classe et d'un utilisateur
     // @GetMapping("/class/{classId}/user/{userId}")
     // public ResponseEntity<List<TagModel>> getTagsByClassAndUser(
-    //     @PathVariable Integer classId, 
-    //     @PathVariable Integer userId
+    //     @PathVariable Long classId, 
+    //     @PathVariable Long userId
     // ) {
     //     List<TagModel> tags = tagRepository.findAllByClassIdAndUserId(classId, userId);
     //     return ResponseEntity.ok(tags);
@@ -88,8 +88,8 @@ public class TagController {
     // Récupérer un tag par ID et utilisateur
     @GetMapping("/{tagId}/user/{userId}")
     public ResponseEntity<TagModel> getTagByIdAndUser(
-        @PathVariable Integer tagId, 
-        @PathVariable Integer userId
+        @PathVariable Long tagId, 
+        @PathVariable Long userId
     ) {
         return tagRepository.findByIdAndUserId(tagId, userId)
             .map(ResponseEntity::ok)

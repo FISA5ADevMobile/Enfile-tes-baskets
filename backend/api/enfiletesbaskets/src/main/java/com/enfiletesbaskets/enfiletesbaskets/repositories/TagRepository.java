@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TagRepository extends CrudRepository<TagModel, Integer> {
+public interface TagRepository extends CrudRepository<TagModel, Long> {
 
     // Fetch all tags for a specific class
     @Query(value = """
@@ -18,7 +18,7 @@ public interface TagRepository extends CrudRepository<TagModel, Integer> {
         FROM tag t JOIN class_tags ct ON t.id = ct.tag_id 
         WHERE ct.class_id = :classId""", 
            nativeQuery = true)
-    List<Object[]> findAllByClassId(@Param("classId") Integer classId);
+    List<Object[]> findAllByClassId(@Param("classId") Long classId);
 
     // Fetch all tags validated by a specific user (through their courses)
     @Query(value = "SELECT DISTINCT t.* FROM tag t " +
@@ -28,7 +28,7 @@ public interface TagRepository extends CrudRepository<TagModel, Integer> {
                    "AND c.id= :courseId"
                    , 
            nativeQuery = true)
-    List<TagModel> findAllByUserId(@Param("userId") Integer userId,@Param("courseId") Integer courseId);
+    List<TagModel> findAllByUserId(@Param("userId") Long userId,@Param("courseId") Long courseId);
 
     // Fetch all tags for a specific class and validated by a specific user
     @Query(value = "SELECT t.* FROM tag t " +
@@ -37,7 +37,7 @@ public interface TagRepository extends CrudRepository<TagModel, Integer> {
                    "JOIN course c ON crt.course_id = c.id " +
                    "WHERE clt.class_id = :classId AND c.userdb = :userId", 
            nativeQuery = true)
-    List<TagModel> findAllByClassIdAndUserId(@Param("classId") Integer classId, @Param("userId") Integer userId);
+    List<TagModel> findAllByClassIdAndUserId(@Param("classId") Long classId, @Param("userId") Long userId);
 
 
     // Fetch all tags for a specific course and validated
@@ -46,7 +46,7 @@ public interface TagRepository extends CrudRepository<TagModel, Integer> {
                    JOIN course_tags crt ON t.id = crt.tag_id 
                    WHERE crt.course_id = :courseId""", 
            nativeQuery = true)
-    List<Object[]> findAllByCourseId(@Param("courseId") Integer courseId);
+    List<Object[]> findAllByCourseId(@Param("courseId") Long courseId);
 
     // Fetch a specific tag validated by a specific user
     @Query(value = "SELECT t.* FROM tag t " +
@@ -54,9 +54,9 @@ public interface TagRepository extends CrudRepository<TagModel, Integer> {
                    "JOIN course c ON ct.course_id = c.id " +
                    "WHERE t.id = :tagId AND c.userdb = :userId", 
            nativeQuery = true)
-    Optional<TagModel> findByIdAndUserId(@Param("tagId") Integer tagId, @Param("userId") Integer userId);
+    Optional<TagModel> findByIdAndUserId(@Param("tagId") Long tagId, @Param("userId") Long userId);
 
     // Fetch description for a tag
     @Query(value = "SELECT description FROM tag WHERE id = :tagId", nativeQuery = true)
-    String findTagDescriptionById(@Param("tagId") Integer tagId);
+    String findTagDescriptionById(@Param("tagId") Long tagId);
 }

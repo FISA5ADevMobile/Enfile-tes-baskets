@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class ClassModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -53,11 +53,11 @@ public class ClassModel {
     private List<CourseModel> courses;
 
     // Getters and setters
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

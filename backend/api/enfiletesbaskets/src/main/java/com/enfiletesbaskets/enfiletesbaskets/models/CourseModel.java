@@ -12,7 +12,7 @@ import java.util.List;
 public class CourseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "userdb")
@@ -39,11 +39,11 @@ public class CourseModel {
     private List<TagModel> tags;
 
     // Getters and Setters
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

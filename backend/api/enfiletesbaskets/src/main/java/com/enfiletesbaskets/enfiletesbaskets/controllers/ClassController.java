@@ -25,18 +25,18 @@ public class ClassController {
     }
 
     @GetMapping("/subscribed/{userId}")
-    public ResponseEntity<List<Map<String, String>>> getSubscribedClasses(@PathVariable Integer userId) {
+    public ResponseEntity<List<Map<String, String>>> getSubscribedClasses(@PathVariable Long userId) {
         return ResponseEntity.ok(classService.getSubscribedClasses(userId));
     }
 
     @GetMapping("/subscribed/full/{userId}")
-    public ResponseEntity<List<ClassModel>> getFullSubscribedClasses(@PathVariable Integer userId) {
+    public ResponseEntity<List<ClassModel>> getFullSubscribedClasses(@PathVariable Long userId) {
         return ResponseEntity.ok(classService.getFullSubscribedClasses(userId));
     }
 
     @PostMapping("/join/{userId}")
     public ResponseEntity<String> joinClass(
-        @PathVariable Integer userId,
+        @PathVariable Long userId,
         @RequestParam String password
     ) {
         classService.subscribeToClassByPassword(userId, password);
@@ -44,7 +44,7 @@ public class ClassController {
     }
 
     @PostMapping("/{courseId}/tags/reset")
-    public ResponseEntity<String> resetTags(@PathVariable Integer courseId) {
+    public ResponseEntity<String> resetTags(@PathVariable Long courseId) {
         try {
             // Call the resetTagsForCourse method from CourseService
             courseService.resetTagsForCourse(courseId);
@@ -57,12 +57,12 @@ public class ClassController {
 
     @PostMapping("/{classId}/courseId/{courseId}/tags/{tagId}/validate")
     public ResponseEntity<String> validateTag(
-            @PathVariable Integer classId,
-            @PathVariable Integer courseId,
-            @PathVariable Integer tagId,
-            @RequestParam Integer userId) {
+            @PathVariable Long classId,
+            @PathVariable Long courseId,
+            @PathVariable Long tagId,
+            @RequestParam Long userId) {
         try {
-            // Integer courseId = classService.getCourseIdForUserAndClass(userId, classId);
+            // Long courseId = classService.getCourseIdForUserAndClass(userId, classId);
             tagService.validateTag(courseId, classId, tagId);
             return ResponseEntity.ok("Tag validated successfully.");
         } catch (Exception e) {
