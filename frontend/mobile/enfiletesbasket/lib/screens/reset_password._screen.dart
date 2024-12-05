@@ -1,11 +1,10 @@
-import 'package:enfiletesbasket/screens/register_screen.dart';
-import 'package:enfiletesbasket/screens/reset_password._screen.dart';
+import 'package:enfiletesbasket/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/primary_button.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class ResetPassword extends StatelessWidget {
+  const ResetPassword({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,7 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 16),
 
               const Text(
-                'Connexion',
+                'Mot de passe oublié',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -42,33 +41,26 @@ class LoginScreen extends StatelessWidget {
                 obscureText: false,
               ),
 
-              const SizedBox(height: 24),
-
-              const CustomTextField(
-                labelText: 'mot de passe *',
-                obscureText: true,
-              ),
-
-              const SizedBox(height: 32),
+              const SizedBox(height: 50),
               Center(
                 child: PrimaryButton(
-                  text: 'Se connecter',
+                  text: 'Réinitialiser le mot de passe',
                   onPressed: () {
                   },
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 60),
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ResetPassword()),
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
                     );
                   },
                   child: const Text(
-                    'mot de passe oublié',
+                    'Retour',
                     style: TextStyle(
                       fontSize: 16,
                       color: Color(0xFFC8A14E),
@@ -76,39 +68,6 @@ class LoginScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-              Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      "Vous n'avez pas de compte ? ",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => RegisterScreen()),
-                        );
-                      },
-                      child: const Text(
-                        "S'inscrire",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF0081A1),
-                          decoration: TextDecoration.underline,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
               ),
             ],
