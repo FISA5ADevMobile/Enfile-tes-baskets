@@ -1,123 +1,236 @@
 import { useState } from "react";
+import DataGridComponent from "./../common/DataGridComponent";
+import { GridActionsCellItem } from "@mui/x-data-grid";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/Edit";
+import { PanoramaFishEye, RemoveRedEye } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 
+import { DATA_GRID_COLUMN_DEFAULT_WIDTH } from "../../utils/constants";
+
 const userData = [
-	{ id: 1, name: "John Doe", email: "john@example.com", role: "Customer", status: "Active" },
-	{ id: 2, name: "Jane Smith", email: "jane@example.com", role: "Admin", status: "Active" },
-	{ id: 3, name: "Bob Johnson", email: "bob@example.com", role: "Customer", status: "Inactive" },
-	{ id: 4, name: "Alice Brown", email: "alice@example.com", role: "Customer", status: "Active" },
-	{ id: 5, name: "Charlie Wilson", email: "charlie@example.com", role: "Moderator", status: "Active" },
+  {
+    id: 1,
+    name: "John Doe",
+    email: "john@example.com",
+    role: "Customer",
+    status: "Active",
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    email: "jane@example.com",
+    role: "Admin",
+    status: "Active",
+  },
+  {
+    id: 3,
+    name: "Bob Johnson",
+    email: "bob@example.com",
+    role: "Customer",
+    status: "Inactive",
+  },
+  {
+    id: 4,
+    name: "Alice Brown",
+    email: "alice@example.com",
+    role: "Customer",
+    status: "Active",
+  },
+  {
+    id: 5,
+    name: "Charlie Wilson",
+    email: "charlie@example.com",
+    role: "Moderator",
+    status: "Active",
+  },
+];
+
+const columns = [
+  {
+    field: "id",
+    headerName: "ID",
+    width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
+  },
+  {
+    field: "pseudo",
+    headerName: "Pseudo",
+    width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
+    editable: false,
+  },
+  {
+    field: "lastName",
+    headerName: "Nom",
+    width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
+    editable: false,
+  },
+  {
+    field: "firstName",
+    headerName: "Prénom",
+    width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
+    editable: false,
+  },
+  {
+    field: "email",
+    headerName: "Email",
+    width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
+    editable: false,
+  },
+  {
+    field: "actions",
+    type: "actions",
+    headerName: "Actions",
+    width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
+    cellClassName: "actions",
+    getActions: ({ id, row }) => {
+      //const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+      // const isInEditMode = false;
+      // if (isInEditMode) {
+      //   return [
+      //     <GridActionsCellItem
+      //       icon={<SaveIcon />}
+      //       label="Save"
+      //       sx={{
+      //         color: "primary.main",
+      //       }}
+      //       onClick={() => id}
+      //     />,
+      //     <GridActionsCellItem
+      //       icon={<CancelIcon />}
+      //       label="Cancel"
+      //       className="textPrimary"
+      //       onClick={() => id}
+      //       color="inherit"
+      //     />,
+      //   ];
+      // }
+
+      return [
+        <GridActionsCellItem
+          icon={<RemoveRedEye color="success" />}
+          label="Voir"
+          //showInMenu
+          onClick={() => {
+            console.log("id : " + id);
+            console.log("row : " + JSON.stringify(row));
+            window.location.href = `/utilisateurs/${id}`;
+          }}
+        />,
+        // <GridActionsCellItem
+        //   icon={<EditIcon color="warning" />}
+        //   label="Modifier"
+        //   onClick={() => (window.location.href = `/customer-form-inputs`)}
+        //   color="inherit"
+        // />,
+        // <GridActionsCellItem
+        //   icon={<DeleteIcon color="error" />}
+        //   label="Delete"
+        //   onClick={() => id}
+        //   color="inherit"
+        // />,
+      ];
+    },
+  },
+];
+
+const rows = [
+  {
+    id: 1,
+    pseudo: "jsnow",
+    lastName: "Snow",
+    firstName: "Jon",
+    email: "john@example.com",
+  },
+  {
+    id: 2,
+    pseudo: "zzcer",
+    lastName: "Lannister",
+    firstName: "Cersei",
+    email: "jane@example.com",
+  },
+  {
+    id: 3,
+    pseudo: "lann",
+    lastName: "Lannister",
+    firstName: "Jaime",
+    email: "bob@example.com",
+  },
+  {
+    id: 4,
+    pseudo: "aryaS",
+    lastName: "Stark",
+    firstName: "Arya",
+    email: "alice@example.com",
+  },
+  {
+    id: 5,
+    pseudo: "daen",
+    lastName: "Targaryen",
+    firstName: "Daenerys",
+    email: "charlie@example.com",
+  },
+  {
+    id: 6,
+    pseudo: "mel",
+    lastName: "Melisandre",
+    firstName: null,
+    email: "frank@example.com",
+  },
+  {
+    id: 7,
+    pseudo: "cliff",
+    lastName: "Clifford",
+    firstName: "Ferrara",
+    email: "richard@example.com",
+  },
+  {
+    id: 8,
+    pseudo: "ross",
+    lastName: "Frances",
+    firstName: "Rossini",
+    email: "james@example.com",
+  },
+  {
+    id: 9,
+    pseudo: "rrooo",
+    lastName: "Roxie",
+    firstName: "Harvey",
+    email: "julie@example.com",
+  },
 ];
 
 const UsersTable = () => {
-	const [searchTerm, setSearchTerm] = useState("");
-	const [filteredUsers, setFilteredUsers] = useState(userData);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState(userData);
 
-	const handleSearch = (e) => {
-		const term = e.target.value.toLowerCase();
-		setSearchTerm(term);
-		const filtered = userData.filter(
-			(user) => user.name.toLowerCase().includes(term) || user.email.toLowerCase().includes(term)
-		);
-		setFilteredUsers(filtered);
-	};
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+    const filtered = userData.filter(
+      (user) =>
+        user.name.toLowerCase().includes(term) ||
+        user.email.toLowerCase().includes(term)
+    );
+    setFilteredUsers(filtered);
+  };
 
-	return (
-		<motion.div
-			className='bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700'
-			initial={{ opacity: 0, y: 20 }}
-			animate={{ opacity: 1, y: 0 }}
-			transition={{ delay: 0.2 }}
-		>
-			<div className='flex justify-between items-center mb-6'>
-				<h2 className='text-xl font-semibold text-gray-100'>Users</h2>
-				<div className='relative'>
-					<input
-						type='text'
-						placeholder='Search users...'
-						className='bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
-						value={searchTerm}
-						onChange={handleSearch}
-					/>
-					<Search className='absolute left-3 top-2.5 text-gray-400' size={18} />
-				</div>
-			</div>
-
-			<div className='overflow-x-auto'>
-				<table className='min-w-full divide-y divide-gray-700'>
-					<thead>
-						<tr>
-							<th className='px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider'>
-								Name
-							</th>
-							<th className='px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider'>
-								Email
-							</th>
-							<th className='px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider'>
-								Role
-							</th>
-							<th className='px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider'>
-								Status
-							</th>
-							<th className='px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider'>
-								Actions
-							</th>
-						</tr>
-					</thead>
-
-					<tbody className='divide-y divide-gray-700'>
-						{filteredUsers.map((user) => (
-							<motion.tr
-								key={user.id}
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1 }}
-								transition={{ duration: 0.3 }}
-							>
-								<td className='px-6 py-4 whitespace-nowrap'>
-									<div className='flex items-center'>
-										<div className='flex-shrink-0 h-10 w-10'>
-											<div className='h-10 w-10 rounded-full bg-gradient-to-r from-purple-400 to-blue-500 flex items-center justify-center text-white font-semibold'>
-												{user.name.charAt(0)}
-											</div>
-										</div>
-										<div className='ml-4'>
-											<div className='text-sm font-medium text-gray-100'>{user.name}</div>
-										</div>
-									</div>
-								</td>
-
-								<td className='px-6 py-4 whitespace-nowrap'>
-									<div className='text-sm text-gray-300'>{user.email}</div>
-								</td>
-								<td className='px-6 py-4 whitespace-nowrap'>
-									<span className='px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-800 text-blue-100'>
-										{user.role}
-									</span>
-								</td>
-
-								<td className='px-6 py-4 whitespace-nowrap'>
-									<span
-										className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-											user.status === "Active"
-												? "bg-green-800 text-green-100"
-												: "bg-red-800 text-red-100"
-										}`}
-									>
-										{user.status}
-									</span>
-								</td>
-
-								<td className='px-6 py-4 whitespace-nowrap text-sm text-gray-300'>
-									<button className='text-indigo-400 hover:text-indigo-300 mr-2'>Edit</button>
-									<button className='text-red-400 hover:text-red-300'>Delete</button>
-								</td>
-							</motion.tr>
-						))}
-					</tbody>
-				</table>
-			</div>
-		</motion.div>
-	);
+  return (
+    <motion.div
+      // className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
+    >
+      <div>
+        <DataGridComponent
+          rows={rows}
+          columns={columns}
+        />
+      </div>
+    </motion.div>
+  );
 };
 export default UsersTable;
