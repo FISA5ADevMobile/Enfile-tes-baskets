@@ -21,21 +21,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool isLoading = false;
 
-  // États pour gérer les erreurs visuelles
   bool isUsernameEmpty = false;
   bool isEmailEmpty = false;
   bool isPasswordEmpty = false;
   bool isConfirmPasswordEmpty = false;
   bool isPasswordMismatch = false;
 
-  // Fonction d'inscription
   Future<void> _register(BuildContext context) async {
     final username = usernameController.text.trim();
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
     final confirmPassword = confirmPasswordController.text.trim();
 
-    // Validation des champs
     setState(() {
       isUsernameEmpty = username.isEmpty;
       isEmailEmpty = email.isEmpty;
@@ -53,14 +50,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     try {
-      // Appelle la méthode d'inscription
       await Provider.of<AuthProvider>(context, listen: false).register(
         username: username,
         email: email,
         password: password,
       );
-
-      // Affiche la popup de succès
       showDialog(
         context: context,
         builder: (context) {
@@ -71,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               PrimaryButton(
                 text: "Ok",
                 onPressed: () {
-                  Navigator.of(context).pop(); // Ferme la popup
+                  Navigator.of(context).pop();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -83,7 +77,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         },
       );
     } catch (e) {
-      // Affiche la popup d'erreur
       showDialog(
         context: context,
         builder: (context) {
@@ -94,7 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               PrimaryButton(
                 text: "Ok",
                 onPressed: () {
-                  Navigator.of(context).pop(); // Ferme la popup
+                  Navigator.of(context).pop();
                 },
               ),
             ],
@@ -118,7 +111,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Logo
               Center(
                 child: Image.asset(
                   'assets/images/logo_enfiletesbaskets_transparent.png',
@@ -129,7 +121,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               const SizedBox(height: 16),
 
-              // Titre
               const Text(
                 'Inscription',
                 style: TextStyle(
@@ -140,42 +131,70 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               const SizedBox(height: 32),
 
-              // Champ pseudo
+
               CustomTextField(
                 labelText: 'pseudo *',
                 controller: usernameController,
                 borderColor: isUsernameEmpty ? Colors.red : null,
               ),
+              if (isUsernameEmpty)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "Le pseudo est requis.",
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
 
               const SizedBox(height: 24),
 
-              // Champ email
               CustomTextField(
                 labelText: 'adresse e-mail *',
                 controller: emailController,
                 borderColor: isEmailEmpty ? Colors.red : null,
               ),
+              if (isEmailEmpty)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "L'adresse e-mail est requise.",
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
 
               const SizedBox(height: 24),
 
-              // Champ mot de passe
               CustomTextField(
                 labelText: 'mot de passe *',
                 obscureText: true,
                 controller: passwordController,
-                borderColor: isPasswordEmpty ? Colors.red : null,
+                borderColor: (isPasswordEmpty || isPasswordMismatch) ? Colors.red : null,
               ),
+              if (isPasswordEmpty)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "Le mot de passe est requis.",
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
 
               const SizedBox(height: 24),
 
-              // Champ confirmation mot de passe
               CustomTextField(
                 labelText: 'confirmer le mot de passe *',
                 obscureText: true,
                 controller: confirmPasswordController,
-                borderColor: isConfirmPasswordEmpty || isPasswordMismatch ? Colors.red : null,
+                borderColor: (isConfirmPasswordEmpty || isPasswordMismatch) ? Colors.red : null,
               ),
-
+              if (isConfirmPasswordEmpty)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "La confirmation du mot de passe est requise.",
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
               if (isPasswordMismatch)
                 const Padding(
                   padding: EdgeInsets.only(top: 8.0),
@@ -187,7 +206,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               const SizedBox(height: 32),
 
-              // Bouton d'inscription ou indicateur de chargement
               Center(
                 child: isLoading
                     ? const CircularProgressIndicator()
@@ -199,7 +217,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               const SizedBox(height: 40),
 
-              // Lien vers l'écran de connexion
               Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

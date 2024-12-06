@@ -17,10 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
-
-  // États pour gérer les erreurs visuelles
   bool isEmailEmpty = false;
   bool isPasswordEmpty = false;
+  bool isLoginError = false;
 
   Future<void> _login(BuildContext context) async {
     final email = emailController.text.trim();
@@ -29,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       isEmailEmpty = email.isEmpty;
       isPasswordEmpty = password.isEmpty;
+      isLoginError = false;
     });
 
     if (isEmailEmpty || isPasswordEmpty) {
@@ -42,10 +42,12 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await Provider.of<AuthProvider>(context, listen: false).login(email, password);
       print("Connexion réussie !");
-      //Navigator.pushReplacementNamed(context, '/home'); // Redirection vers l'écran principal
+      // Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
       print("Erreur de connexion : $e");
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      setState(() {
+        isLoginError = true;
+      });
     } finally {
       setState(() {
         isLoading = false;
@@ -86,8 +88,16 @@ class _LoginScreenState extends State<LoginScreen> {
               CustomTextField(
                 labelText: 'adresse e-mail *',
                 controller: emailController,
-                borderColor: isEmailEmpty ? Colors.red : null,
+                borderColor: (isEmailEmpty || isLoginError) ? Colors.red : null,
               ),
+              if (isEmailEmpty)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "L'adresse e-mail est requise.",
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
 
               const SizedBox(height: 24),
 
@@ -95,10 +105,27 @@ class _LoginScreenState extends State<LoginScreen> {
                 labelText: 'mot de passe *',
                 obscureText: true,
                 controller: passwordController,
-                borderColor: isPasswordEmpty ? Colors.red : null,
+                borderColor: (isPasswordEmpty || isLoginError) ? Colors.red : null,
               ),
+              if (isPasswordEmpty)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "Le mot de passe est requis.",
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
+              if (isLoginError && !isPasswordEmpty && !isEmailEmpty)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "Identifiant ou mot de passe incorrect.",
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
 
               const SizedBox(height: 32),
+
               Center(
                 child: isLoading
                     ? const CircularProgressIndicator()
@@ -109,6 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               const SizedBox(height: 24),
+
               Center(
                 child: TextButton(
                   onPressed: () {
@@ -130,6 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               const SizedBox(height: 16),
+
               Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

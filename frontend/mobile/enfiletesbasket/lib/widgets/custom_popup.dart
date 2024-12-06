@@ -19,8 +19,8 @@ class CustomPopup extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.8, // Largeur relative à l'écran
-        constraints: const BoxConstraints(maxHeight: 400), // Limite la hauteur
+        width: MediaQuery.of(context).size.width * 0.8,
+        constraints: const BoxConstraints(maxHeight: 400),
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -47,7 +47,7 @@ class CustomPopup extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: actions.map((action) {
-                return Flexible(child: action); // S'assure que chaque bouton s'adapte
+                return Flexible(child: action);
               }).toList(),
             ),
           ],

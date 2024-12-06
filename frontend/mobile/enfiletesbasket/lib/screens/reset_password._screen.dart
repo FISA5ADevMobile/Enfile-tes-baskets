@@ -35,10 +35,8 @@ class _ResetPasswordState extends State<ResetPassword> {
     });
 
     try {
-      // Appel à la méthode resetPassword
       await authService.resetPassword(email);
 
-      // Affiche une popup de succès
       showDialog(
         context: context,
         builder: (context) {
@@ -49,7 +47,7 @@ class _ResetPasswordState extends State<ResetPassword> {
               PrimaryButton(
                 text: "Ok",
                 onPressed: () {
-                  Navigator.of(context).pop(); // Ferme la popup
+                  Navigator.of(context).pop();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -61,7 +59,6 @@ class _ResetPasswordState extends State<ResetPassword> {
         },
       );
     } catch (e) {
-      // Affiche une popup d'erreur
       showDialog(
         context: context,
         builder: (context) {
@@ -72,7 +69,7 @@ class _ResetPasswordState extends State<ResetPassword> {
               PrimaryButton(
                 text: "Ok",
                 onPressed: () {
-                  Navigator.of(context).pop(); // Ferme la popup
+                  Navigator.of(context).pop();
                 },
               ),
             ],
@@ -96,7 +93,6 @@ class _ResetPasswordState extends State<ResetPassword> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Logo
               Center(
                 child: Image.asset(
                   'assets/images/logo_enfiletesbaskets_transparent.png',
@@ -107,7 +103,6 @@ class _ResetPasswordState extends State<ResetPassword> {
 
               const SizedBox(height: 16),
 
-              // Titre
               const Text(
                 'Mot de passe oublié',
                 style: TextStyle(
@@ -118,7 +113,6 @@ class _ResetPasswordState extends State<ResetPassword> {
 
               const SizedBox(height: 32),
 
-              // Champ e-mail
               CustomTextField(
                 labelText: 'adresse e-mail *',
                 controller: emailController,
@@ -127,7 +121,6 @@ class _ResetPasswordState extends State<ResetPassword> {
 
               const SizedBox(height: 50),
 
-              // Bouton de réinitialisation ou indicateur de chargement
               Center(
                 child: isLoading
                     ? const CircularProgressIndicator()
@@ -139,7 +132,6 @@ class _ResetPasswordState extends State<ResetPassword> {
 
               const SizedBox(height: 60),
 
-              // Bouton retour
               Center(
                 child: TextButton(
                   onPressed: () {
