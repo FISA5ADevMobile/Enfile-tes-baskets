@@ -34,6 +34,11 @@ public class AuthController {
         return authService.resetPassword(request);
     }
 
+    @PostMapping("/request-password-reset")
+    public ResponseEntity<?> requestPasswordReset(@RequestBody PasswordResetRequest request) {
+        return authService.requestPasswordReset(request.getEmail());
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<?> logout() {
         return authService.logout();

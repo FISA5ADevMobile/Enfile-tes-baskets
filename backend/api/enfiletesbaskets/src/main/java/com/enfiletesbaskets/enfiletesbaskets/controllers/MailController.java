@@ -14,8 +14,8 @@ public class MailController {
     private MailService mailService;
 
     @PostMapping("/send")
-    public String sendMail(@RequestParam String to, @RequestParam String subject, @RequestParam String text) {
-        mailService.sendSimpleEmail(to, subject, text);
+    public String sendMail(@RequestParam String to, @RequestParam String token) {
+        mailService.sendPasswordResetEmail(to, token);
         return "Email sent successfully!";
     }
 }

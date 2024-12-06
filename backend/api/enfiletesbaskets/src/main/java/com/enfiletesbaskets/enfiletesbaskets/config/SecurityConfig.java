@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -23,11 +25,13 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider, UserService userService) {
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider, UserService userService, PasswordEncoder passwordEncoder) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
         logger.info("SecurityConfig initialized");
     }
 
@@ -38,7 +42,7 @@ public class SecurityConfig {
                         -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/reset-password","/error").permitAll()
+                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/reset-password", "/api/auth/request-password-reset", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userService), UsernamePasswordAuthenticationFilter.class)

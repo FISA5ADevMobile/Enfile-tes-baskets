@@ -7,15 +7,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MailService {
+
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendSimpleEmail(String to, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-        message.setFrom("your-email@gmail.com");
-        mailSender.send(message);
+    public void sendPasswordResetEmail(String to, String token) {
+        String subject = "Réinitialisation de votre mot de passe";
+        String resetUrl = "http://localhost:8080/api/auth/reset-password?token=" + token; // Changez l'URL selon votre configuration
+        String message = "Cliquez sur le lien suivant pour réinitialiser votre mot de passe : " + resetUrl;
+
+        SimpleMailMessage email = new SimpleMailMessage();
+        email.setTo(to);
+        email.setSubject(subject);
+        email.setText(message);
+        mailSender.send(email);
     }
 }
