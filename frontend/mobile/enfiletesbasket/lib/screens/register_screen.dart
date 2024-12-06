@@ -5,6 +5,7 @@ import 'package:enfiletesbasket/widgets/custom_text_field.dart';
 import 'package:enfiletesbasket/widgets/primary_button.dart';
 import 'package:enfiletesbasket/screens/login_screen.dart';
 import 'package:enfiletesbasket/widgets/custom_popup.dart';
+import 'package:enfiletesbasket/utils/validators.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -20,12 +21,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController confirmPasswordController = TextEditingController();
 
   bool isLoading = false;
-
   bool isUsernameEmpty = false;
   bool isEmailEmpty = false;
+  bool isEmailInvalid = false;
   bool isPasswordEmpty = false;
   bool isConfirmPasswordEmpty = false;
   bool isPasswordMismatch = false;
+  bool isPasswordNotSecure = false;
 
   Future<void> _register(BuildContext context) async {
     final username = usernameController.text.trim();
@@ -36,12 +38,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() {
       isUsernameEmpty = username.isEmpty;
       isEmailEmpty = email.isEmpty;
+      isEmailInvalid = !isEmailEmpty && !Validators.isValidEmail(email);
       isPasswordEmpty = password.isEmpty;
       isConfirmPasswordEmpty = confirmPassword.isEmpty;
-      isPasswordMismatch = password != confirmPassword;
+      isPasswordNotSecure = !isPasswordEmpty && !Validators.isSecurePassword(password);
+      isPasswordMismatch = !isConfirmPasswordEmpty && password != confirmPassword;
     });
 
-    if (isUsernameEmpty || isEmailEmpty || isPasswordEmpty || isConfirmPasswordEmpty || isPasswordMismatch) {
+    if (isUsernameEmpty ||
+        isEmailEmpty ||
+        isEmailInvalid ||
+        isPasswordEmpty ||
+        isConfirmPasswordEmpty ||
+        isPasswordMismatch ||
+        isPasswordNotSecure) {
       return;
     }
 
@@ -55,6 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         email: email,
         password: password,
       );
+
       showDialog(
         context: context,
         builder: (context) {
@@ -104,11 +115,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
@@ -118,19 +129,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   height: 300,
                 ),
               ),
-
               const SizedBox(height: 16),
 
               const Text(
                 'Inscription',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-
               const SizedBox(height: 32),
-
 
               CustomTextField(
                 labelText: 'pseudo *',
@@ -138,47 +143,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 borderColor: isUsernameEmpty ? Colors.red : null,
               ),
               if (isUsernameEmpty)
-                const Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    "Le pseudo est requis.",
-                    style: TextStyle(color: Colors.red, fontSize: 14),
-                  ),
+                const Text(
+                  "Le pseudo est requis.",
+                  style: TextStyle(color: Colors.red),
                 ),
-
               const SizedBox(height: 24),
 
               CustomTextField(
                 labelText: 'adresse e-mail *',
                 controller: emailController,
-                borderColor: isEmailEmpty ? Colors.red : null,
+                borderColor: (isEmailEmpty || isEmailInvalid) ? Colors.red : null,
               ),
               if (isEmailEmpty)
-                const Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    "L'adresse e-mail est requise.",
-                    style: TextStyle(color: Colors.red, fontSize: 14),
-                  ),
+                const Text(
+                  "L'adresse e-mail est requise.",
+                  style: TextStyle(color: Colors.red),
+                )
+              else if (isEmailInvalid)
+                const Text(
+                  "L'adresse e-mail est invalide.",
+                  style: TextStyle(color: Colors.red),
                 ),
-
               const SizedBox(height: 24),
 
               CustomTextField(
                 labelText: 'mot de passe *',
                 obscureText: true,
                 controller: passwordController,
-                borderColor: (isPasswordEmpty || isPasswordMismatch) ? Colors.red : null,
+                borderColor: (isPasswordEmpty || isPasswordNotSecure) ? Colors.red : null,
               ),
               if (isPasswordEmpty)
-                const Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    "Le mot de passe est requis.",
-                    style: TextStyle(color: Colors.red, fontSize: 14),
-                  ),
+                const Text(
+                  "Le mot de passe est requis.",
+                  style: TextStyle(color: Colors.red),
+                )
+              else if (isPasswordNotSecure)
+                const Text(
+                  "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un symbole.",
+                  style: TextStyle(color: Colors.red),
                 ),
-
               const SizedBox(height: 24),
 
               CustomTextField(
@@ -188,20 +191,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 borderColor: (isConfirmPasswordEmpty || isPasswordMismatch) ? Colors.red : null,
               ),
               if (isConfirmPasswordEmpty)
-                const Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    "La confirmation du mot de passe est requise.",
-                    style: TextStyle(color: Colors.red, fontSize: 14),
-                  ),
-                ),
-              if (isPasswordMismatch)
-                const Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    "Les mots de passe ne correspondent pas.",
-                    style: TextStyle(color: Colors.red, fontSize: 14),
-                  ),
+                const Text(
+                  "La confirmation du mot de passe est requise.",
+                  style: TextStyle(color: Colors.red),
+                )
+              else if (isPasswordMismatch)
+                const Text(
+                  "Les mots de passe ne correspondent pas.",
+                  style: TextStyle(color: Colors.red),
                 ),
 
               const SizedBox(height: 32),
@@ -214,7 +211,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () => _register(context),
                 ),
               ),
-
               const SizedBox(height: 40),
 
               Center(
@@ -223,10 +219,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     const Text(
                       "Vous avez déjà un compte ?",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     TextButton(
                       onPressed: () {

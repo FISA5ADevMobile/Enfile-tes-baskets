@@ -4,6 +4,8 @@ import 'package:enfiletesbasket/widgets/custom_text_field.dart';
 import 'package:enfiletesbasket/widgets/primary_button.dart';
 import 'package:enfiletesbasket/widgets/custom_popup.dart';
 import 'package:enfiletesbasket/screens/login_screen.dart';
+import 'package:enfiletesbasket/utils/validators.dart';
+
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({Key? key}) : super(key: key);
@@ -18,15 +20,17 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   bool isLoading = false;
   bool isEmailEmpty = false;
+  bool isEmailInvalid = false;
 
   Future<void> _resetPassword(BuildContext context) async {
     final email = emailController.text.trim();
 
     setState(() {
       isEmailEmpty = email.isEmpty;
+      isEmailInvalid = !isEmailEmpty && !Validators.isValidEmail(email);
     });
 
-    if (isEmailEmpty) {
+    if (isEmailEmpty || isEmailInvalid) {
       return;
     }
 
@@ -116,8 +120,24 @@ class _ResetPasswordState extends State<ResetPassword> {
               CustomTextField(
                 labelText: 'adresse e-mail *',
                 controller: emailController,
-                borderColor: isEmailEmpty ? Colors.red : null,
+                borderColor: (isEmailEmpty || isEmailInvalid) ? Colors.red : null,
               ),
+              if (isEmailEmpty)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "L'adresse e-mail est requise.",
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                )
+              else if (isEmailInvalid)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "L'adresse e-mail est invalide.",
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
 
               const SizedBox(height: 50),
 
