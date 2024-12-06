@@ -53,6 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     try {
+      // Appelle la méthode d'inscription
       await Provider.of<AuthProvider>(context, listen: false).register(
         username: username,
         email: email,
@@ -88,7 +89,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         builder: (context) {
           return CustomPopup(
             title: "Erreur",
-            description: "Une erreur s'est produite : ${e.toString()}",
+            description: e.toString().replaceFirst("Exception: ", ""),
             actions: [
               PrimaryButton(
                 text: "Ok",

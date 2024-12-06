@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:enfiletesbasket/services/auth_service.dart';
 import 'package:enfiletesbasket/widgets/custom_text_field.dart';
 import 'package:enfiletesbasket/widgets/primary_button.dart';
+import 'package:enfiletesbasket/widgets/custom_popup.dart';
 import 'package:enfiletesbasket/screens/login_screen.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -13,29 +14,19 @@ class ResetPassword extends StatefulWidget {
 
 class _ResetPasswordState extends State<ResetPassword> {
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
   final AuthService authService = AuthService();
 
   bool isLoading = false;
   bool isEmailEmpty = false;
-  bool isPasswordEmpty = false;
-  bool isConfirmPasswordEmpty = false;
-  bool isPasswordMismatch = false;
 
-  Future<void> _resetPassword() async {
+  Future<void> _resetPassword(BuildContext context) async {
     final email = emailController.text.trim();
-    final password = passwordController.text.trim();
-    final confirmPassword = confirmPasswordController.text.trim();
 
     setState(() {
       isEmailEmpty = email.isEmpty;
-      isPasswordEmpty = password.isEmpty;
-      isConfirmPasswordEmpty = confirmPassword.isEmpty;
-      isPasswordMismatch = password != confirmPassword;
     });
 
-    if (isEmailEmpty || isPasswordEmpty || isConfirmPasswordEmpty || isPasswordMismatch) {
+    if (isEmailEmpty) {
       return;
     }
 
@@ -44,19 +35,50 @@ class _ResetPasswordState extends State<ResetPassword> {
     });
 
     try {
+      // Appel à la méthode resetPassword
       await authService.resetPassword(email);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Un lien de réinitialisation a été envoyé à votre adresse e-mail."),
-        ),
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
+
+      // Affiche une popup de succès
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomPopup(
+            title: "Succès",
+            description: "Un lien de réinitialisation a été envoyé à votre adresse e-mail.",
+            actions: [
+              PrimaryButton(
+                text: "Ok",
+                onPressed: () {
+                  Navigator.of(context).pop(); // Ferme la popup
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  );
+                },
+              ),
+            ],
+          );
+        },
       );
     } catch (e) {
-      print("Erreur lors de la réinitialisation : $e");
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      // Affiche une popup d'erreur
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomPopup(
+            title: "Erreur",
+            description: e.toString().replaceFirst("Exception: ", ""),
+            actions: [
+              PrimaryButton(
+                text: "Ok",
+                onPressed: () {
+                  Navigator.of(context).pop(); // Ferme la popup
+                },
+              ),
+            ],
+          );
+        },
+      );
     } finally {
       setState(() {
         isLoading = false;
@@ -74,6 +96,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Logo
               Center(
                 child: Image.asset(
                   'assets/images/logo_enfiletesbaskets_transparent.png',
@@ -84,6 +107,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
               const SizedBox(height: 16),
 
+              // Titre
               const Text(
                 'Mot de passe oublié',
                 style: TextStyle(
@@ -94,50 +118,28 @@ class _ResetPasswordState extends State<ResetPassword> {
 
               const SizedBox(height: 32),
 
+              // Champ e-mail
               CustomTextField(
                 labelText: 'adresse e-mail *',
                 controller: emailController,
                 borderColor: isEmailEmpty ? Colors.red : null,
               ),
 
-              const SizedBox(height: 24),
-
-              CustomTextField(
-                labelText: 'Nouveau mot de passe *',
-                controller: passwordController,
-                obscureText: true,
-                borderColor: isPasswordEmpty ? Colors.red : null,
-              ),
-
-              const SizedBox(height: 24),
-
-              CustomTextField(
-                labelText: 'Confirmer le mot de passe *',
-                controller: confirmPasswordController,
-                obscureText: true,
-                borderColor: isConfirmPasswordEmpty || isPasswordMismatch ? Colors.red : null,
-              ),
-
-              if (isPasswordMismatch)
-                const Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    "Les mots de passe ne correspondent pas.",
-                    style: TextStyle(color: Colors.red, fontSize: 14),
-                  ),
-                ),
-
               const SizedBox(height: 50),
+
+              // Bouton de réinitialisation ou indicateur de chargement
               Center(
                 child: isLoading
                     ? const CircularProgressIndicator()
                     : PrimaryButton(
                   text: 'Réinitialiser le mot de passe',
-                  onPressed: _resetPassword,
+                  onPressed: () => _resetPassword(context),
                 ),
               ),
 
               const SizedBox(height: 60),
+
+              // Bouton retour
               Center(
                 child: TextButton(
                   onPressed: () {
