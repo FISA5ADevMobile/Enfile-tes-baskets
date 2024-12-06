@@ -4,14 +4,14 @@ class CustomTextField extends StatelessWidget {
   final String labelText;
   final bool obscureText;
   final TextEditingController? controller;
-  final Color? borderColor; // Nouvelle propriété pour la bordure
+  final Color? borderColor;
 
   const CustomTextField({
     Key? key,
     required this.labelText,
     this.obscureText = false,
     this.controller,
-    this.borderColor, // Ajout
+    this.borderColor,
   }) : super(key: key);
 
   @override
@@ -26,13 +26,13 @@ class CustomTextField extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
           borderSide: BorderSide(
-            color: borderColor ?? const Color(0xFFE8E8E8), // Défaut ou rouge
+            color: borderColor ?? const Color(0xFFE8E8E8),
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
           borderSide: BorderSide(
-            color: borderColor ?? const Color(0xFFE8E8E8), // Défaut ou rouge
+            color: borderColor ?? const Color(0xFFE8E8E8),
           ),
         ),
         focusedBorder: OutlineInputBorder(

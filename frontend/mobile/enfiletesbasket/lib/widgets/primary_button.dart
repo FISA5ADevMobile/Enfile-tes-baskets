@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class PrimaryButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
-  final double? width; // Ajout d'un paramètre optionnel pour la largeur
+  final double? width;
 
   const PrimaryButton({
     Key? key,
@@ -15,7 +15,7 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width ?? double.infinity, // Utilise la largeur fournie ou occupe tout l'espace disponible
+      width: width ?? double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
