@@ -2,6 +2,7 @@ package com.enfiletesbaskets.enfiletesbaskets.controllers;
 
 import com.enfiletesbaskets.enfiletesbaskets.dto.CreatePostDTO;
 import com.enfiletesbaskets.enfiletesbaskets.dto.PostDTO;
+import com.enfiletesbaskets.enfiletesbaskets.dto.UpdatePostDTO;
 import com.enfiletesbaskets.enfiletesbaskets.exception.NoContentException;
 import com.enfiletesbaskets.enfiletesbaskets.exception.PostNotFound;
 import com.enfiletesbaskets.enfiletesbaskets.exception.UserNotFound;
@@ -69,5 +70,16 @@ public class PostController {
         }
     }
 
-    //TODO : Add put post
+    @PutMapping("/{postId}")
+    public ResponseEntity<?> updatePost(@PathVariable Long postId, @RequestBody UpdatePostDTO dto) {
+        try {
+            PostDTO updatedPost = postService.updatePost(postId, dto);
+            return ResponseEntity.ok(updatedPost);
+        } catch (NoContentException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
 }

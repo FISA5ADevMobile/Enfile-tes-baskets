@@ -2,6 +2,7 @@ package com.enfiletesbaskets.enfiletesbaskets.services;
 
 import com.enfiletesbaskets.enfiletesbaskets.dto.CreatePostDTO;
 import com.enfiletesbaskets.enfiletesbaskets.dto.PostDTO;
+import com.enfiletesbaskets.enfiletesbaskets.dto.UpdatePostDTO;
 import com.enfiletesbaskets.enfiletesbaskets.exception.NoContentException;
 import com.enfiletesbaskets.enfiletesbaskets.exception.PostNotFound;
 import com.enfiletesbaskets.enfiletesbaskets.exception.UserNotFound;
@@ -79,4 +80,28 @@ public class PostService {
 
         return postRepository.save(post);
     }
+
+    public PostDTO updatePost(Long postId, UpdatePostDTO dto) {
+        // Recherche du post
+        PostModel post = postRepository.findById(postId)
+                .orElseThrow(() -> new NoContentException("Post with ID " + postId + " not found."));
+
+        // Mise à jour des champs si fournis
+        if (dto.getDescription() != null) {
+            post.setDescription(dto.getDescription());
+        }
+        if (dto.getImage() != null) {
+            post.setImage(dto.getImage());
+        }
+        if (dto.getVisible() != null) {
+            post.setVisible(dto.getVisible());
+        }
+
+        // Sauvegarde des modifications
+        PostModel updatedPost = postRepository.save(post);
+
+        // Retourne le DTO
+        return PostMapper.toDTO(updatedPost);
+    }
+
 }
