@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PostRepository extends CrudRepository<PostModel, Long> {
+public interface PostRepository extends JpaRepository<PostModel, Long> {
     List<PostModel> findAll();
 }
