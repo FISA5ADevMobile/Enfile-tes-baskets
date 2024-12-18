@@ -10,6 +10,9 @@ import com.enfiletesbaskets.enfiletesbaskets.models.PostModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.PostRepository;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.UserRepository;
+import com.enfiletesbaskets.enfiletesbaskets.security.JwtTokenProvider;
+import org.apache.catalina.User;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
@@ -25,7 +28,9 @@ public class PostService {
     private PostRepository postRepository;
 
     @Resource
-    private UserRepository userRepository;
+    private UserService userService;
+
+    private JwtTokenProvider jwtTokenProvider;
 
     // Ajoutez des méthodes et des dépendances si nécessaire
     public List<PostDTO> getAllPost(){
@@ -51,7 +56,8 @@ public class PostService {
     }
 
     public PostModel createPost(CreatePostDTO dto){
-        UserModel creator = userRepository.findByEmail(dto.getToken());
+        UserModel creator = userService.getUserById(jwtTokenProvider.getUserIdFromToken(dto.getToken()));
+
         if (creator == null) {
             throw new UserNotFound("User not found with email: " + dto.getToken());
         }
