@@ -18,8 +18,8 @@ import java.util.List;
 public class UserService implements UserDetailsService {
 
 
-    private UserRepository userRepository;
-    private JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     public UserService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
@@ -51,6 +51,16 @@ public class UserService implements UserDetailsService {
     }
 
     public UserModel authenticate(Authentication authentication) {
-        return userRepository.findById(jwtTokenProvider.getUserIdFromToken(authentication.getPrincipal().toString())).orElseThrow(() -> new UsernameNotFoundException("Invalid token"));
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserDetails)) {
+            throw new UsernameNotFoundException("Authentication failed: UserDetails not found");
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername(); // Récupère le nom d'utilisateur
+
+        // Charge l'utilisateur depuis la base de données
+        return userRepository.findByPseudo(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
+
 }

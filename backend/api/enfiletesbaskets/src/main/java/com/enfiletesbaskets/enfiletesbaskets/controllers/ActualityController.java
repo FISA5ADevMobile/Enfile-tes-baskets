@@ -17,11 +17,9 @@ public class ActualityController {
 
     @Resource
     private ActualityService actualityService;
-    private final UserService userService;
 
-    public ActualityController(ActualityService actualityService, UserService userService){
+    public ActualityController(ActualityService actualityService){
         this.actualityService = actualityService;
-        this.userService = userService;
     }
 
     @GetMapping("/get_1/{id}")
@@ -37,9 +35,8 @@ public class ActualityController {
     }
 
     @PostMapping("/subscribe/{actualityId}")
-    public ResponseEntity<String> subscribeToEvent(@PathVariable Long actualityId, Authentication authentication) {
-        UserModel user = userService.authenticate(authentication);
-        actualityService.subscribeToEvent(actualityId, user.getId());
+    public ResponseEntity<String> subscribeToEvent(@PathVariable Long actualityId, Authentication auth) {
+        actualityService.subscribeToEvent(actualityId, auth);
         return ResponseEntity.ok("Subscribed to event");
     }
 
@@ -48,5 +45,11 @@ public class ActualityController {
     public ResponseEntity<ActualityModel> addActuality(@RequestBody ActualityModel actuality) {
         ActualityModel savedActuality = actualityService.saveActuality(actuality);
         return ResponseEntity.ok(savedActuality);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteActualityById(@PathVariable Long id) {
+        actualityService.deleteActualityById(id);
+        return ResponseEntity.ok("Actuality deleted successfully");
     }
 }
