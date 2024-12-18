@@ -22,7 +22,6 @@ public class PostController {
     @Resource
     private PostService postService;
 
-    // Ajoutez des endpoints (méthodes REST) si nécessaire
     @GetMapping("/all")
     public ResponseEntity<?> getAllPosts() {
         try {

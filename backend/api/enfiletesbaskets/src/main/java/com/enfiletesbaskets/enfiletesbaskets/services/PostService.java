@@ -30,12 +30,11 @@ public class PostService {
     @Resource
     private UserService userService;
 
+    @Resource
     private JwtTokenProvider jwtTokenProvider;
 
-    // Ajoutez des méthodes et des dépendances si nécessaire
     public List<PostDTO> getAllPost(){
         List<PostModel> posts = postRepository.findAll();
-        System.out.println("RESULT / " + posts);
         if (posts.isEmpty()) {
             throw new NoContentException("No post found.");
         }
