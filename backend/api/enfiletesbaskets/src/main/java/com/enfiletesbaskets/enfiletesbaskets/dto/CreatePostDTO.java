@@ -1,12 +1,10 @@
 package com.enfiletesbaskets.enfiletesbaskets.dto;
 
-import java.util.Date;
-
 public class CreatePostDTO {
     private String description;
     private byte[] image;
     private Boolean visible;
-    private String email; // ID du créateur
+    private String token; // ID du créateur
     private Long relatedPostId; // ID du post lié, si applicable
     // Getters et Setters
     public String getDescription() {
@@ -33,12 +31,12 @@ public class CreatePostDTO {
         this.visible = visible;
     }
 
-    public String getEmail() {
-        return email;
+    public String getToken() {
+        return token;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Long getRelatedPostId() {

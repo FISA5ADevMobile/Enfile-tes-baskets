@@ -51,9 +51,9 @@ public class PostService {
     }
 
     public PostModel createPost(CreatePostDTO dto){
-        UserModel creator = userRepository.findByEmail(dto.getEmail());
+        UserModel creator = userRepository.findByEmail(dto.getToken());
         if (creator == null) {
-            throw new UserNotFound("User not found with email: " + dto.getEmail());
+            throw new UserNotFound("User not found with email: " + dto.getToken());
         }
 
         PostModel relatedPost = null;
