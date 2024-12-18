@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../services/tags_provider.dart';
+import '../widgets/FilterButtons.dart';
+import '../widgets/TagCard.dart';
 
 class TagsPage extends StatelessWidget {
   final String className;
@@ -12,16 +13,15 @@ class TagsPage extends StatelessWidget {
     required this.className,
     required this.classId,
     required this.courseId,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    final tagsProvider = Provider.of<TagsProvider>(context);
+    final tagsProvider = Provider.of<TagsProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tags for $className'),
+        title: Text('Parcours d’orientation'),
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),
@@ -29,25 +29,54 @@ class TagsPage extends StatelessWidget {
           ),
         ],
       ),
-      body: tagsProvider.isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-        itemCount: tagsProvider.tags.length,
-        itemBuilder: (context, index) {
-          final tag = tagsProvider.tags[index];
-          return ListTile(
-            title: Text(tag['name']),
-            trailing: Text(
-              tag['validated'] ? 'Validated' : 'Not Validated',
-              style: TextStyle(
-                color: tag['validated'] ? Colors.green : Colors.red,
+      body: FutureBuilder<void>(
+        future: tagsProvider.fetchTags(classId, courseId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('An error occurred: ${snapshot.error}'),
+            );
+          }
+
+          return Column(
+            children: [
+              // Utilisation directe du FilterButtons
+              FilterButtons(),
+              Expanded(
+                child: Consumer<TagsProvider>(
+                  builder: (context, provider, child) {
+                    final tags = provider.filteredTags;
+
+                    if (tags.isEmpty) {
+                      return Center(child: Text('No tags found.'));
+                    }
+
+                    return ListView.builder(
+                      itemCount: tags.length,
+                      itemBuilder: (context, index) {
+                        final tag = tags[index];
+                        return TagCard(
+                          tag: tag,
+                          onValidate: (tagId) {
+                            provider.validateTag(classId, courseId, tagId, 1);
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
-            onTap: () {
-              // Show tag details or validate
-            },
+            ],
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: tagsProvider.toggleCamera,
+        child: Icon(tagsProvider.isCameraActive ? Icons.close : Icons.qr_code),
       ),
     );
   }

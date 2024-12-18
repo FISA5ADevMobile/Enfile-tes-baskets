@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:enfiletesbasket/model/Course.dart';
 import 'package:http/http.dart' as http;
 
 class ClassesService {
   final String baseUrl = "http://10.0.2.2:8081/classes";
 
-  /// Fetch classes subscribed by the user
-  Future<List<Map<String, dynamic>>> fetchSubscribedClasses(int idUser) async {
+  /// Fetch classes subscribed by the user and return a list of Course objects
+  Future<List<Course>> fetchSubscribedClasses(int idUser) async {
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/subscribed/$idUser'),
@@ -13,7 +14,8 @@ class ClassesService {
       );
 
       if (response.statusCode == 200) {
-        return List<Map<String, dynamic>>.from(json.decode(response.body));
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((json) => Course.fromJson(json)).toList();
       } else {
         throw Exception("Failed to load subscribed classes");
       }
@@ -29,7 +31,6 @@ class ClassesService {
         Uri.parse('$baseUrl/join/$idUser?password=$password'),
         headers: {'Content-Type': 'application/json; charset=utf-8'},
       );
-
       return response;
     } catch (e) {
       throw Exception("Error joining class: $e");
@@ -48,15 +49,22 @@ class ClassesService {
     } catch (e) {
       throw Exception("Error joining class: $e");
     }
-    /*if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Tag successfully reinit')),
+  }
+  Future<int?> getCourseIdForClass(int classId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/courses/user/1?classId=$classId'),
+        headers: {'Content-Type': 'application/json; charset=utf-8'},
       );
-      fetchTags();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error reinit tags')),
-      );
-    }*/
+
+      if (response.statusCode == 200) {
+        print("Body getCourseId: ${response.body}");
+        return int.tryParse(response.body);
+      } else {
+        throw Exception('Failed to fetch courseId: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception("Error fetching courseId for classId $classId: $e");
+    }
   }
 }

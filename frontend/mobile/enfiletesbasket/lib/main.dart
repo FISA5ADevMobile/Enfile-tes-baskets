@@ -1,5 +1,6 @@
 
 import 'package:enfiletesbasket/screens/MainNavigationPage.dart';
+import 'package:enfiletesbasket/services/CourseProvider.dart';
 import 'package:enfiletesbasket/services/classes_provider.dart';
 import 'package:enfiletesbasket/services/tags_provider.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => ClassesProvider()),
         ChangeNotifierProvider(create: (_) => TagsProvider()),
+        ChangeNotifierProvider(create: (_) => CourseProvider()),
       ],
       child: const MyApp(),
     ),

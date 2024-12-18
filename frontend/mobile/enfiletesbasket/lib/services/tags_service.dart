@@ -1,67 +1,51 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import '../model/tag.dart';
 
 class TagsService {
-  final String baseUrl = "http://10.0.2.2:8080";
+  // Liste statique pour simuler les données
+  final List<Tag> _mockTags = [
+    Tag(
+      id: 1,
+      name: "Balise 1",
+      description: "Emplacement initial de l’activité d’orientation",
+      xPos: 0.0,
+      yPos: 0.0,
+      validated: false,
+    ),
+    Tag(
+      id: 2,
+      name: "Balise 2",
+      description: "Premier point de contrôle du parcours",
+      xPos: 10.5,
+      yPos: 5.2,
+      validated: false,
+    ),
+    Tag(
+      id: 3,
+      name: "Balise 3",
+      description: "Emplacement final de l’activité",
+      xPos: 25.3,
+      yPos: 18.7,
+      validated: true,
+    ),
+  ];
 
-  Future<List<Map<String, dynamic>>> fetchClassTags(int classId) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/tags/class/$classId'),
-      headers: {'Content-Type': 'application/json; charset=utf-8'},
-    );
-
-    if (response.statusCode == 200) {
-      return List<Map<String, dynamic>>.from(json.decode(response.body));
-    } else {
-      throw Exception('Failed to fetch class tags');
-    }
+  // Simule l'appel API pour récupérer les tags
+  Future<List<Tag>> fetchTags(int classId, int courseId) async {
+    // Simuler un délai pour imiter un appel réseau
+    await Future.delayed(Duration(seconds: 1));
+    return _mockTags;
   }
 
-  Future<List<Map<String, dynamic>>> fetchCourseTags(int courseId) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/tags/course/$courseId'),
-      headers: {'Content-Type': 'application/json; charset=utf-8'},
-    );
-
-    if (response.statusCode == 200) {
-      return List<Map<String, dynamic>>.from(json.decode(response.body));
-    } else {
-      throw Exception('Failed to fetch course tags');
-    }
-  }
-
+  // Simule la réinitialisation des tags
   Future<void> resetTags(int courseId) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/classes/$courseId/tags/reset'),
-      headers: {'Content-Type': 'application/json; charset=utf-8'},
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception('Failed to reset tags');
+    for (var tag in _mockTags) {
+      tag.validated = false;
     }
   }
 
-  Future<String> fetchTagDescription(String tagId) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/tags/$tagId/description'),
-      headers: {'Content-Type': 'application/json; charset=utf-8'},
-    );
-
-    if (response.statusCode == 200) {
-      return response.body; // Assuming plain text description
-    } else {
-      throw Exception('Failed to fetch tag description');
-    }
-  }
-
-  Future<void> validateTag(int classId, int courseId, String tagId, int userId) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/classes/$classId/courseId/$courseId/tags/$tagId/validate?userId=$userId'),
-      headers: {'Content-Type': 'application/json; charset=utf-8'},
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception('Failed to validate tag');
-    }
+  // Simule la validation d'un tag
+  Future<void> validateTag(int classId, int courseId, int tagId, int userId) async {
+    final tag = _mockTags.firstWhere((tag) => tag.id == tagId);
+    tag.validated = true;
   }
 }
