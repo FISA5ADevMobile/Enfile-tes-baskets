@@ -1,12 +1,18 @@
-import 'dart:typed_data'; // Assurez-vous d'utiliser celui-ci
 import 'package:flutter/material.dart';
-import '../models/activity.dart';
-
 
 class ActivityCard extends StatelessWidget {
-  final Activity activity;
+  final String title;
+  final String description;
+  final String image; // Chemin de l'image dans les assets
+  final bool isEvent;
 
-  const ActivityCard({Key? key, required this.activity}) : super(key: key);
+  const ActivityCard({
+    Key? key,
+    required this.title,
+    required this.description,
+    required this.image,
+    required this.isEvent,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,22 +31,20 @@ class ActivityCard extends StatelessWidget {
             children: [
               SizedBox(
                 height: 300,
-                child: activity.imageBytes.isNotEmpty
-                    ? Image.memory(
-                  Uint8List.fromList(activity.imageBytes),
+                child: Image.asset(
+                  image, // Chargement de l'image depuis les assets
                   fit: BoxFit.cover,
-                )
-                    : const Icon(Icons.image_not_supported), // Icône par défaut si l'image est absente
+                ),
               ),
               const SizedBox(height: 16),
               Text(
-                activity.title,
+                title,
                 style: const TextStyle(
                     fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const SizedBox(height: 4),
               Text(
-                activity.description,
+                description,
                 maxLines: 3, // Limite à 3 lignes
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(color: Colors.grey),
