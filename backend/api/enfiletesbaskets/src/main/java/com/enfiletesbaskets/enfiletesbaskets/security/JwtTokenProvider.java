@@ -62,17 +62,7 @@ public class JwtTokenProvider {
         return claims.get("isBanned", Boolean.class);
     }
 
-    public Long getUserIdFromToken(String token) {
-        Claims claims = getAllClaimsFromToken(token);
-        return claims.get("id", Long.class);
-    }
-    public Long getUserIdFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
-            return claims.get("id", Long.class);
-    }
+
     public Boolean getIsAdminFromToken(String token) {
         Claims claims = getAllClaimsFromToken(token);
         return claims.get("isAdmin", Boolean.class);
