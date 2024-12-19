@@ -18,21 +18,20 @@ public class TagService {
         this.tagRepository = tagRepository;
         this.courseRepository = courseRepository;
     }
-
-    // public void resetTagsForCourse(Integer courseId, Integer classId) {
-    //     courseRepository.resetTagsForCourse(courseId, classId);
-    // }
-
     public String getTagDescription(Long tagId) {
         return tagRepository.findTagDescriptionById(tagId);
     }
     
     @Transactional
     public void validateTag(Long courseId, Long classId, Long tagId) {
-        // Validate the tag
+        // Validation du tag
+        boolean alreadyValidated = courseRepository.isValidatedTag(courseId, tagId);
+        if (alreadyValidated) {
+            throw new IllegalArgumentException("La balise est déjà validée");
+        }
         int rowsInserted = courseRepository.validateTag(courseId, classId, tagId);
         if (rowsInserted == 0) {
-            throw new IllegalArgumentException("Invalid tag ID for the given class");
+            throw new IllegalArgumentException("Cette balise ne fait pas partie du parcours");
         }
     }
     

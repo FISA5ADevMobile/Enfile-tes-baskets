@@ -49,41 +49,18 @@ public class ClassService {
                 .orElseThrow(() -> new IllegalArgumentException("Course not found for the user in this class"));
     }
 
-    // Subscribe a user to a class with known classId
-    public void subscribeToClass(Long userId, Long classId, String password) {
-        Optional<ClassModel> classOptional = classRepository.findById(classId);
-        if (classOptional.isEmpty() || !classOptional.get().getPassword().equals(password)) {
-            throw new IllegalArgumentException("Invalid class password");
-        }
-
-        ClassModel classModel = classOptional.get();
-
-        if (courseRepository.existsByUserAndClass(userId, classId)) {
-            throw new IllegalStateException("User is already enrolled in this class");
-        }
-
-        CourseModel course = new CourseModel();
-        course.setUser(new UserModel(userId)); 
-        course.setBeginDate(LocalDate.now());
-        course.setEndDate(LocalDate.now().plusMonths(1)); 
-        courseRepository.save(course);
-
-        userRepository.addCourseToUser(userId, course.getId());
-        classRepository.addCourseToClass(classId, course.getId());
-    }
-
-    // Subscribe a user to a class using password
+    // S'inscrire à un parcours à l'aide du code
     @Transactional
     public void subscribeToClassByPassword(Long userId, String password) {
         Optional<ClassModel> classOptional = classRepository.findByPassword(password);
         if (classOptional.isEmpty()) {
-            throw new IllegalArgumentException("No class found with the provided password.");
+            throw new IllegalArgumentException("Pas de parcours associé à ce code.");
         }
 
         Long classId = classOptional.get().getId();
 
         if (courseRepository.existsByUserAndClass(userId, classId)) {
-            throw new IllegalStateException("User is already enrolled in this class.");
+            throw new IllegalStateException("Déjà inscrit au parcours.");
         }
 
         CourseModel course = new CourseModel();

@@ -29,10 +29,9 @@ public class TagController {
     @GetMapping("/class/{classId}")
     public ResponseEntity<List<Map<String, Object>>> getTagsByClass(@PathVariable Long classId) {
         List<Object[]> results = tagRepository.findAllByClassId(classId);
-                // Safely map the query result to a list of key-value pairs
                 List<Map<String, Object>> tags = results.stream().map(row -> {
                     if (row.length < 5) {
-                        throw new IllegalStateException("Unexpected result structure. Expected 5 fields.");
+                        throw new IllegalStateException("Pas la bonne structure.");
                     }
                     Map<String, Object> tag = new HashMap<>();
                     tag.put("id", row[0]);
@@ -42,8 +41,6 @@ public class TagController {
                     tag.put("yPos", row[4]);
                     return tag;
                 }).collect(Collectors.toList());
-                System.out.println("Meriem "+ tags);
-            
                 return ResponseEntity.ok(tags);
     }
 
@@ -51,11 +48,10 @@ public class TagController {
     @GetMapping("/course/{courseId}")
     public ResponseEntity<List<Map<String, Object>>> getTags(@PathVariable Long courseId) {
         List<Object[]> results = tagRepository.findAllByCourseId(courseId);
-    
-        // Safely map the query result to a list of key-value pairs
+
         List<Map<String, Object>> tags = results.stream().map(row -> {
             if (row.length < 5) {
-                throw new IllegalStateException("Unexpected result structure. Expected 5 fields.");
+                throw new IllegalStateException("Pas la bonne structure.");
             }
             Map<String, Object> tag = new HashMap<>();
             tag.put("id", row[0]);

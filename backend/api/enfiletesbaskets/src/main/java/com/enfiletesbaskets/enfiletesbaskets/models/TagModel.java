@@ -19,10 +19,10 @@ public class TagModel {
 
     private String description;
 
-    @Column(name = "xPos")
+    @Column(name = "xpos")
     private Float xPos;
 
-    @Column(name = "yPos")
+    @Column(name = "ypos")
     private Float yPos;
 
     @ManyToMany(mappedBy = "tags")
@@ -30,11 +30,11 @@ public class TagModel {
     private List<ClassModel> classes;
     
     @ManyToMany(mappedBy = "tags")
-    @JsonIgnoreProperties({"tags", "classes"}) // Prevent serialization of tags and classes in CourseModel
+    @JsonIgnoreProperties({"tags", "classes"})
     private List<CourseModel> courses;
     
     @ManyToMany(mappedBy = "tags")
-    @JsonIgnoreProperties({"tags", "classes", "courses"}) // Prevent serialization of related entities in UserModel
+    @JsonIgnoreProperties({"tags", "classes", "courses"})
     private List<UserModel> users;
     
     public Long getId() {

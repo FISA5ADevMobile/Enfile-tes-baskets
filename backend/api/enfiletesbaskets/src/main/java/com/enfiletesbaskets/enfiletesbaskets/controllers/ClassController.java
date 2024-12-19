@@ -15,15 +15,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/classes")
 public class ClassController {
     private final ClassService classService;
-    private final TagService tagService; // Add TagService as a dependency
-    private final CourseService courseService; // Add CourseService as a dependency
+    private final TagService tagService;
+    private final CourseService courseService;
 
     public ClassController(ClassService classService, TagService tagService, CourseService courseService) {
         this.classService = classService;
-        this.tagService = tagService; // Initialize TagService
-        this.courseService = courseService; // Initialize CourseService
+        this.tagService = tagService;
+        this.courseService = courseService;
     }
 
+    //récupérer les parcours auquel l'utilisateur est inscrit
     @GetMapping("/subscribed/{userId}")
     public ResponseEntity<List<Map<String, String>>> getSubscribedClasses(@PathVariable Long userId) {
         return ResponseEntity.ok(classService.getSubscribedClasses(userId));
@@ -34,27 +35,28 @@ public class ClassController {
         return ResponseEntity.ok(classService.getFullSubscribedClasses(userId));
     }
 
+    //On va s'inscrire à un parcours
     @PostMapping("/join/{userId}")
     public ResponseEntity<String> joinClass(
         @PathVariable Long userId,
         @RequestParam String password
     ) {
         classService.subscribeToClassByPassword(userId, password);
-        return ResponseEntity.ok("User added to class and tags initialized.");
+        return ResponseEntity.ok("Parcours rejoint");
     }
 
     @PostMapping("/{courseId}/tags/reset")
     public ResponseEntity<String> resetTags(@PathVariable Long courseId) {
         try {
-            // Call the resetTagsForCourse method from CourseService
+            // On reset les tags du parcours
             courseService.resetTagsForCourse(courseId);
-            return ResponseEntity.ok("Tags reset successfully.");
+            return ResponseEntity.ok("Balises réinitialisées.");
         } catch (Exception e) {
-            // Return an error message if something goes wrong
-            return ResponseEntity.badRequest().body("Error resetting tags: " + e.getMessage());
+            // On retourne un message d'erreur
+            return ResponseEntity.badRequest().body("Erreur lors de la réinitialisation des balises : " + e.getMessage());
         }
     }
-
+    //Validation d'une balise pour un parcours
     @PostMapping("/{classId}/courseId/{courseId}/tags/{tagId}/validate")
     public ResponseEntity<String> validateTag(
             @PathVariable Long classId,
@@ -62,11 +64,10 @@ public class ClassController {
             @PathVariable Long tagId,
             @RequestParam Long userId) {
         try {
-            // Long courseId = classService.getCourseIdForUserAndClass(userId, classId);
             tagService.validateTag(courseId, classId, tagId);
-            return ResponseEntity.ok("Tag validated successfully.");
+            return ResponseEntity.ok("Balise validée.");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error validating tag: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erreur lors de la validation : " + e.getMessage());
         }
     }
     

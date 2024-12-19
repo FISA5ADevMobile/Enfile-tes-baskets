@@ -1,7 +1,6 @@
 package com.enfiletesbaskets.enfiletesbaskets.repositories;
 import com.enfiletesbaskets.enfiletesbaskets.models.CourseModel;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,13 +25,12 @@ public interface CourseRepository extends JpaRepository<CourseModel, Long> {
                "WHERE uc.user_id = :userId AND cc.class_id = :classId)", nativeQuery = true)
     boolean existsByUserAndClass(@Param("userId") Long userId, @Param("classId") Long classId);
 
-    @Query("SELECT c FROM CourseModel c WHERE c.user.id = :userId")
-    List<CourseModel> findAllByUserId(@Param("userId") Long userId);
+    @Query(value="SELECT EXISTS(SELECT 1 FROM Course_Tags WHERE course_id = :courseId AND tag_id = :tagId)", nativeQuery = true)
+    boolean isValidatedTag(@Param("courseId") Long courseId, @Param("tagId") Long tagId);
 
     @Modifying
     @Query(value = "INSERT INTO Course_Tags (tag_id, course_id) " +
                    "SELECT :tagId, :courseId FROM Class_Tags " +
                    "WHERE class_id = :classId AND tag_id = :tagId", nativeQuery = true)
     int validateTag(@Param("courseId") Long courseId, @Param("classId") Long classId, @Param("tagId") Long tagId);
-    
 }
