@@ -7,6 +7,7 @@ import com.enfiletesbaskets.enfiletesbaskets.exception.NoContentException;
 import com.enfiletesbaskets.enfiletesbaskets.services.CommunityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
 import java.util.List;
@@ -43,9 +44,9 @@ public class CommunityController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCommunity(@RequestBody CreateCommunityDTO dto) {
+    public ResponseEntity<?> createCommunity(@RequestBody CreateCommunityDTO dto, Authentication auth) {
         try {
-            CommunityDTO newCommunity = communityService.createCommunity(dto);
+            CommunityDTO newCommunity = communityService.createCommunity(dto, auth);
             return ResponseEntity.status(HttpStatus.CREATED).body(newCommunity);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -56,9 +57,9 @@ public class CommunityController {
 
 
     @PostMapping("/post/{communityId}")
-    public ResponseEntity<?> createPostInCommunity(@PathVariable Long communityId, @RequestBody CreatePostDTO dto) {
+    public ResponseEntity<?> createPostInCommunity(@PathVariable Long communityId, @RequestBody CreatePostDTO dto, Authentication auth) {
         try {
-            CommunityDTO updatedCommunity = communityService.createPostInCommunity(communityId, dto);
+            CommunityDTO updatedCommunity = communityService.createPostInCommunity(communityId, dto, auth);
             return ResponseEntity.ok(updatedCommunity);
         } catch (NoContentException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());

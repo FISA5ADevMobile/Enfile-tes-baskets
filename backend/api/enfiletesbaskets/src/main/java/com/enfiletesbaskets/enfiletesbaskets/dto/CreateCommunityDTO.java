@@ -4,7 +4,6 @@ public class CreateCommunityDTO {
     private String nom;
     private String description;
     private Boolean isPublic;
-    private String adminToken; // Identifiant de l'admin via un token ou ID utilisateur
     private Long categoryId; // Catégorie associée
 
     // Getters et Setters
@@ -30,14 +29,6 @@ public class CreateCommunityDTO {
 
     public void setIsPublic(Boolean isPublic) {
         this.isPublic = isPublic;
-    }
-
-    public String getAdminToken() {
-        return adminToken;
-    }
-
-    public void setAdminToken(String adminToken) {
-        this.adminToken = adminToken;
     }
 
     public Long getCategoryId() {
