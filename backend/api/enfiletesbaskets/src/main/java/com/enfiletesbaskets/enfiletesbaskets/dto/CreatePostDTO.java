@@ -4,7 +4,6 @@ public class CreatePostDTO {
     private String description;
     private byte[] image;
     private Boolean visible;
-    private String token; // ID du créateur
     private Long relatedPostId; // ID du post lié, si applicable
     // Getters et Setters
     public String getDescription() {
@@ -29,14 +28,6 @@ public class CreatePostDTO {
 
     public void setVisible(Boolean visible) {
         this.visible = visible;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public Long getRelatedPostId() {

@@ -11,6 +11,7 @@ import com.enfiletesbaskets.enfiletesbaskets.models.PostModel;
 import com.enfiletesbaskets.enfiletesbaskets.services.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
 
@@ -36,9 +37,9 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPost(@RequestBody CreatePostDTO createPostDTO) {
+    public ResponseEntity<?> createPost(@RequestBody CreatePostDTO createPostDTO, Authentication auth) {
         try {
-            PostModel createdPost = postService.createPost(createPostDTO);
+            PostModel createdPost = postService.createPost(createPostDTO, auth);
             PostDTO response = PostMapper.toDTO(createdPost);
             return ResponseEntity.ok(response);
         } catch (UserNotFound | PostNotFound e){

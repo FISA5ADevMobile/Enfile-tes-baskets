@@ -2,7 +2,6 @@ package com.enfiletesbaskets.enfiletesbaskets.security;
 
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
@@ -34,31 +33,41 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         return !isTokenExpired(token);
     }
-
+    private String cleanToken(String token) {
+        if (token != null) {
+            return token.replace("\n", "").replace("\r", "").trim();
+        }
+        return null;
+    }
     private boolean isTokenExpired(String token) {
-        Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        String cleanedToken = cleanToken(token);
+        Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(cleanedToken).getBody();
         return claims.getExpiration().before(new Date());
     }
-
+    public Claims getAllClaimsFromToken(String token) {
+        String cleanedToken = cleanToken(token);
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(cleanedToken)
+                .getBody();
+    }
     public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.getSubject(); // Le nom d'utilisateur est généralement stocké dans le sujet
+        Claims claims = getAllClaimsFromToken(token);
+        return claims.getSubject();
     }
+
+    public Boolean getIsBannedFromToken(String token) {
+        Claims claims = getAllClaimsFromToken(token);
+        return claims.get("isBanned", Boolean.class);
+    }
+
     public Long getUserIdFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
-            return claims.get("id", Long.class);
+        Claims claims = getAllClaimsFromToken(token);
+        return claims.get("id", Long.class);
     }
+
     public Boolean getIsAdminFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims = getAllClaimsFromToken(token);
         return claims.get("isAdmin", Boolean.class);
     }
 

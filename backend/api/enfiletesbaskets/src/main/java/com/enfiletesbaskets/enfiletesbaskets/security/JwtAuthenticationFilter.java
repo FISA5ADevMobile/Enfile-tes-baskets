@@ -1,5 +1,6 @@
 package com.enfiletesbaskets.enfiletesbaskets.security;
 
+import io.jsonwebtoken.Claims;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -41,15 +42,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = getJwtFromRequest(request);
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            String username = jwtTokenProvider.getUsernameFromToken(token);
-            Boolean isAdmin = jwtTokenProvider.getIsAdminFromToken(token);
+            Claims claims = jwtTokenProvider.getAllClaimsFromToken(token);
+
+            String username = claims.getSubject();
+            Long userId = claims.get("id", Long.class);
+            Boolean isAdmin = claims.get("isAdmin", Boolean.class);
             System.out.println("Token valid for username: " + username);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             // Authentifiez l'utilisateur
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(Map.of("isAdmin", isAdmin));
+            authentication.setDetails(Map.of("id", userId, "isAdmin", isAdmin != null ? isAdmin : false));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else {
             System.out.println("Invalid or missing token for path: " + path);

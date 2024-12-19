@@ -17,6 +17,7 @@ import com.enfiletesbaskets.enfiletesbaskets.repositories.PostRepository;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.UserRepository;
 import com.enfiletesbaskets.enfiletesbaskets.security.JwtTokenProvider;
 import jakarta.annotation.Resource;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -55,14 +56,11 @@ public class CommunityService {
         return CommunityMapper.toDTO(community);
     }
 
-    public CommunityDTO createPostInCommunity(Long communityId, CreatePostDTO dto) {
+    public CommunityDTO createPostInCommunity(Long communityId, CreatePostDTO dto, Authentication auth) {
         CommunityModel community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new NoContentException("Community with ID " + communityId + " not found."));
 
-        UserModel creator = userService.getUserById(jwtTokenProvider.getUserIdFromToken(dto.getToken()));
-        if (creator == null) {
-            throw new UserNotFound("User not found with email: " + dto.getToken());
-        }
+        UserModel creator = userService.authenticate(auth);
 
         PostModel relatedPost = null;
         if (dto.getRelatedPostId() != null) {
@@ -86,11 +84,8 @@ public class CommunityService {
         return CommunityMapper.toDTO(community);
     }
 
-    public CommunityDTO createCommunity(CreateCommunityDTO dto) {
-        UserModel admin = userService.getUserById(jwtTokenProvider.getUserIdFromToken(dto.getAdminToken()));
-        if (admin == null) {
-            throw new UserNotFound("User not found with email: " + dto.getAdminToken());
-        }
+    public CommunityDTO createCommunity(CreateCommunityDTO dto, Authentication auth) {
+        UserModel admin = userService.authenticate(auth);
 
         CategoryModel category = null;
         if (dto.getCategoryId() != null) {

@@ -55,12 +55,8 @@ public class PostService {
         return  PostMapper.toDTO(postRepository.save(res));
     }
 
-    public PostModel createPost(CreatePostDTO dto){
-        UserModel creator = userService.getUserById(jwtTokenProvider.getUserIdFromToken(dto.getToken()));
-
-        if (creator == null) {
-            throw new UserNotFound("User not found with email: " + dto.getToken());
-        }
+    public PostModel createPost(CreatePostDTO dto, Authentication auth){
+        UserModel creator = userService.authenticate(auth);
 
         PostModel relatedPost = null;
         if (dto.getRelatedPostId() != null) {
