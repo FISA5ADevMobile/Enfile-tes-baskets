@@ -1,10 +1,10 @@
-class Activity {
+class Actuality {
   final String title;
   final String description;
   final List<int> imageBytes;
   final bool isEvent;
 
-  Activity({
+  Actuality({
     required this.title,
     required this.description,
     required this.imageBytes,
@@ -12,8 +12,8 @@ class Activity {
   });
 
   // Factory method pour convertir depuis le JSON
-  factory Activity.fromJson(Map<String, dynamic> json) {
-    return Activity(
+  factory Actuality.fromJson(Map<String, dynamic> json) {
+    return Actuality(
       title: json['title'],
       description: json['description'],
       imageBytes: List<int>.from(json['image']),

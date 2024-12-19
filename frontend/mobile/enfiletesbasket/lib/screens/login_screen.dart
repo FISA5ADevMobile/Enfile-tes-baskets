@@ -5,6 +5,7 @@ import 'package:enfiletesbasket/widgets/custom_text_field.dart';
 import 'package:enfiletesbasket/widgets/primary_button.dart';
 import 'package:enfiletesbasket/screens/register_screen.dart';
 import 'package:enfiletesbasket/screens/reset_password._screen.dart';
+import 'package:enfiletesbasket/screens/home_page.dart'; // Import de la HomePage
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -40,9 +41,15 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
+      // Appel à l'authentification via AuthProvider
       await Provider.of<AuthProvider>(context, listen: false).login(email, password);
       print("Connexion réussie !");
-      // Navigator.pushReplacementNamed(context, '/home');
+
+      // Redirection vers la page d'accueil
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
     } catch (e) {
       print("Erreur de connexion : $e");
       setState(() {
