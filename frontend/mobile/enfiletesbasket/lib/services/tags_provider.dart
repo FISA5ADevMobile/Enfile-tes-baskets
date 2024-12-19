@@ -32,7 +32,6 @@ class TagsProvider extends ChangeNotifier {
 
   /// Active ou désactive la caméra
   void toggleCamera() {
-    print("Toggle camera: $_isCameraActive");
     _isCameraActive = !_isCameraActive;
     notifyListeners();
   }
@@ -40,8 +39,7 @@ class TagsProvider extends ChangeNotifier {
   /// Récupère toutes les balises pour une classe et un cours
   Future<void> fetchTags(int classId, int courseId) async {
     try {
-      final fetchedTags = await _tagsService.fetchTags(classId, courseId);
-      _tags = fetchedTags;
+      _tags = await _tagsService.fetchClassTags(classId);
       notifyListeners();
     } catch (e) {
       print('Error fetching tags: $e');
@@ -68,44 +66,7 @@ class TagsProvider extends ChangeNotifier {
       final tag = _tags.firstWhere(
             (tag) => tag.id == tagId,
         orElse: () => Tag(
-          id: -1,
-          name: "Unknown Tag",
-          description: "Tag not found",
-          validated: false,
-          xPos: 0.0,
-          yPos: 0.0,
-        ),
-      );
-      if (tag.id != -1) {
-        tag.validated = true; // Met à jour localement
-      }
-      notifyListeners();
-    } catch (e) {
-      print('Error validating tag: $e');
-    }
-  }
-
-  /// Récupère les détails d'une balise spécifique si elle n'est pas chargée
-  Future<void> fetchTagDetails(String tagId) async {
-    try {
-      final tag = await _tagsService.fetchTagDetails(tagId);
-      if (!_tags.any((existingTag) => existingTag.id == tag.id)) {
-        _tags.add(tag); // Ajoute la balise si elle n'existe pas déjà
-      }
-      notifyListeners();
-    } catch (e) {
-      print('Error fetching tag details: $e');
-    }
-  }
-
-  /// Traite une balise scannée
-  Future<void> processScannedTag(String tagId, int classId, int courseId) async {
-    try {
-      // Vérifie si la balise existe déjà
-      final tag = _tags.firstWhere(
-            (tag) => tag.id.toString() == tagId,
-        orElse: () => Tag(
-          id: -1,
+          id: tagId,
           name: "Unknown Tag",
           description: "Tag not found",
           validated: false,
@@ -115,11 +76,36 @@ class TagsProvider extends ChangeNotifier {
       );
       if (tag.id != -1) {
         tag.validated = true; // Met à jour comme validée
-      } else {
-        // Si elle n'existe pas, récupère ses détails
-        await fetchTagDetails(tagId);
       }
       notifyListeners();
+    } catch (e) {
+      print('Error validating tag: $e');
+    }
+  }
+
+  /// Traite une balise scannée
+  Future<void> processScannedTag(String tagId, int classId, int courseId) async {
+    try {
+      final parsedTagId = int.tryParse(tagId);
+      if (parsedTagId == null) {
+        print('Invalid tag ID: $tagId');
+        return;
+      }
+      final tag = _tags.firstWhere(
+            (tag) => tag.id == parsedTagId,
+        orElse: () => Tag(
+          id: parsedTagId,
+          name: "Unknown Tag",
+          description: "Tag not found",
+          validated: false,
+          xPos: 0.0,
+          yPos: 0.0,
+        ),
+      );
+      if (tag.id != -1) {
+        tag.validated = true; // Met à jour comme validée
+        notifyListeners();
+      }
     } catch (e) {
       print('Error processing scanned tag: $e');
     }

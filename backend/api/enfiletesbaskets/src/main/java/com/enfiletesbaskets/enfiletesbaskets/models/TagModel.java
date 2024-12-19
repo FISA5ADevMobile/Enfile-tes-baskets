@@ -19,10 +19,10 @@ public class TagModel {
 
     private String description;
 
-    @Column(name = "xPos")
+    @Column(name = "xpos")
     private Float xPos;
 
-    @Column(name = "yPos")
+    @Column(name = "ypos")
     private Float yPos;
 
     @ManyToMany(mappedBy = "tags")

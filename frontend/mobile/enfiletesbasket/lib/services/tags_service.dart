@@ -1,6 +1,11 @@
 import '../model/tag.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class TagsService {
+
+  final String baseUrl = "http://10.0.2.2:8081";
+
   // Liste statique pour simuler les données
   final List<Tag> _mockTags = [
     Tag(
@@ -29,11 +34,23 @@ class TagsService {
     ),
   ];
 
-  /// Récupère les balises pour une classe et un cours
-  Future<List<Tag>> fetchTags(int classId, int courseId) async {
-    // Simuler un délai pour imiter un appel réseau
-    await Future.delayed(Duration(seconds: 1));
-    return List<Tag>.from(_mockTags);
+  Future<List<Tag>> fetchClassTags(int classId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/tags/class/$classId'),
+      headers: {'Content-Type': 'application/json; charset=utf-8'},
+    );
+
+    print("ResponseTags: ${response.body}");
+
+    if (response.statusCode == 200) {
+      // Décoder la réponse JSON
+      final List<dynamic> jsonData = json.decode(response.body);
+
+      // Mapper chaque élément JSON sur un objet `Tag`
+      return jsonData.map((tagJson) => Tag.fromJson(tagJson)).toList();
+    } else {
+      throw Exception('Failed to fetch class tags');
+    }
   }
 
   /// Réinitialise toutes les balises à non validées
