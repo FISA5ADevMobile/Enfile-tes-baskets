@@ -2,6 +2,7 @@ package com.enfiletesbaskets.enfiletesbaskets.security;
 
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ public class JwtTokenProvider {
         claims.put("id", user.getId());
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getEmail())
+                .setSubject(user.getPseudo())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
@@ -61,10 +62,6 @@ public class JwtTokenProvider {
         return claims.get("isBanned", Boolean.class);
     }
 
-    public Long getUserIdFromToken(String token) {
-        Claims claims = getAllClaimsFromToken(token);
-        return claims.get("id", Long.class);
-    }
 
     public Boolean getIsAdminFromToken(String token) {
         Claims claims = getAllClaimsFromToken(token);

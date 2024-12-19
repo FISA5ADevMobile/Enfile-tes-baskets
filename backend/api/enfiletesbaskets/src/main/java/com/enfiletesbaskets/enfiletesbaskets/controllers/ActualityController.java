@@ -18,10 +18,6 @@ public class ActualityController {
     @Resource
     private ActualityService actualityService;
 
-    public ActualityController(ActualityService actualityService){
-        this.actualityService = actualityService;
-    }
-
     @GetMapping("/get_1/{id}")
     public ResponseEntity<ActualityModel> getActualityById(@PathVariable Long id) {
         ActualityModel actuality = actualityService.getActualityById(id);
