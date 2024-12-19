@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -46,5 +47,11 @@ public class UserService implements UserDetailsService {
 
     public UserModel authenticate(Authentication authentication) {
         return userRepository.findById(jwtService.getUserIdFromToken(authentication.getPrincipal().toString())).orElseThrow(() -> new UsernameNotFoundException("Invalid token"));
+    }
+
+    public void banUser(Long id) {
+        UserModel user = userRepository.findById(id).orElseThrow();
+        user.setBanDate(new Date());
+        userRepository.save(user);
     }
 }

@@ -1,8 +1,10 @@
 package com.enfiletesbaskets.enfiletesbaskets.controllers;
 
+import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 import com.enfiletesbaskets.enfiletesbaskets.services.UserService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -15,4 +17,14 @@ public class UserController {
     }
 
     // Ajoutez ici d'autres endpoints pour gérer les utilisateurs
+
+    @GetMapping("/all")
+    public List<UserModel> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @PutMapping("/ban/{id}")
+    public void banUser(@PathVariable Long id) {
+        userService.banUser(id);
+    }
 }
