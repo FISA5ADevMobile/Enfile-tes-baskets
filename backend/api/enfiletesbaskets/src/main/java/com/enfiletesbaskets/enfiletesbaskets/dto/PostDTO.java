@@ -1,32 +1,29 @@
-package com.enfiletesbaskets.enfiletesbaskets.models;
+package com.enfiletesbaskets.enfiletesbaskets.dto;
 
-import com.enfiletesbaskets.enfiletesbaskets.dto.PostDTO;
-import jakarta.persistence.*;
+
 import java.util.Date;
 
-@Entity
-public class PostModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PostDTO {
     private Long id;
-
     private String description;
     private Date datePost;
-    private byte[] image;
+    private String imageBase64; // Image encodée en base64 pour transfert
     private Integer nbLike;
     private Integer nbPost;
     private Boolean visible;
     private Date banDate;
+    private Long creatorId; // ID de l'utilisateur créateur
+    private Long relatedPostId; // ID du post lié
 
-    @ManyToOne
-    @JoinColumn(name = "creator")
-    private UserModel creator;
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "related")
-    private PostModel related;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    // Getters and Setters
     public String getDescription() {
         return description;
     }
@@ -43,12 +40,12 @@ public class PostModel {
         this.datePost = datePost;
     }
 
-    public byte[] getImage() {
-        return image;
+    public String getImageBase64() {
+        return imageBase64;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
     }
 
     public Integer getNbLike() {
@@ -83,23 +80,19 @@ public class PostModel {
         this.banDate = banDate;
     }
 
-    public PostModel getRelated() {
-        return related;
+    public Long getCreatorId() {
+        return creatorId;
     }
 
-    public void setRelated(PostModel related) {
-        this.related = related;
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
     }
 
-    public Long getId() {
-        return id;
+    public Long getRelatedPostId() {
+        return relatedPostId;
     }
 
-    public UserModel getCreator() {
-        return creator;
-    }
-
-    public void setCreator(UserModel creator) {
-        this.creator = creator;
+    public void setRelatedPostId(Long relatedPostId) {
+        this.relatedPostId = relatedPostId;
     }
 }

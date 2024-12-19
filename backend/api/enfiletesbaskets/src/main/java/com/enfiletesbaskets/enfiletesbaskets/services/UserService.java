@@ -4,6 +4,7 @@ import com.enfiletesbaskets.enfiletesbaskets.exception.GlobalExceptionHandler;
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.UserRepository;
 import com.enfiletesbaskets.enfiletesbaskets.security.JwtTokenProvider;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -17,8 +18,9 @@ import java.util.List;
 @Service
 public class UserService implements UserDetailsService {
 
-
+    @Resource
     private final UserRepository userRepository;
+    @Resource
     private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
