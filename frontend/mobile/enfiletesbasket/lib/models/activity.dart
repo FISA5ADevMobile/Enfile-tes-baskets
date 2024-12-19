@@ -1,32 +1,36 @@
-class Activity {
+import 'dart:typed_data';
+import 'dart:convert';
+import '../utils/image_utils.dart';
+
+class Actuality {
   final String title;
   final String description;
-  final List<int> imageBytes;
+  final Uint8List imageBytes;
   final bool isEvent;
 
-  Activity({
+  Actuality({
     required this.title,
     required this.description,
     required this.imageBytes,
     required this.isEvent,
   });
 
-  // Factory method pour convertir depuis le JSON
-  factory Activity.fromJson(Map<String, dynamic> json) {
-    return Activity(
-      title: json['title'],
-      description: json['description'],
-      imageBytes: List<int>.from(json['image']),
-      isEvent: json['isEvent'],
+  factory Actuality.fromJson(Map<String, dynamic> json) {
+    return Actuality(
+      title: json['title'] ?? 'Titre non disponible',
+      description: json['description'] ?? 'Description non disponible',
+      imageBytes: json['image'] != null && json['image']!.isNotEmpty
+          ? decodeBase64Image(json['image'])
+          : Uint8List(0), // Image vide si non fournie
+      isEvent: json['event'] ?? false,
     );
   }
 
-  // Méthode pour convertir l'objet en JSON
   Map<String, dynamic> toJson() {
     return {
       'title': title,
       'description': description,
-      'image': imageBytes,
+      'image': base64Encode(imageBytes),
       'isEvent': isEvent,
     };
   }
