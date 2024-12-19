@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -65,4 +66,15 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 
+    public void banUser(Long id) {
+        UserModel user = userRepository.findById(id).orElseThrow();
+        user.setBanDate(new Date());
+        userRepository.save(user);
+    }
+
+    public void unbanUser(Long id) {
+        UserModel user = userRepository.findById(id).orElseThrow();
+        user.setBanDate(null);
+        userRepository.save(user);
+    }
 }
