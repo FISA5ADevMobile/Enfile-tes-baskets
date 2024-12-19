@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import '../services/tags_provider.dart';
 import '../widgets/FilterButtons.dart';
@@ -23,9 +24,18 @@ class TagsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Parcours d’orientation'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () => tagsProvider.resetTags(courseId),
+          Consumer<TagsProvider>(
+            builder: (context, provider, child) {
+              return IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  provider.resetTags(courseId);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Tags reset successfully')),
+                  );
+                },
+              );
+            },
           ),
         ],
       ),
@@ -37,46 +47,67 @@ class TagsPage extends StatelessWidget {
           }
 
           if (snapshot.hasError) {
-            return Center(
-              child: Text('An error occurred: ${snapshot.error}'),
-            );
+            return Center(child: Text('An error occurred: ${snapshot.error}'));
           }
 
-          return Column(
-            children: [
-              // Utilisation directe du FilterButtons
-              FilterButtons(),
-              Expanded(
-                child: Consumer<TagsProvider>(
-                  builder: (context, provider, child) {
-                    final tags = provider.filteredTags;
-
-                    if (tags.isEmpty) {
-                      return Center(child: Text('No tags found.'));
+          return Consumer<TagsProvider>(
+            builder: (context, provider, child) {
+              if (provider.isCameraActive) {
+                return MobileScanner(
+                  onDetect: (barcode) {
+                    if (barcode.barcodes.isNotEmpty) {
+                      final idTag = barcode.barcodes.first.rawValue;
+                      if (idTag != null) {
+                        provider.processScannedTag(idTag, classId, courseId);
+                      }
+                      provider.toggleCamera(); // Ferme la caméra après scan
                     }
-
-                    return ListView.builder(
-                      itemCount: tags.length,
-                      itemBuilder: (context, index) {
-                        final tag = tags[index];
-                        return TagCard(
-                          tag: tag,
-                          onValidate: (tagId) {
-                            provider.validateTag(classId, courseId, tagId, 1);
-                          },
-                        );
-                      },
-                    );
                   },
-                ),
-              ),
-            ],
+                );
+              }
+
+              final tags = provider.filteredTags;
+
+              return Column(
+                children: [
+                  FilterButtons(
+                  ),
+                  if (tags.isEmpty)
+                    Expanded(
+                      child: Center(child: Text('No tags found.')),
+                    )
+                  else
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: tags.length,
+                        itemBuilder: (context, index) {
+                          final tag = tags[index];
+                          return TagCard(
+                            tag: tag,
+                            onValidate: (tagId) {
+                              provider.validateTag(classId, courseId, tagId, 1);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text('Tag ${tag.name} validated!')),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                ],
+              );
+            },
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: tagsProvider.toggleCamera,
-        child: Icon(tagsProvider.isCameraActive ? Icons.close : Icons.qr_code),
+      floatingActionButton: Consumer<TagsProvider>(
+        builder: (context, provider, child) {
+          return FloatingActionButton(
+            onPressed: provider.toggleCamera,
+            child: Icon(provider.isCameraActive ? Icons.close : Icons.qr_code),
+          );
+        },
       ),
     );
   }

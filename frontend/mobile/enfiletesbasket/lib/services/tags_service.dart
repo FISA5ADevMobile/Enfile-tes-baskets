@@ -29,23 +29,30 @@ class TagsService {
     ),
   ];
 
-  // Simule l'appel API pour récupérer les tags
+  /// Récupère les balises pour une classe et un cours
   Future<List<Tag>> fetchTags(int classId, int courseId) async {
     // Simuler un délai pour imiter un appel réseau
     await Future.delayed(Duration(seconds: 1));
-    return _mockTags;
+    return List<Tag>.from(_mockTags);
   }
 
-  // Simule la réinitialisation des tags
+  /// Réinitialise toutes les balises à non validées
   Future<void> resetTags(int courseId) async {
     for (var tag in _mockTags) {
       tag.validated = false;
     }
   }
 
-  // Simule la validation d'un tag
+  /// Valide une balise spécifique
   Future<void> validateTag(int classId, int courseId, int tagId, int userId) async {
-    final tag = _mockTags.firstWhere((tag) => tag.id == tagId);
+    final tag = _mockTags.firstWhere((tag) => tag.id == tagId, orElse: () => throw Exception('Tag not found'));
     tag.validated = true;
+  }
+
+  /// Récupère les détails d'une balise spécifique
+  Future<Tag> fetchTagDetails(String tagId) async {
+    // Simuler un délai pour imiter un appel réseau
+    await Future.delayed(Duration(seconds: 1));
+    return _mockTags.firstWhere((tag) => tag.id.toString() == tagId, orElse: () => throw Exception('Tag not found'));
   }
 }
