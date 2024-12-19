@@ -69,4 +69,10 @@ public class UserService implements UserDetailsService {
         user.setBanDate(new Date());
         userRepository.save(user);
     }
+
+    public void unbanUser(Long id) {
+        UserModel user = userRepository.findById(id).orElseThrow();
+        user.setBanDate(null);
+        userRepository.save(user);
+    }
 }
