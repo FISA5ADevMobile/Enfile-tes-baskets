@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/activity.dart';
-import '../services/activity_service.dart';
 import '../widgets/activity_card.dart';
-import '../widgets/custom_app_bar.dart'; // Import de l'AppBar personnalisée
+import '../widgets/custom_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -10,13 +8,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<List<Activity>> _activities;
-
-  @override
-  void initState() {
-    super.initState();
-    _activities = ActivityService().fetchActivities();
-  }
+  // Simuler des actualités
+  final List<Map<String, dynamic>> _mockedActivities = [
+    {
+      'title': 'Enfile Tes Baskets : Nouveau Parcours',
+      'description': 'Découvrez le dernier parcours dans votre communauté locale !',
+      'image': 'assets/images/logo_enfiletesbaskets_fondbleu.png',
+      'isEvent': true,
+    },
+    {
+      'title': 'Challenge Running',
+      'description': 'Participez à notre challenge running de ce mois-ci et gagnez des récompenses !',
+      'image': 'assets/images/logo_enfiletesbaskets_fondbleu.png',
+      'isEvent': false,
+    },
+    {
+      'title': 'Conseils Running',
+      'description': 'Améliorez votre technique de course grâce à nos astuces de pros.',
+      'image': 'assets/images/logo_enfiletesbaskets_fondbleu.png',
+      'isEvent': false,
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +52,7 @@ class _HomePageState extends State<HomePage> {
           const Padding(
             padding: EdgeInsets.all(12.0),
             child: Text(
-              'Content de te revoir ! Prêt.e à reprendre là où tu t’étais arrêté.e ? 💪',
+              'Content de te revoir ! Prêt.e à reprendre là où tu t’étais arrêté.e ? 💪',
               style: TextStyle(fontSize: 16),
             ),
           ),
@@ -53,27 +65,17 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<Activity>>(
-              future: _activities,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Erreur : ${snapshot.error}'),
-                  );
-                } else if (snapshot.hasData) {
-                  final activities = snapshot.data!;
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: activities.length,
-                    itemBuilder: (context, index) {
-                      return ActivityCard(activity: activities[index]);
-                    },
-                  );
-                } else {
-                  return const Center(child: Text('Aucune activité trouvée.'));
-                }
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: _mockedActivities.length,
+              itemBuilder: (context, index) {
+                final activity = _mockedActivities[index];
+                return ActivityCard(
+                  title: activity['title'],
+                  description: activity['description'],
+                  image: activity['image'],
+                  isEvent: activity['isEvent'],
+                );
               },
             ),
           ),
