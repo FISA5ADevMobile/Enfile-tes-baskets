@@ -72,4 +72,25 @@ public class ClassService {
         userRepository.addCourseToUser(userId, course.getId());
         classRepository.addCourseToClass(classId, course.getId());
     }
+
+    public List<ClassModel> getAllClasses() {
+        return classRepository.findAll();
+    }
+
+    public ClassModel getClassById(Long id) {
+        return classRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Parcours non trouvé."));
+    }
+
+    public void deleteClass(Long courseId) {
+        classRepository.deleteById(courseId);
+    }
+
+    public ClassModel createClass(ClassModel classModel) {
+        return classRepository.save(classModel);
+    }
+
+    public void save(ClassModel classModel) {
+        classRepository.save(classModel);
+    }
 }

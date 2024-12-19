@@ -38,5 +38,9 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getPseudo(), user.getPassword(), user.getAuthorities());
     }
 
+    public UserModel findById(Long ownerId) {
+        return userRepository.findById(ownerId).orElse(null);
+    }
+
     // Ajoutez d'autres méthodes pour gérer les utilisateurs
 }

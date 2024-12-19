@@ -34,6 +34,9 @@ public class TagService {
             throw new IllegalArgumentException("Cette balise ne fait pas partie du parcours");
         }
     }
-    
 
+
+    public List<TagModel> findByIds(List<Long> tagIds) {
+        return tagRepository.findAllById(tagIds);
+    }
 }
