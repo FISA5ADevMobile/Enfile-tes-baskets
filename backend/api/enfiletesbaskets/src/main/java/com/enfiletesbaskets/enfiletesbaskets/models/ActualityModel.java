@@ -11,6 +11,7 @@ public class ActualityModel {
     private String title;
     private String description;
     private byte[] image;
+    private boolean event;
 
     // Getters and Setters
     public String getTitle() {
@@ -35,5 +36,13 @@ public class ActualityModel {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public boolean getEvent() {
+        return event;
+    }
+
+    public void setEvent(boolean event) {
+        this.event = event;
     }
 }

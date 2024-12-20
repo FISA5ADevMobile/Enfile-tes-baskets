@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClassRepository extends CrudRepository<ClassModel, Long> {
+public interface ClassRepository extends JpaRepository<ClassModel, Long> {
     // Ajoutez des méthodes personnalisées si nécessaire
 }
