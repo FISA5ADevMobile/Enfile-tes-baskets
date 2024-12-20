@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 
+@Repository
 public interface UserRepository extends CrudRepository<UserModel, Long> {
-    UserModel findByEmail(String email);
+    Optional<UserModel> findByEmail(String email);
     Optional<UserModel> findByPseudo(String pseudo);
     List<UserModel> findAll();
 }

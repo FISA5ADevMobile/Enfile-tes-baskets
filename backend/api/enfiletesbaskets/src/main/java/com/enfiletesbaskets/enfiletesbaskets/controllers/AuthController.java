@@ -1,9 +1,8 @@
 package com.enfiletesbaskets.enfiletesbaskets.controllers;
 
-import com.enfiletesbaskets.enfiletesbaskets.dto.LoginRequest;
-import com.enfiletesbaskets.enfiletesbaskets.dto.RegisterRequest;
-import com.enfiletesbaskets.enfiletesbaskets.dto.PasswordResetRequest;
+import com.enfiletesbaskets.enfiletesbaskets.dto.*;
 import com.enfiletesbaskets.enfiletesbaskets.services.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +28,19 @@ public class AuthController {
         return authService.login(request);
     }
 
+    @PostMapping("/request-password-reset")
+    public ResponseEntity<?> requestPasswordReset(@Valid @RequestBody RequestPasswordResetRequest request) {
+        return authService.requestPasswordReset(request);
+    }
+
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequest request) {
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         return authService.resetPassword(request);
+    }
+
+    @PostMapping("/validate-reset-password")
+    public ResponseEntity<?> validateResetPassword(@Valid @RequestBody ValidateResetPasswordRequest request) {
+        return authService.validateResetPassword(request);
     }
 
     @PostMapping("/logout")
