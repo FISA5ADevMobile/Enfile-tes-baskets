@@ -141,4 +141,8 @@ public class UserModel {
     public void setCode(Integer code) {
         this.code = code;
     }
+
+    public Long getId() {
+        return id;
+    }
 }
