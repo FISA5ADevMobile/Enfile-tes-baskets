@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface UserRepository extends JpaRepository<UserModel, Long> {
-    UserModel findByEmail(String email);
+@Repository
+public interface UserRepository extends CrudRepository<UserModel, Long> {
+    Optional<UserModel> findByEmail(String email);
     Optional<UserModel> findByPseudo(String pseudo);
     List<UserModel> findAll();
 }

@@ -24,6 +24,7 @@ public class UserModel {
     private String role;
     private Integer nbPostDeleted;
     private Date banDate;
+    private Integer code;
 
     @ManyToMany
     @JoinTable(
@@ -130,6 +131,14 @@ public class UserModel {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role)); //
         return authorities;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
     public Long getId() {
