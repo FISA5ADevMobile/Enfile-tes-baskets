@@ -10,11 +10,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthService authService;
-
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
+    @Resource
+    private AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
