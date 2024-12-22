@@ -1,6 +1,8 @@
 package com.enfiletesbaskets.enfiletesbaskets.repositories;
+import com.enfiletesbaskets.enfiletesbaskets.models.ClassModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.CourseModel;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,4 +35,5 @@ public interface CourseRepository extends JpaRepository<CourseModel, Long> {
                    "SELECT :tagId, :courseId FROM Class_Tags " +
                    "WHERE class_id = :classId AND tag_id = :tagId", nativeQuery = true)
     int validateTag(@Param("courseId") Long courseId, @Param("classId") Long classId, @Param("tagId") Long tagId);
+
 }

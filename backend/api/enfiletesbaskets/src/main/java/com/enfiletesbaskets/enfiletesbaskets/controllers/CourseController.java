@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 @RestController
-@RequestMapping("/courses")
+@RequestMapping("/api/courses")
 public class CourseController {
 
     private final CourseRepository courseRepository;
@@ -34,4 +34,17 @@ public class CourseController {
         return courseId.map(ResponseEntity::ok)
                        .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/{courseId}")
+    public ResponseEntity<CourseModel> getCourse(@PathVariable Long courseId) {
+        return courseRepository.findById(courseId)
+                               .map(ResponseEntity::ok)
+                               .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<CourseModel>> getAllCourses() {
+        return ResponseEntity.ok(courseRepository.findAll());
+    }
+
 }
