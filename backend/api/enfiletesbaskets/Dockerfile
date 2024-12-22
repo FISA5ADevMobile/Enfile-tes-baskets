@@ -8,7 +8,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Étape finale pour l'exécution
-FROM openjdk:17
+FROM openjdk:21
 
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
