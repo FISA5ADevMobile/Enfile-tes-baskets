@@ -2,6 +2,7 @@ package com.enfiletesbaskets.enfiletesbaskets.controllers;
 
 import com.enfiletesbaskets.enfiletesbaskets.dto.*;
 import com.enfiletesbaskets.enfiletesbaskets.services.AuthService;
+import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
