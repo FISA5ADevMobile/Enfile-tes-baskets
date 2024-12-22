@@ -1,16 +1,17 @@
-# Build stage
-FROM maven:3.9.8-eclipse-temurin-21 AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package -DskipTests
+# Étape de build
+FROM maven:3.8.4-openjdk-17 as build
 
-# Package stage
-FROM openjdk:21-jdk-slim
-VOLUME /tmp
-COPY --from=build /home/app/target/*.jar enfiletesbaskets.jar
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
 
-# Expose le port dynamiquement (Heroku le gère avec PORT)
+RUN mvn clean package -DskipTests
+
+# Étape finale pour l'exécution
+FROM openjdk:17
+
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
-
-# Utilise le PORT défini par Heroku
-ENTRYPOINT ["java", "-jar", "/enfiletesbaskets.jar", "--server.port=${PORT}"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
