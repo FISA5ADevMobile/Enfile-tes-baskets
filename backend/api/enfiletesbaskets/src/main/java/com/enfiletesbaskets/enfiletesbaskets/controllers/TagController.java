@@ -91,4 +91,18 @@ public class TagController {
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/{tagId}")
+    public ResponseEntity<TagModel> getTagById(@PathVariable Long tagId) {
+        return tagRepository.findById(tagId)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<TagModel>> getAllTags() {
+        List<TagModel> tags = tagRepository.findAll();
+        return ResponseEntity.ok(tags);
+    }
+    
 }
