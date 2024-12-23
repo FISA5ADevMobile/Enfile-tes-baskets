@@ -1,5 +1,6 @@
 package com.enfiletesbaskets.enfiletesbaskets.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -169,7 +170,4 @@ public class UserModel {
         this.code = code;
     }
 
-    public Long getId() {
-        return id;
-    }
 }
