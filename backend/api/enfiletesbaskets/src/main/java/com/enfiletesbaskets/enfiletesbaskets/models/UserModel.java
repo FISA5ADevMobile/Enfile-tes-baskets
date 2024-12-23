@@ -1,6 +1,5 @@
 package com.enfiletesbaskets.enfiletesbaskets.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,6 +33,7 @@ public class UserModel {
     private Integer nbPostDeleted = 0;
 
     private Date banDate;
+    private Integer code;
 
     @ManyToMany
     @JoinTable(
@@ -159,5 +159,17 @@ public class UserModel {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role)); //
         return authorities;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
