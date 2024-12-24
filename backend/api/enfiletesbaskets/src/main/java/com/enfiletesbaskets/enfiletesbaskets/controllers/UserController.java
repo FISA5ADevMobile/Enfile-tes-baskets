@@ -2,9 +2,14 @@ package com.enfiletesbaskets.enfiletesbaskets.controllers;
 
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 import com.enfiletesbaskets.enfiletesbaskets.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
+
 import jakarta.annotation.Resource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @RestController
 @RequestMapping("/api/users")
@@ -29,4 +34,42 @@ public class UserController {
     public void unbanUser(@PathVariable Long id) {
         userService.unbanUser(id);
     }
+
+    // Récupérer les informations de l'utilisateur actuel + token
+    @GetMapping("/me")
+    public Map<String, Object> getCurrentUser(HttpServletRequest request) {
+        // Récupère l'authentification
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Utilisateur non authentifié");
+        }
+
+        String pseudo = authentication.getName(); // Récupère le pseudo
+        Map<String, Object> details = (Map<String, Object>) authentication.getDetails();
+
+        Long userId = (Long) details.get("id");
+        String email = (String) details.get("email");
+        Boolean isAdmin = (Boolean) details.get("isAdmin");
+
+        // Récupère le token JWT depuis l'en-tête Authorization
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7).trim(); // Enlève "Bearer " du token
+        }
+
+        System.out.println("Utilisateur: " + pseudo);
+        System.out.println("Details: " + details);
+        System.out.println("Token: " + token);
+
+        return Map.of(
+                "id", userId,
+                "pseudo", pseudo,
+                "email", email != null ? email : "unknown@example.com",
+                "isAdmin", isAdmin != null ? isAdmin : false,
+                "token", token != null ? token : "No token provided"
+        );
+    }
+
+
 }

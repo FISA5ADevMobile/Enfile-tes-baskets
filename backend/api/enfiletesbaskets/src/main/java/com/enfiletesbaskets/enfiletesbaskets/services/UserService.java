@@ -77,4 +77,9 @@ public class UserService implements UserDetailsService {
         user.setBanDate(null);
         userRepository.save(user);
     }
+
+    public UserModel getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+    }
 }
