@@ -1,6 +1,7 @@
 import 'package:enfiletesbasket/model/Course.dart';
 import 'package:enfiletesbasket/screens/tags_page.dart';
 import 'package:enfiletesbasket/services/CourseProvider.dart';
+import 'package:enfiletesbasket/services/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,8 +27,9 @@ class CourseCard extends StatelessWidget {
 
   Future<void> _navigateToTagsPage(BuildContext context, Course course) async {
     final courseProvider = Provider.of<CourseProvider>(context, listen: false);
-
-    final courseId = await courseProvider.fetchCourseId(1, int.parse(course.id)); // Exemple : ID utilisateur = 1
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final String token = authProvider.token ?? '';
+    final courseId = await courseProvider.fetchCourseId(authProvider.currentUser!.id, int.parse(course.id), token); // Exemple : ID utilisateur = 1
 
     if (courseId != null) {
       Navigator.push(

@@ -15,11 +15,15 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ClassesProvider()),
+        ChangeNotifierProvider(create: (_) => TagsProvider()),
+        ChangeNotifierProvider(create: (_) => CourseProvider()),
       ],
       child: MyApp(),
     ),
   );
 }
+
 
 class MyApp extends StatelessWidget {
   @override
@@ -37,16 +41,10 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/reset-password': (context) => const ResetPassword(),
-        '/main-navigation': (context) => MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => ClassesProvider()),
-            ChangeNotifierProvider(create: (_) => TagsProvider()),
-            ChangeNotifierProvider(create: (_) => CourseProvider()),
-          ],
-          child: const MainNavigationPage(),
-        ),
+        '/main-navigation': (context) => const MainNavigationPage(),
       },
     );
   }
 }
+
 

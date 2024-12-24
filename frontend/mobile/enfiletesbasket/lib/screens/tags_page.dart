@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
+import '../services/auth_provider.dart';
 import '../services/tags_provider.dart';
 import '../widgets/FilterButtons.dart';
 import '../widgets/TagCard.dart';
@@ -19,6 +20,7 @@ class TagsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tagsProvider = Provider.of<TagsProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +42,11 @@ class TagsPage extends StatelessWidget {
         ],
       ),
       body: FutureBuilder<void>(
-        future: tagsProvider.fetchTags(classId, courseId),
+        future:() async {
+        final String token = authProvider.token ?? '';
+        return tagsProvider.fetchTags(classId, courseId, token);
+      }(),
+
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());

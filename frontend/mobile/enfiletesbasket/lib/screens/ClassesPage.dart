@@ -1,3 +1,4 @@
+import 'package:enfiletesbasket/services/auth_provider.dart';
 import 'package:enfiletesbasket/services/classes_provider.dart';
 import 'package:enfiletesbasket/widgets/CourseCard.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ class ClassesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final classesProvider = Provider.of<ClassesProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -21,8 +23,10 @@ class ClassesPage extends StatelessWidget {
         backgroundColor: Color(0xFF0081A1),
       ),
       body: FutureBuilder(
-        future: classesProvider.fetchSubscribedClasses(1), // Exemple : ID utilisateur = 1
-        builder: (context, snapshot) {
+        future: () async {
+          final String token = authProvider.token ?? '';
+          return await classesProvider.fetchSubscribedClasses(authProvider.currentUser!.id, token);
+        }(),        builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
@@ -57,7 +61,8 @@ class ClassesPage extends StatelessWidget {
 
   void _showJoinClassDialog(BuildContext context) {
     String password = "";
-
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final String token = authProvider.token ?? '';
     showDialog(
       context: context,
       builder: (context) {
@@ -77,7 +82,7 @@ class ClassesPage extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
                 Provider.of<ClassesProvider>(context, listen: false)
-                    .joinClass(1, password);
+                    .joinClass(authProvider.currentUser!.id, password, token);
               },
               child: Text('Join'),
             ),

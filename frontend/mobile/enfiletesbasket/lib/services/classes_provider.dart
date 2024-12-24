@@ -9,22 +9,22 @@ class ClassesProvider extends ChangeNotifier {
 
   List<Course> get subscribedClasses => _subscribedClasses;
 
-  Future<void> fetchSubscribedClasses(int idUser) async {
+  Future<void> fetchSubscribedClasses(int idUser, String token) async {
     try {
-      _subscribedClasses = await _classesService.fetchSubscribedClasses(idUser);
+      _subscribedClasses = await _classesService.fetchSubscribedClasses(idUser,token);
       notifyListeners(); // Notifier les consommateurs que les données ont changé
     } catch (e) {
       print("Error fetching subscribed classes: $e");
     }
   }
 
-  Future<String> joinClass(int idUser, String password) async {
+  Future<String> joinClass(int idUser, String password, String token) async {
     String resultMessage;
     try {
-      final response = await _classesService.joinClass(idUser, password);
+      final response = await _classesService.joinClass(idUser, password, token);
 
       if (response.statusCode == 200) {
-        await fetchSubscribedClasses(idUser); // Rafraîchir la liste des classes
+        await fetchSubscribedClasses(idUser, token); // Rafraîchir la liste des classes
         resultMessage = 'Class joined successfully!';
       } else {
         resultMessage = 'Error joining the class: ${response.statusCode}';
@@ -36,9 +36,9 @@ class ClassesProvider extends ChangeNotifier {
     return resultMessage;
   }
 
-  Future<int?> getCourseId(int classId) async {
+  Future<int?> getCourseId(int classId, String token) async {
     try {
-      return await _classesService.getCourseIdForClass(classId);
+      return await _classesService.getCourseIdForClass(classId, token);
     } catch (e) {
       print("Error fetching courseId for classId $classId: $e");
       return null;
