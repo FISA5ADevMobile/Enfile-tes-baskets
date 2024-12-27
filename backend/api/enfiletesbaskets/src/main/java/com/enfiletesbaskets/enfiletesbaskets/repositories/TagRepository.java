@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface TagRepository extends JpaRepository<TagModel, Long> {
 
-    // Fetch all tags for a specific class
+    // On récupère toutes les balises faisant parti d'un parcours
     @Query(value = """
         SELECT t.id, t.name, t.description, t.xPos, t.yPos 
         FROM tag t JOIN class_tags ct ON t.id = ct.tag_id 
@@ -20,27 +20,8 @@ public interface TagRepository extends JpaRepository<TagModel, Long> {
            nativeQuery = true)
     List<Object[]> findAllByClassId(@Param("classId") Long classId);
 
-    // Fetch all tags validated by a specific user (through their courses)
-    @Query(value = "SELECT DISTINCT t.* FROM tag t " +
-                   "JOIN course_tags ct ON t.id = ct.tag_id " +
-                   "JOIN course c ON ct.course_id = c.id " +
-                   "WHERE c.userdb = :userId " +
-                   "AND c.id= :courseId"
-                   , 
-           nativeQuery = true)
-    List<TagModel> findAllByUserId(@Param("userId") Long userId,@Param("courseId") Long courseId);
 
-    // Fetch all tags for a specific class and validated by a specific user
-    @Query(value = "SELECT t.* FROM tag t " +
-                   "JOIN class_tags clt ON t.id = clt.tag_id " +
-                   "JOIN course_tags crt ON t.id = crt.tag_id " +
-                   "JOIN course c ON crt.course_id = c.id " +
-                   "WHERE clt.class_id = :classId AND c.userdb = :userId", 
-           nativeQuery = true)
-    List<TagModel> findAllByClassIdAndUserId(@Param("classId") Long classId, @Param("userId") Long userId);
-
-
-    // Fetch all tags for a specific course and validated
+    // On récupère toutes les balises validées par un utilisateur
     @Query(value = """
         SELECT t.id, t.name, t.description, t.xPos, t.yPos FROM tag t   
                    JOIN course_tags crt ON t.id = crt.tag_id 
@@ -48,7 +29,7 @@ public interface TagRepository extends JpaRepository<TagModel, Long> {
            nativeQuery = true)
     List<Object[]> findAllByCourseId(@Param("courseId") Long courseId);
 
-    // Fetch a specific tag validated by a specific user
+    // On récupère une balise spécifique validée par un utilisateur lors d'un parcours
     @Query(value = "SELECT t.* FROM tag t " +
                    "JOIN course_tags ct ON t.id = ct.tag_id " +
                    "JOIN course c ON ct.course_id = c.id " +
@@ -56,7 +37,7 @@ public interface TagRepository extends JpaRepository<TagModel, Long> {
            nativeQuery = true)
     Optional<TagModel> findByIdAndUserId(@Param("tagId") Long tagId, @Param("userId") Long userId);
 
-    // Fetch description for a tag
+    // Récupérer la description pour un tag
     @Query(value = "SELECT description FROM tag WHERE id = :tagId", nativeQuery = true)
     String findTagDescriptionById(@Param("tagId") Long tagId);
 }

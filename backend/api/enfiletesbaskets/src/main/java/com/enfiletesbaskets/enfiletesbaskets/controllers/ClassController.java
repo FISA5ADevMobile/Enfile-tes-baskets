@@ -70,5 +70,4 @@ public class ClassController {
             return ResponseEntity.badRequest().body("Erreur lors de la validation : " + e.getMessage());
         }
     }
-    
 }
