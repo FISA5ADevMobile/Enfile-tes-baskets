@@ -1,7 +1,7 @@
-import 'package:enfiletesbasket/screens/MainNavigationPage.dart';
+import 'package:enfiletesbasket/screens/main_navigation_page.dart';
 import 'package:enfiletesbasket/screens/register_screen.dart';
 import 'package:enfiletesbasket/screens/reset_password._screen.dart';
-import 'package:enfiletesbasket/services/CourseProvider.dart';
+import 'package:enfiletesbasket/services/course_provider.dart';
 import 'package:enfiletesbasket/services/classes_provider.dart';
 import 'package:enfiletesbasket/services/tags_provider.dart';
 import 'package:flutter/material.dart';

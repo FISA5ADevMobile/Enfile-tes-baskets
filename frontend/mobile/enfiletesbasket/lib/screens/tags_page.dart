@@ -3,8 +3,8 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_provider.dart';
 import '../services/tags_provider.dart';
-import '../widgets/FilterButtons.dart';
-import '../widgets/TagCard.dart';
+import '../widgets/filter_buttons.dart';
+import '../widgets/tag_card.dart';
 
 class TagsPage extends StatelessWidget {
   final String className;

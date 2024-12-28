@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:enfiletesbasket/model/Course.dart';
+import 'package:enfiletesbasket/model/course.dart';
 import 'package:http/http.dart' as http;
 
 class ClassesService {

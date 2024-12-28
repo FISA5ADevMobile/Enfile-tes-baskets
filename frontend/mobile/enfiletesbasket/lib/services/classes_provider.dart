@@ -1,6 +1,6 @@
-import 'package:enfiletesbasket/model/Course.dart';
+import 'package:enfiletesbasket/model/course.dart';
 import 'package:flutter/material.dart';
-import '../services/classes_service.dart';
+import 'classes_service.dart';
 
 class ClassesProvider extends ChangeNotifier {
   final ClassesService _classesService = ClassesService();

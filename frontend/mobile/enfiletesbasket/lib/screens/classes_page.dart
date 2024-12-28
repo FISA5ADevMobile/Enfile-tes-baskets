@@ -1,6 +1,6 @@
 import 'package:enfiletesbasket/services/auth_provider.dart';
 import 'package:enfiletesbasket/services/classes_provider.dart';
-import 'package:enfiletesbasket/widgets/CourseCard.dart';
+import 'package:enfiletesbasket/widgets/course_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

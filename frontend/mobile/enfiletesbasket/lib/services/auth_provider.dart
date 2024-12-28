@@ -1,4 +1,4 @@
-import 'package:enfiletesbasket/model/User.dart';
+import 'package:enfiletesbasket/model/user.dart';
 import 'package:flutter/material.dart';
 import 'auth_service.dart';
 import 'user_service.dart';
