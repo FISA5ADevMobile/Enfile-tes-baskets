@@ -52,22 +52,14 @@ public class UserController {
         String email = (String) details.get("email");
         Boolean isAdmin = (Boolean) details.get("isAdmin");
 
-        // Récupère le token JWT depuis l'en-tête Authorization
-        String token = request.getHeader("Authorization");
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7).trim(); // Enlève "Bearer " du token
-        }
-
         System.out.println("Utilisateur: " + pseudo);
         System.out.println("Details: " + details);
-        System.out.println("Token: " + token);
 
         return Map.of(
                 "id", userId,
                 "pseudo", pseudo,
                 "email", email != null ? email : "unknown@example.com",
-                "isAdmin", isAdmin != null ? isAdmin : false,
-                "token", token != null ? token : "No token provided"
+                "isAdmin", isAdmin != null ? isAdmin : false
         );
     }
 
