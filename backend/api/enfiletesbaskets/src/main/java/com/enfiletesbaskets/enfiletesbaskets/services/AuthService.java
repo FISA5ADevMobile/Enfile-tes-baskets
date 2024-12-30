@@ -32,7 +32,9 @@ public class AuthService {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new CustomException("Email already in use");
         }
-
+        if (userRepository.findByPseudo(request.getUsername()).isPresent()) {
+            throw new CustomException("Username already in use");
+        }
         // Créez un nouvel utilisateur
         UserModel user = new UserModel();
         user.setEmail(request.getEmail());

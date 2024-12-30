@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/actualities")
@@ -25,8 +26,8 @@ public class ActualityController {
     }
 
     @GetMapping("/get_all")
-    public ResponseEntity<List<ActualityModel>> getAllActualities() {
-        List<ActualityModel> actualities = actualityService.getAllActualities();
+    public ResponseEntity<List<Map<String, Object>>> getAllActualities() {
+        List<Map<String, Object>> actualities = actualityService.getAllActualities();
         return ResponseEntity.ok(actualities);
     }
 

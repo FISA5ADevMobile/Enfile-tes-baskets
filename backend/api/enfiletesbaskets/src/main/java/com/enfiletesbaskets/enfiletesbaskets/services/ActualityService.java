@@ -10,8 +10,12 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class ActualityService {
@@ -30,8 +34,18 @@ public class ActualityService {
                 .orElseThrow(() -> new NoSuchElementException("Actuality not found with id: " + id));
     }
 
-    public List<ActualityModel> getAllActualities() {
-        return actualityRepository.findAll();
+    public List<Map<String, Object>> getAllActualities() {
+        return actualityRepository.findAll().stream()
+                .map(actuality -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", actuality.getId());
+                    map.put("title", actuality.getTitle());
+                    map.put("description", actuality.getDescription());
+                    map.put("event", actuality.getEvent());
+                    map.put("publicationDate", actuality.getPublicationDate());
+                    return map;
+                })
+                .collect(Collectors.toList());
     }
 
     public void subscribeToEvent(Long actualityId, Authentication auth) {
@@ -59,6 +73,9 @@ public class ActualityService {
     }
 
     public ActualityModel saveActuality(ActualityModel actuality) {
+        if (actuality.getPublicationDate() == null) {
+            actuality.setPublicationDate(LocalDateTime.now());
+        }
         return actualityRepository.save(actuality);
     }
 }

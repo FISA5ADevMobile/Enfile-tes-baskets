@@ -16,6 +16,7 @@ public class UserModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
+    @Column(unique = true, nullable = false)
     private String pseudo;
     private String name;
     private String firstName;
