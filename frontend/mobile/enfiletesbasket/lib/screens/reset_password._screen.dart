@@ -3,7 +3,6 @@ import 'package:enfiletesbasket/services/auth_service.dart';
 import 'package:enfiletesbasket/widgets/custom_text_field.dart';
 import 'package:enfiletesbasket/widgets/primary_button.dart';
 import 'package:enfiletesbasket/widgets/custom_popup.dart';
-import 'package:enfiletesbasket/screens/login_screen.dart';
 import 'package:enfiletesbasket/utils/validators.dart';
 
 
@@ -52,10 +51,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 text: "Ok",
                 onPressed: () {
                   Navigator.of(context).pop();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  );
+                  Navigator.pushReplacementNamed(context, '/login');
                 },
               ),
             ],
@@ -155,10 +151,7 @@ class _ResetPasswordState extends State<ResetPassword> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginScreen()),
-                    );
+                    Navigator.pushReplacementNamed(context, '/login');
                   },
                   child: const Text(
                     'Retour',

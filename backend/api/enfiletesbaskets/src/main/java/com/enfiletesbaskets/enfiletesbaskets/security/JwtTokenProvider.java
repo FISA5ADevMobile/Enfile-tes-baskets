@@ -22,14 +22,17 @@ public class JwtTokenProvider {
         claims.put("isAdmin", user.getRole().equals("ADMIN"));
         claims.put("isBanned", user.getBanDate() != null);
         claims.put("id", user.getId());
+        claims.put("email", user.getEmail()); // Ajoute l'email comme claim personnalisé
+
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getPseudo())
+                .setSubject(user.getPseudo()) // Garde le pseudo comme subject
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
     }
+
 
     public boolean validateToken(String token) {
         return !isTokenExpired(token);

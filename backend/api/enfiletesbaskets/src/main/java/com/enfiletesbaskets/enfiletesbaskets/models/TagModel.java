@@ -1,27 +1,50 @@
 package com.enfiletesbaskets.enfiletesbaskets.models;
 
-import com.enfiletesbaskets.enfiletesbaskets.models.ClassModel;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Entity
+@Table(name = "Tag")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class TagModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
     private String description;
+
+    @Column(name = "xpos")
     private Float xPos;
+
+    @Column(name = "ypos")
     private Float yPos;
 
-    @ManyToMany(mappedBy = "tagsValidated")
-    private List<UserModel> users = new ArrayList<>();
-
     @ManyToMany(mappedBy = "tags")
-    private List<ClassModel> classes = new ArrayList<>();
+    @JsonBackReference 
+    private List<ClassModel> classes;
+    
+    @ManyToMany(mappedBy = "tags")
+    @JsonIgnoreProperties({"tags", "classes"})
+    private List<CourseModel> courses;
+    
+    @ManyToMany(mappedBy = "tags")
+    @JsonIgnoreProperties({"tags", "classes", "courses"})
+    private List<UserModel> users;
+    
+    public Long getId() {
+        return id;
+    }
 
-    // Getters and Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -54,19 +77,27 @@ public class TagModel {
         this.yPos = yPos;
     }
 
-    public List<UserModel> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<UserModel> users) {
-        this.users = users;
-    }
-
     public List<ClassModel> getClasses() {
         return classes;
     }
 
     public void setClasses(List<ClassModel> classes) {
         this.classes = classes;
+    }
+
+    public List<CourseModel> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<CourseModel> courses) {
+        this.courses = courses;
+    }
+
+    public List<UserModel> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserModel> users) {
+        this.users = users;
     }
 }

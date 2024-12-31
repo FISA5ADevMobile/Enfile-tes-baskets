@@ -1,0 +1,15 @@
+import 'package:enfiletesbasket/services/course_service.dart';
+import 'package:flutter/material.dart';
+
+class CourseProvider extends ChangeNotifier {
+  final CourseService _courseService = CourseService();
+
+  Future<int?> fetchCourseId(int userId, int classId, String token) async {
+    try {
+      return await _courseService.getCourseIdForClass(userId, classId, token);
+    } catch (e) {
+      print("Error fetching courseId for classId $classId: $e");
+      return null;
+    }
+  }
+}

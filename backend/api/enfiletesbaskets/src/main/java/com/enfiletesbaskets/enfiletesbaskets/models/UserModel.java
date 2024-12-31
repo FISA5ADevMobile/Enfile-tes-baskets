@@ -1,5 +1,6 @@
 package com.enfiletesbaskets.enfiletesbaskets.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,19 +12,27 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String email;
-    @Column(unique = true, nullable = false)
+
+    @Column(nullable = false, unique = true)
     private String pseudo;
+
     private String name;
     private String firstName;
     private String password;
     private byte[] profilPicture;
     private String role;
-    private Integer nbPostDeleted;
+
+    @Column(name = "nbPostDeleted")
+    private Integer nbPostDeleted = 0;
+
     private Date banDate;
     private Integer code;
 
@@ -33,12 +42,31 @@ public class UserModel {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private List<TagModel> tagsValidated = new ArrayList<>();
+    @JsonIgnoreProperties("users") // Prevent infinite loop with TagModel
+    private List<TagModel> tags;
 
-    @OneToMany(mappedBy = "user")
-    private List<CourseModel> courses = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "User_Courses",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    @JsonIgnoreProperties("users") // Prevent infinite loop with CourseModel
+    private List<CourseModel> courses;
 
-    // Getters and Setters
+    public UserModel() {}
+
+    public UserModel(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;
@@ -112,12 +140,12 @@ public class UserModel {
         this.banDate = banDate;
     }
 
-    public List<TagModel> getTagsValidated() {
-        return tagsValidated;
+    public List<TagModel> getTags() {
+        return tags;
     }
 
-    public void setTagsValidated(List<TagModel> tagsValidated) {
-        this.tagsValidated = tagsValidated;
+    public void setTags(List<TagModel> tags) {
+        this.tags = tags;
     }
 
     public List<CourseModel> getCourses() {
@@ -142,7 +170,4 @@ public class UserModel {
         this.code = code;
     }
 
-    public Long getId() {
-        return id;
-    }
 }

@@ -16,7 +16,6 @@ services:
       - 5435:5432/tcp
     volumes:
       - "./pg_db:/var/lib/postgresql/data"
-      - "./database/init.sql:/docker-entrypoint-initdb.d/create-db.sql"
 
   enfiletesbaskets-server:
     image: enfiletesbaskets-server

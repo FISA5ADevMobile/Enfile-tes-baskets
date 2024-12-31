@@ -3,8 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:enfiletesbasket/services/auth_provider.dart';
 import 'package:enfiletesbasket/widgets/custom_text_field.dart';
 import 'package:enfiletesbasket/widgets/primary_button.dart';
-import 'package:enfiletesbasket/screens/register_screen.dart';
-import 'package:enfiletesbasket/screens/reset_password._screen.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -42,8 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await Provider.of<AuthProvider>(context, listen: false).login(email, password);
       print("Connexion réussie !");
-      // Navigator.pushReplacementNamed(context, '/home');
-    } catch (e) {
+      Navigator.pushNamed(context, '/main-navigation');    } catch (e) {
       print("Erreur de connexion : $e");
       setState(() {
         isLoginError = true;
@@ -140,10 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ResetPassword()),
-                    );
+                    Navigator.pushNamed(context, '/reset-password');
                   },
                   child: const Text(
                     'mot de passe oublié',
@@ -172,10 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const RegisterScreen()),
-                        );
+                        Navigator.pushNamed(context, '/register');
                       },
                       child: const Text(
                         "S'inscrire",

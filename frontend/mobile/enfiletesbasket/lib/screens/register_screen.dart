@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:enfiletesbasket/services/auth_provider.dart';
 import 'package:enfiletesbasket/widgets/custom_text_field.dart';
 import 'package:enfiletesbasket/widgets/primary_button.dart';
-import 'package:enfiletesbasket/screens/login_screen.dart';
 import 'package:enfiletesbasket/widgets/custom_popup.dart';
 import 'package:enfiletesbasket/utils/validators.dart';
 
@@ -77,10 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 text: "Ok",
                 onPressed: () {
                   Navigator.of(context).pop();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  );
+                  Navigator.pushReplacementNamed(context, '/login');
                 },
               ),
             ],
@@ -223,10 +219,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const LoginScreen()),
-                        );
+                        Navigator.pushReplacementNamed(context, '/login');
                       },
                       child: const Text(
                         "Se connecter",
