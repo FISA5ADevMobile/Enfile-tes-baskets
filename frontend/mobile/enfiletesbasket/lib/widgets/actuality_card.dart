@@ -18,7 +18,7 @@ class ActualityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String shortenedDescription = truncateText(decodeText(description), 50); // Décodage
+    final String shortenedDescription = truncateText(decodeText(description), 50);
     final String decodedTitle = decodeText(title);
 
     return Container(
@@ -62,7 +62,7 @@ class ActualityCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    decodedTitle, // Utilisation du titre décodé
+                    decodedTitle,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -70,7 +70,7 @@ class ActualityCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    shortenedDescription, // Utilisation de la description décodée
+                    shortenedDescription,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(color: Colors.grey),

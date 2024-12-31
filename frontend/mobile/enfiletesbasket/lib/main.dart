@@ -10,7 +10,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => ActualityProvider()), // Ajout du ActualityProvider
+        ChangeNotifierProvider(create: (_) => ActualityProvider()),
       ],
       child: const MyApp(),
     ),

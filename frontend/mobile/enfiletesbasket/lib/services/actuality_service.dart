@@ -33,4 +33,28 @@ class ActualityService {
       throw Exception('Failed to load actualities');
     }
   }
+
+  Future<Actuality?> fetchActualityById(String id) async {
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('No token found. User might not be authenticated.');
+    }
+
+    final url = Uri.parse('$_baseUrl/get_1/$id');
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      return Actuality.fromJson(data);
+    } else {
+      throw Exception('Failed to load actuality');
+    }
+  }
+
 }

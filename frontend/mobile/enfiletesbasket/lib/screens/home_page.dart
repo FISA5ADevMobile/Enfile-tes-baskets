@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import '../services/actuality_provider.dart';
-import '../utils/text_utils.dart'; // Pour le décodage
+import '../utils/text_utils.dart';
 import '../widgets/actuality_card.dart';
 import '../widgets/custom_app_bar.dart';
 
@@ -47,15 +47,16 @@ class _HomePageState extends State<HomePage> {
           : Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 32), // Espacement sous l'AppBar
+          const SizedBox(height: 32),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
               'Bienvenue à nouveau sur Enfile Tes Baskets !',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
-          const SizedBox(height: 16), // Espacement sous le texte de bienvenue
+          const SizedBox(height: 16),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
@@ -63,18 +64,19 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(fontSize: 16),
             ),
           ),
-          const SizedBox(height: 40), // Espacement avant "Actualités"
+          const SizedBox(height: 40),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
               'Actualités',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
-          const SizedBox(height: 24), // Espacement avant le carrousel
+          const SizedBox(height: 24),
           CarouselSlider.builder(
             options: CarouselOptions(
-              height: 400, // Hauteur du carrousel
+              height: 400,
               autoPlay: false,
               enlargeCenterPage: true,
               onPageChanged: (index, reason) {
@@ -85,12 +87,13 @@ class _HomePageState extends State<HomePage> {
             ),
             itemCount: actualityProvider.actualities.length,
             itemBuilder: (context, index, realIndex) {
-              final actuality = actualityProvider.actualities[index];
+              final actuality =
+              actualityProvider.actualities[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16.0,
                   vertical: 8.0,
-                ), // Marges autour des cartes
+                ),
                 child: ActualityCard(
                   title: decodeText(actuality.title),
                   description: decodeText(actuality.description),
@@ -100,7 +103,7 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-          const SizedBox(height: 12), // Espacement avant les indicateurs
+          const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: actualityProvider.actualities
@@ -119,14 +122,14 @@ class _HomePageState extends State<HomePage> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: _currentIndex == entry.key
-                        ? const Color(0xFF49454F) // Couleur active
-                        : const Color(0xFFD8D8D8), // Couleur inactive
+                        ? const Color(0xFF49454F)
+                        : const Color(0xFFD8D8D8),
                   ),
                 ),
               );
             }).toList(),
           ),
-          const SizedBox(height: 24), // Espacement final après les indicateurs
+          const SizedBox(height: 24),
         ],
       ),
     );
