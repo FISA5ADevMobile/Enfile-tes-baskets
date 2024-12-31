@@ -39,6 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
+      // Appel à l'authentification via AuthProvider
       await Provider.of<AuthProvider>(context, listen: false).login(email, password);
       print("Connexion réussie !");
       Navigator.pushNamed(context, '/main-navigation');    } catch (e) {
