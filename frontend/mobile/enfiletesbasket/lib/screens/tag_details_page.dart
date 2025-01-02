@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/tag.dart';
+import '../models/tag.dart';
 
 class TagDetailsPage extends StatelessWidget {
   final Tag tag;

@@ -12,16 +12,6 @@ class ClassesPage extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'My Classes',
-          style: TextStyle(
-            color: Color(0xFFC8A14E),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Color(0xFF0081A1),
-      ),
       body: FutureBuilder(
         future: () async {
           final String token = authProvider.token ?? '';

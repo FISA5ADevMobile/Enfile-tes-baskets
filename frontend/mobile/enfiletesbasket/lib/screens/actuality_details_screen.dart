@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/actuality.dart';
-import '../widgets/custom_app_bar.dart';
 
 class ActualityDetailPage extends StatelessWidget {
   final Actuality actuality;
@@ -10,11 +9,6 @@ class ActualityDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        onPersonIconPressed: () {
-          print('Icone de profil cliquée');
-        },
-      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(

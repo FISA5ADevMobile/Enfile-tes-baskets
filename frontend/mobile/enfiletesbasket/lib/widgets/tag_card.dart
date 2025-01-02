@@ -1,6 +1,6 @@
 import 'package:enfiletesbasket/screens/tag_details_page.dart';
 import 'package:flutter/material.dart';
-import '../model/tag.dart';
+import '../models/tag.dart';
 
 class TagCard extends StatelessWidget {
   final Tag tag;

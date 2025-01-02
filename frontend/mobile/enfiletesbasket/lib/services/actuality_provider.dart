@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/actuality.dart';
-import '../services/actuality_service.dart';
+import 'activity_service.dart';
 
 class ActualityProvider extends ChangeNotifier {
   final ActualityService _actualityService = ActualityService();

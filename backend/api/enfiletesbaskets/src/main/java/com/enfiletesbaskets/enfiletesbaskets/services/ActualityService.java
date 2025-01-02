@@ -40,6 +40,7 @@ public class ActualityService {
                     Map<String, Object> map = new HashMap<>();
                     map.put("id", actuality.getId());
                     map.put("title", actuality.getTitle());
+                    map.put("image", actuality.getImage());
                     map.put("description", actuality.getDescription());
                     map.put("event", actuality.getEvent());
                     map.put("publicationDate", actuality.getPublicationDate());

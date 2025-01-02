@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../services/actuality_provider.dart';
 import '../utils/text_utils.dart';
 import '../widgets/actuality_card.dart';
-import '../widgets/custom_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,11 +29,6 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(
-        onPersonIconPressed: () {
-          print('Icone de profil cliquée');
-        },
-      ),
       body: actualityProvider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : actualityProvider.actualities.isEmpty

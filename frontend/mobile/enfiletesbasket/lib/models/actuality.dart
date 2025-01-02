@@ -21,7 +21,7 @@ class Actuality {
       description: json['description'] ?? 'Description non disponible',
       imageBytes: json['image'] != null && json['image']!.isNotEmpty
           ? decodeBase64Image(json['image'])
-          : Uint8List(0), // Image vide si non fournie
+          : Uint8List(0),
       isEvent: json['event'] ?? false,
     );
   }

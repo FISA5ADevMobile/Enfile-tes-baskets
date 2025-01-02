@@ -4,7 +4,7 @@ import 'package:enfiletesbasket/services/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../model/course.dart';
+import '../models/course.dart';
 
 class CourseCard extends StatelessWidget {
   final Course course;

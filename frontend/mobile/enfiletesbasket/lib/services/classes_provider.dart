@@ -1,4 +1,4 @@
-import 'package:enfiletesbasket/model/course.dart';
+import 'package:enfiletesbasket/models/course.dart';
 import 'package:flutter/material.dart';
 import 'classes_service.dart';
 

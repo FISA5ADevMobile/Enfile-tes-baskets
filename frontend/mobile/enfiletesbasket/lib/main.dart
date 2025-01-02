@@ -1,14 +1,14 @@
-import 'package:enfiletesbasket/screens/main_navigation_page.dart';
-import 'package:enfiletesbasket/screens/register_screen.dart';
-import 'package:enfiletesbasket/screens/reset_password._screen.dart';
-import 'package:enfiletesbasket/services/course_provider.dart';
+import 'package:enfiletesbasket/services/actuality_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:enfiletesbasket/services/auth_provider.dart';
 import 'package:enfiletesbasket/services/classes_provider.dart';
 import 'package:enfiletesbasket/services/tags_provider.dart';
-
+import 'package:enfiletesbasket/services/course_provider.dart';
+import 'package:enfiletesbasket/app_routes.dart';
 import 'package:provider/provider.dart';
-import 'package:enfiletesbasket/services/auth_provider.dart';
-import 'package:enfiletesbasket/screens/login_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+void main() {
   runApp(
     MultiProvider(
       providers: [
@@ -16,11 +16,17 @@ import 'package:google_fonts/google_fonts.dart';
         ChangeNotifierProvider(create: (_) => ClassesProvider()),
         ChangeNotifierProvider(create: (_) => TagsProvider()),
         ChangeNotifierProvider(create: (_) => CourseProvider()),
+        ChangeNotifierProvider(create: (_) => ActualityProvider())
       ],
       child: MyApp(),
     ),
   );
+}
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       title: 'Enfile tes Baskets',
       theme: ThemeData(
         primaryColor: const Color(0xFF0081A1),
@@ -28,14 +34,8 @@ import 'package:google_fonts/google_fonts.dart';
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login',
-      routes: {
-        '/login': (context) => const LoginScreen(),
-        '/register': (context) => const RegisterScreen(),
-        '/reset-password': (context) => const ResetPassword(),
-        '/main-navigation': (context) => const MainNavigationPage(),
-      },
+      initialRoute: AppRoutes.login,
+      routes: AppRoutes.getRoutes(),
     );
   }
 }
-
