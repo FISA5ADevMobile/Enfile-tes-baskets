@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
 
-import 'ClassesPage.dart';
-import 'CommunitiesPage.dart';
-import 'HomePage.dart';
+import 'classes_page.dart';
+import 'communities_page.dart';
+import 'home_page.dart';
 
 class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});

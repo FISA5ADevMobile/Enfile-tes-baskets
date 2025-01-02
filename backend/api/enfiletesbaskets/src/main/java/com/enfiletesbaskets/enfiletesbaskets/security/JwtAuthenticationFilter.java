@@ -1,5 +1,6 @@
 package com.enfiletesbaskets.enfiletesbaskets.security;
 
+import io.jsonwebtoken.Claims;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,6 +12,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -40,15 +43,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = getJwtFromRequest(request);
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            String username = jwtTokenProvider.getUsernameFromToken(token);
-            System.out.println("Token valid for username: " + username);
+            Claims claims = jwtTokenProvider.getAllClaimsFromToken(token);
+
+            String username = claims.getSubject(); // Récupère le pseudo
+            String email = claims.get("email", String.class); // Récupère l'email
+            Long userId = claims.get("id", Long.class);
+            Boolean isAdmin = claims.get("isAdmin", Boolean.class);
+
+            System.out.println("Extracted claims:");
+            System.out.println("Username: " + username);
+            System.out.println("Email: " + email);
+            System.out.println("ID: " + userId);
+            System.out.println("IsAdmin: " + isAdmin);
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            // Authentifiez l'utilisateur
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+            Map<String, Object> details = new HashMap<>();
+            details.put("id", userId);
+            details.put("isAdmin", isAdmin != null ? isAdmin : false);
+            details.put("email", email != null ? email : "unknown@example.com");
+
+            authentication.setDetails(details);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        } else {
+        }
+        else {
             System.out.println("Invalid or missing token for path: " + path);
         }
 

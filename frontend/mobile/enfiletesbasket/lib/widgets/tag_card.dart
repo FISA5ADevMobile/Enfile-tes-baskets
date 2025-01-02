@@ -1,4 +1,4 @@
-import 'package:enfiletesbasket/screens/TagDetailsPage.dart';
+import 'package:enfiletesbasket/screens/tag_details_page.dart';
 import 'package:flutter/material.dart';
 import '../model/tag.dart';
 

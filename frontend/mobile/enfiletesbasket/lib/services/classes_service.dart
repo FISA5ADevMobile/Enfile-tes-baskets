@@ -1,19 +1,22 @@
 import 'dart:convert';
-import 'package:enfiletesbasket/model/Course.dart';
+import 'package:enfiletesbasket/model/course.dart';
 import 'package:http/http.dart' as http;
 
 class ClassesService {
   final String baseUrl = "http://10.0.2.2:8081/classes";
 
   /// Fetch classes subscribed by the user and return a list of Course objects
-  Future<List<Course>> fetchSubscribedClasses(int idUser) async {
+  Future<List<Course>> fetchSubscribedClasses(int idUser, String token) async {
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/subscribed/$idUser'),
-        headers: {'Content-Type': 'application/json; charset=utf-8'},
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Authorization': 'Bearer $token', // Format correct
+        },
       );
-
       if (response.statusCode == 200) {
+        print("FetchSubscribe: ${response.body}");
         final List<dynamic> data = json.decode(response.body);
         return data.map((json) => Course.fromJson(json)).toList();
       } else {
@@ -25,11 +28,14 @@ class ClassesService {
   }
 
   /// Join a class with the provided password
-  Future<http.Response> joinClass(int idUser, String password) async {
+  Future<http.Response> joinClass(int idUser, String password, String token) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/join/$idUser?password=$password'),
-        headers: {'Content-Type': 'application/json; charset=utf-8'},
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Authorization': 'Bearer $token', // Ajout du token JWT
+        },
       );
       return response;
     } catch (e) {
@@ -50,11 +56,14 @@ class ClassesService {
       throw Exception("Error joining class: $e");
     }
   }
-  Future<int?> getCourseIdForClass(int classId) async {
+  Future<int?> getCourseIdForClass(int classId, String token) async {
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/courses/user/1?classId=$classId'),
-        headers: {'Content-Type': 'application/json; charset=utf-8'},
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Authorization': 'Bearer $token', // Ajout du token JWT
+        },
       );
 
       if (response.statusCode == 200) {

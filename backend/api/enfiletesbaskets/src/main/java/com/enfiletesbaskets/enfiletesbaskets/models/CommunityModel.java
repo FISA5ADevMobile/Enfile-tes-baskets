@@ -56,6 +56,93 @@ public class CommunityModel {
     @JoinColumn(name = "category_id")
     private CategoryModel category;
 
-    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getBanDate() {
+        return banDate;
+    }
+
+    public void setBanDate(Date banDate) {
+        this.banDate = banDate;
+    }
+
+    public Boolean getPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(Boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public UserModel getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(UserModel admin) {
+        this.admin = admin;
+    }
+
+    public List<UserModel> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserModel> users) {
+        this.users = users;
+    }
+
+    public List<UserModel> getModerators() {
+        return moderators;
+    }
+
+    public void setModerators(List<UserModel> moderators) {
+        this.moderators = moderators;
+    }
+
+    public List<PostModel> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<PostModel> posts) {
+        this.posts = posts;
+    }
+
+    public List<UserModel> getBannedUsers() {
+        return bannedUsers;
+    }
+
+    public void setBannedUsers(List<UserModel> bannedUsers) {
+        this.bannedUsers = bannedUsers;
+    }
+
+    public CategoryModel getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryModel category) {
+        this.category = category;
+    }
+// Getters et Setters
 }
 

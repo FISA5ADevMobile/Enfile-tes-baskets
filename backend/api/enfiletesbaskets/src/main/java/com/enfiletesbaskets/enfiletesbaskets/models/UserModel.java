@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -22,7 +21,7 @@ public class UserModel {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String pseudo;
 
     private String name;
@@ -34,7 +33,8 @@ public class UserModel {
     @Column(name = "nbPostDeleted")
     private Integer nbPostDeleted = 0;
 
-    private LocalDate banDate;
+    private Date banDate;
+    private Integer code;
 
     @ManyToMany
     @JoinTable(
@@ -132,11 +132,11 @@ public class UserModel {
         this.nbPostDeleted = nbPostDeleted;
     }
 
-    public LocalDate getBanDate() {
+    public Date getBanDate() {
         return banDate;
     }
 
-    public void setBanDate(LocalDate banDate) {
+    public void setBanDate(Date banDate) {
         this.banDate = banDate;
     }
 
@@ -161,4 +161,13 @@ public class UserModel {
         authorities.add(new SimpleGrantedAuthority(role)); //
         return authorities;
     }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
 }

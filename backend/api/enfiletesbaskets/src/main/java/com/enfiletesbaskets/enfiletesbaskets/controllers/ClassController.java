@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/classes")
-public class    ClassController {
+public class ClassController {
     private final ClassService classService;
     private final TagService tagService;
     private final CourseService courseService;

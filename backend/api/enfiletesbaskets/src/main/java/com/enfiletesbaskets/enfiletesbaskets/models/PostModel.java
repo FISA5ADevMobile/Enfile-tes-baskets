@@ -1,5 +1,6 @@
 package com.enfiletesbaskets.enfiletesbaskets.models;
 
+import com.enfiletesbaskets.enfiletesbaskets.dto.PostDTO;
 import jakarta.persistence.*;
 import java.util.Date;
 
@@ -88,5 +89,17 @@ public class PostModel {
 
     public void setRelated(PostModel related) {
         this.related = related;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public UserModel getCreator() {
+        return creator;
+    }
+
+    public void setCreator(UserModel creator) {
+        this.creator = creator;
     }
 }

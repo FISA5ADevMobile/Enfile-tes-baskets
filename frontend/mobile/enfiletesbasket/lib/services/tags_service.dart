@@ -34,11 +34,13 @@ class TagsService {
     ),
   ];
 
-  Future<List<Tag>> fetchClassTags(int classId) async {
+  Future<List<Tag>> fetchClassTags(int classId, String token) async {
     final response = await http.get(
       Uri.parse('$baseUrl/tags/class/$classId'),
-      headers: {'Content-Type': 'application/json; charset=utf-8'},
-    );
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': 'Bearer $token', // Ajout du token JWT
+      },     );
 
     print("ResponseTags: ${response.body}");
 

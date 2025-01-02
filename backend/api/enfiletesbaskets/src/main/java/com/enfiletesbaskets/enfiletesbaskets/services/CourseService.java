@@ -23,7 +23,7 @@ public class CourseService {
 
     public Long getCourseIdForUserAndClass(Long userId, Long classId) {
         return courseRepository.findCourseIdByUserAndClass(userId, classId)
-                .orElseThrow(() -> new IllegalArgumentException("No course found for the user in this class."));
+                .orElseThrow(() -> new IllegalArgumentException("Pas de course trouvée pour cet utilisateur."));
     }
 
     public List<CourseModel> findByIds(List<Long> courseIds) {

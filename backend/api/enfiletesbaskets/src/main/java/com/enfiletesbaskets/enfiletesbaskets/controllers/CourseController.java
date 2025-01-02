@@ -3,10 +3,8 @@ package com.enfiletesbaskets.enfiletesbaskets.controllers;
 import com.enfiletesbaskets.enfiletesbaskets.models.CourseModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.TagModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
-import com.enfiletesbaskets.enfiletesbaskets.repositories.CourseRepository;
-import com.enfiletesbaskets.enfiletesbaskets.repositories.TagRepository;
-import com.enfiletesbaskets.enfiletesbaskets.repositories.UserRepository;
 
+import com.enfiletesbaskets.enfiletesbaskets.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +17,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/courses")
 public class CourseController {
 
-    private final CourseRepository courseRepository;
+    private final CourseService courseService;
 
-    public CourseController(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
+    public CourseController(CourseService courseService) {
+        this.courseService = courseService;
     }
 
     @GetMapping("/user/{userId}")
@@ -30,9 +28,12 @@ public class CourseController {
         @PathVariable Long userId,
         @RequestParam Long classId
     ) {
-        Optional<Long> courseId = courseRepository.findCourseIdByUserAndClass(userId, classId);
-        return courseId.map(ResponseEntity::ok)
-                       .orElse(ResponseEntity.notFound().build());
+        try {
+            Long courseId = courseService.getCourseIdForUserAndClass(userId, classId);
+            return ResponseEntity.ok(courseId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/{courseId}")
