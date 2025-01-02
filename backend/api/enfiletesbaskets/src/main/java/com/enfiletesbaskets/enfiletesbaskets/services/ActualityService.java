@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +44,8 @@ public class ActualityService {
                     map.put("image", actuality.getImage());
                     map.put("description", actuality.getDescription());
                     map.put("event", actuality.getEvent());
-                    map.put("publicationDate", actuality.getPublicationDate());
-                    return map;
+                    map.put("publicationDate", actuality.getPublicationDate()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));                    return map;
                 })
                 .collect(Collectors.toList());
     }

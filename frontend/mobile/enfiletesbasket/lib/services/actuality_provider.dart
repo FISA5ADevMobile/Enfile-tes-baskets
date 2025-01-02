@@ -26,18 +26,14 @@ class ActualityProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> loadActualityById(String id) async {
-    _isLoading = true;
-    notifyListeners();
-
+  Future<Actuality?> loadActualityById(int id) async {
     try {
-      _selectedActuality = await _actualityService.fetchActualityById(id);
+      return await _actualityService.fetchActualityById(id);
     } catch (e) {
       print('Error loading actuality by id: $e');
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+      return null;
     }
   }
+
 }
 

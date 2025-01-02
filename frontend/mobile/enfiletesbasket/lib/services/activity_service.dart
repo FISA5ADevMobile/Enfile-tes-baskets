@@ -34,7 +34,7 @@ class ActualityService {
     }
   }
 
-  Future<Actuality?> fetchActualityById(String id) async {
+  Future<Actuality?> fetchActualityById(int id) async {
     final token = await _getToken();
     if (token == null) {
       throw Exception('No token found. User might not be authenticated.');

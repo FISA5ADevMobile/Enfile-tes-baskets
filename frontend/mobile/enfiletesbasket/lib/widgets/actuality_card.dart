@@ -3,59 +3,77 @@ import 'package:flutter/material.dart';
 import '../utils/text_utils.dart';
 
 class ActualityCard extends StatelessWidget {
+  final int id; // Ajout de l'ID pour faciliter la navigation
   final String title;
   final String description;
   final Uint8List imageBytes;
   final bool isEvent;
+  final DateTime publicationDate;
+  final VoidCallback onTap; // Gestion du clic pour la navigation
 
   const ActualityCard({
     Key? key,
+    required this.id, // Paramètre ID ajouté
     required this.title,
     required this.description,
     required this.imageBytes,
     required this.isEvent,
+    required this.publicationDate,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final String shortenedDescription = truncateText(decodeText(description), 50);
     final String decodedTitle = decodeText(title);
+    final String formattedDate =
+        "${publicationDate.day.toString().padLeft(2, '0')}/${publicationDate.month.toString().padLeft(2, '0')}/${publicationDate.year}";
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
-        color: Colors.white,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12.0),
+    return GestureDetector(
+      onTap: onTap, // Action lors du clic sur la carte
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+          color: Colors.white,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            imageBytes.isNotEmpty
-                ? Image.memory(
-              imageBytes,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: 200,
-            )
-                : Container(
-              color: Colors.grey[200],
-              height: 200,
-              width: double.infinity,
-              child: const Icon(
-                Icons.image_not_supported,
-                color: Colors.grey,
-                size: 50,
+            // 📸 Image Section
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12.0),
+                topRight: Radius.circular(12.0),
+              ),
+              child: imageBytes.isNotEmpty
+                  ? Image.memory(
+                imageBytes,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 200,
+              )
+                  : Container(
+                color: Colors.grey[200],
+                height: 200,
+                width: double.infinity,
+                child: const Icon(
+                  Icons.image_not_supported,
+                  color: Colors.grey,
+                  size: 50,
+                ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
+
+            // 📝 Title and Description Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
@@ -78,7 +96,24 @@ class ActualityCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+
+            const Spacer(), // Pousse la date vers le bas
+
+            // 📅 Publication Date Section (en bas à droite avec "Publiée le")
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0, bottom: 8.0),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Text(
+                  "Publiée le $formattedDate",
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
