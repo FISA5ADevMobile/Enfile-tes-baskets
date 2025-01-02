@@ -27,21 +27,6 @@ class ClassesService {
     }
   }
 
-  /// Join a class with the provided password
-  Future<http.Response> joinClass(int idUser, String password, String token) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/join/$idUser?password=$password'),
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          'Authorization': 'Bearer $token', // Ajout du token JWT
-        },
-      );
-      return response;
-    } catch (e) {
-      throw Exception("Error joining class: $e");
-    }
-  }
 
   Future<http.Response> resetTags(int courseId) async {
 
