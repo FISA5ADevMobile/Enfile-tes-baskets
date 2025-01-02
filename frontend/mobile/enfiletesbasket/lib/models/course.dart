@@ -1,5 +1,5 @@
 class Course {
-  final String id;
+  final int id; // Correction ici : int au lieu de String
   final String name;
   final String description;
 
@@ -11,9 +11,9 @@ class Course {
 
   factory Course.fromJson(Map<String, dynamic> json) {
     return Course(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
+      id: json['id'] as int, // Assurez-vous que c'est un int
+      name: json['name'] ?? 'No Name', // Gère les valeurs nulles
+      description: json['description'] ?? 'No Description', // Gère les valeurs nulles
     );
   }
 }
