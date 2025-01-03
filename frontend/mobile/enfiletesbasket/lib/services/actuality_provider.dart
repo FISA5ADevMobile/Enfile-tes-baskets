@@ -7,15 +7,12 @@ class ActualityProvider extends ChangeNotifier {
   List<Actuality> _actualities = [];
   Actuality? _selectedActuality;
   bool _isLoading = false;
-  bool _isSubscribed = false; // Utilisation d'un bool directement
-
-  /// ✅ Getters
+  bool _isSubscribed = false;
   List<Actuality> get actualities => _actualities;
   Actuality? get selectedActuality => _selectedActuality;
   bool get isLoading => _isLoading;
   bool get isSubscribed => _isSubscribed;
 
-  /// ✅ Charger toutes les actualités
   Future<void> loadActualities() async {
     _isLoading = true;
     notifyListeners();
@@ -30,7 +27,6 @@ class ActualityProvider extends ChangeNotifier {
     }
   }
 
-  /// ✅ Charger une actualité spécifique
   Future<void> loadActualityById(int id) async {
     _isLoading = true;
     notifyListeners();
@@ -45,7 +41,6 @@ class ActualityProvider extends ChangeNotifier {
     }
   }
 
-  /// ✅ Vérifier si l'utilisateur est inscrit à un événement
   Future<void> checkIfSubscribed(int actualityId) async {
     _isLoading = true;
     notifyListeners();
@@ -61,14 +56,13 @@ class ActualityProvider extends ChangeNotifier {
     }
   }
 
-  /// ✅ S'inscrire à un événement
   Future<void> subscribeToEvent(int actualityId) async {
     _isLoading = true;
     notifyListeners();
 
     try {
       await _actualityService.subscribeToEvent(actualityId);
-      _isSubscribed = true; // Met à jour l'état après l'inscription
+      _isSubscribed = true;
       print('Successfully subscribed to the event.');
     } catch (e) {
       print('Error subscribing to event: $e');

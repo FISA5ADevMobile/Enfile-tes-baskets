@@ -14,17 +14,18 @@ class ActualityDetailPage extends StatefulWidget {
 }
 
 class _ActualityDetailPageState extends State<ActualityDetailPage> {
+  bool _isSubscribing = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<ActualityProvider>(context, listen: false);
       provider.loadActualityById(widget.actualityId);
-      provider.checkIfSubscribed(widget.actualityId); // Vérifie si l'utilisateur est inscrit
+      provider.checkIfSubscribed(widget.actualityId);
     });
   }
 
-  /// ✅ Affiche une popup de confirmation ou d'erreur
   void _showPopup(String title, String description, {bool isError = false}) {
     showDialog(
       context: context,
@@ -32,20 +33,24 @@ class _ActualityDetailPageState extends State<ActualityDetailPage> {
         title: title,
         description: description,
         actions: [
-          TextButton(
+          PrimaryButton(
+            text: "Ok",
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('OK'),
+            width: 120,
           ),
         ],
       ),
     );
   }
 
-  /// ✅ Gère l'inscription à l'événement
   Future<void> _handleSubscription() async {
     final provider = Provider.of<ActualityProvider>(context, listen: false);
+
+    setState(() {
+      _isSubscribing = true;
+    });
 
     try {
       await provider.subscribeToEvent(widget.actualityId);
@@ -59,6 +64,10 @@ class _ActualityDetailPageState extends State<ActualityDetailPage> {
         'Une erreur est survenue lors de l\'inscription. Veuillez réessayer.',
         isError: true,
       );
+    } finally {
+      setState(() {
+        _isSubscribing = false;
+      });
     }
   }
 
@@ -78,7 +87,6 @@ class _ActualityDetailPageState extends State<ActualityDetailPage> {
       )
           : Column(
         children: [
-          /// 📸 **Image Section avec marge et bords arrondis**
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
             child: ClipRRect(
@@ -93,7 +101,6 @@ class _ActualityDetailPageState extends State<ActualityDetailPage> {
 
           const SizedBox(height: 24),
 
-          /// 📝 **Title and Description Section**
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -116,18 +123,18 @@ class _ActualityDetailPageState extends State<ActualityDetailPage> {
                     ),
                     const SizedBox(height: 24),
 
-                    /// 🎟️ **Bouton d'inscription à l'événement**
+
                     if (actualityProvider.selectedActuality!.isEvent)
                       Center(
                         child: PrimaryButton(
                           text: actualityProvider.isSubscribed
                               ? "Déjà inscrit à l'événement"
                               : "Participer à l'événement",
-                          onPressed: actualityProvider.isSubscribed
+                          onPressed: actualityProvider.isSubscribed || _isSubscribing
                               ? null
                               : _handleSubscription,
+                          isDisabled: actualityProvider.isSubscribed || _isSubscribing,
                           width: double.infinity,
-                          isDisabled: actualityProvider.isSubscribed,
                         ),
                       ),
                   ],
@@ -136,7 +143,6 @@ class _ActualityDetailPageState extends State<ActualityDetailPage> {
             ),
           ),
 
-          /// 📅 **Publication Date Section**
           Padding(
             padding: const EdgeInsets.only(
               right: 16.0,

@@ -69,8 +69,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: 24),
-
-          // 🛠️ Ajustement du Carousel
           Expanded(
             child: CarouselSlider.builder(
               options: CarouselOptions(
@@ -110,8 +108,6 @@ class _HomePageState extends State<HomePage> {
           ),
 
           const SizedBox(height: 12),
-
-          // 🔘 Indicateurs du carrousel
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: actualityProvider.actualities

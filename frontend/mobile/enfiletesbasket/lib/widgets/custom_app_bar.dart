@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onPersonIconPressed;
-  final bool showBackButton; // Nouveau paramètre pour afficher le bouton retour
-  final VoidCallback? onBackButtonPressed; // Action pour le bouton retour
+  final bool showBackButton;
+  final VoidCallback? onBackButtonPressed;
 
   const CustomAppBar({
     Key? key,
     this.onPersonIconPressed,
-    this.showBackButton = false, // Par défaut, désactivé
+    this.showBackButton = false,
     this.onBackButtonPressed,
   }) : super(key: key);
 
@@ -22,7 +22,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: 80,
       title: Row(
         children: [
-          if (showBackButton) // Affiche le bouton retour uniquement si activé
+          if (showBackButton)
             IconButton(
               icon: const Icon(
                 Icons.arrow_back,
@@ -33,7 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Navigator.pop(context);
               },
             ),
-          if (!showBackButton) // Sinon, affiche l'icône de profil
+          if (!showBackButton)
             IconButton(
               icon: const Icon(
                 Icons.account_circle,

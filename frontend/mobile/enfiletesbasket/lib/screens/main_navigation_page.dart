@@ -9,7 +9,6 @@ import '../widgets/custom_app_bar.dart';
 class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});
 
-  /// Méthode statique pour naviguer vers les détails d'une actualité
   static void navigateToActualityDetails(BuildContext context, int actualityId) {
     final state = context.findAncestorStateOfType<_MainNavigationPageState>();
     state?._showActualityDetails(actualityId);
@@ -21,36 +20,31 @@ class MainNavigationPage extends StatefulWidget {
 
 class _MainNavigationPageState extends State<MainNavigationPage> {
   int _selectedIndex = 0;
-  int? _selectedActualityId; // Stocke l'ID de l'actualité sélectionnée
+  int? _selectedActualityId;
 
-  /// Liste des écrans pour la navigation
   final List<Widget> _screens = [
     const HomePage(),
     const CommunitiesPage(),
     ClassesPage(),
   ];
 
-  /// Fonction pour gérer le changement d'onglet
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      _selectedActualityId = null; // Réinitialise l'ID lorsqu'on change d'onglet
+      _selectedActualityId = null;
     });
   }
 
-  /// Fonction pour afficher la page de détails d'une actualité
   void _showActualityDetails(int actualityId) {
     setState(() {
-      _selectedActualityId = actualityId; // Indique l'affichage de la page détail
+      _selectedActualityId = actualityId;
     });
   }
 
-  /// Détermine si le bouton retour doit être affiché
   bool _shouldShowBackButton() {
     return _selectedIndex != 0 || _selectedActualityId != null;
   }
 
-  /// Récupère l'écran à afficher
   Widget _getCurrentScreen() {
     if (_selectedActualityId != null) {
       return ActualityDetailPage(actualityId: _selectedActualityId!);
@@ -59,10 +53,9 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     }
   }
 
-  /// Récupère l'index actuel pour la navigation
   int _getCurrentNavigationIndex() {
     if (_selectedActualityId != null) {
-      return 0; // Maintient l'index sur Home même en détail
+      return 0;
     }
     return _selectedIndex;
   }

@@ -3,12 +3,12 @@ import 'dart:convert';
 import '../utils/image_utils.dart';
 
 class Actuality {
-  final int id; // Ajout de l'identifiant unique
+  final int id;
   final String title;
   final String description;
   final Uint8List imageBytes;
   final bool isEvent;
-  final DateTime publicationDate; // Ajout de la date de publication
+  final DateTime publicationDate;
 
   Actuality({
     required this.id,
@@ -30,7 +30,7 @@ class Actuality {
       isEvent: json['event'] ?? false,
       publicationDate: json['publicationDate'] != null
           ? DateTime.parse(json['publicationDate'])
-          : DateTime.now(), // Date par défaut si non fournie
+          : DateTime.now(),
     );
   }
 

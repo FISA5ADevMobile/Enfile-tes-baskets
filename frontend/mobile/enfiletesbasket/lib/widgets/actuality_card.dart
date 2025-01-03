@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import '../utils/text_utils.dart';
 
 class ActualityCard extends StatelessWidget {
-  final int id; // Ajout de l'ID pour faciliter la navigation
+  final int id;
   final String title;
   final String description;
   final Uint8List imageBytes;
   final bool isEvent;
   final DateTime publicationDate;
-  final VoidCallback onTap; // Gestion du clic pour la navigation
+  final VoidCallback onTap;
 
   const ActualityCard({
     Key? key,
-    required this.id, // Paramètre ID ajouté
+    required this.id,
     required this.title,
     required this.description,
     required this.imageBytes,
@@ -30,7 +30,7 @@ class ActualityCard extends StatelessWidget {
         "${publicationDate.day.toString().padLeft(2, '0')}/${publicationDate.month.toString().padLeft(2, '0')}/${publicationDate.year}";
 
     return GestureDetector(
-      onTap: onTap, // Action lors du clic sur la carte
+      onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         decoration: BoxDecoration(
@@ -47,7 +47,6 @@ class ActualityCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 📸 Image Section
             ClipRRect(
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12.0),
@@ -72,8 +71,6 @@ class ActualityCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-
-            // 📝 Title and Description Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
@@ -97,9 +94,7 @@ class ActualityCard extends StatelessWidget {
               ),
             ),
 
-            const Spacer(), // Pousse la date vers le bas
-
-            // 📅 Publication Date Section (en bas à droite avec "Publiée le")
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.only(right: 16.0, bottom: 8.0),
               child: Align(

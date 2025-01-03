@@ -6,13 +6,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ActualityService {
   static const String _baseUrl = 'http://10.0.2.2:8081/api/actualities';
 
-  /// ✅ Récupération du Token JWT
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('jwt_token');
   }
 
-  /// ✅ Récupération de toutes les actualités
   Future<List<Actuality>> fetchAllActualities() async {
     final token = await _getToken();
     if (token == null) {
@@ -36,7 +34,6 @@ class ActualityService {
     }
   }
 
-  /// ✅ Récupération d'une actualité par son ID
   Future<Actuality?> fetchActualityById(int id) async {
     final token = await _getToken();
     if (token == null) {
@@ -60,7 +57,6 @@ class ActualityService {
     }
   }
 
-  /// ✅ Vérifier si l'utilisateur est inscrit à un événement
   Future<bool> checkIfSubscribed(int id) async {
     final token = await _getToken();
     if (token == null) {
@@ -83,7 +79,6 @@ class ActualityService {
     }
   }
 
-  /// ✅ Inscription à un événement
   Future<void> subscribeToEvent(int id) async {
     final token = await _getToken();
     if (token == null) {
