@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/tags_service.dart';
-import '../model/tag.dart';
+import '../models/tag.dart';
 
 class TagsProvider extends ChangeNotifier {
   final TagsService _tagsService = TagsService();

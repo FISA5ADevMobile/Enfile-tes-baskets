@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:enfiletesbasket/model/user.dart';
+import 'package:enfiletesbasket/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class UserService {

@@ -6,11 +6,11 @@ import com.enfiletesbaskets.enfiletesbaskets.repositories.ActualityRepository;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.UserActualityRepository;
 import com.enfiletesbaskets.enfiletesbaskets.models.ActualityModel;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,10 +40,11 @@ public class ActualityService {
                     Map<String, Object> map = new HashMap<>();
                     map.put("id", actuality.getId());
                     map.put("title", actuality.getTitle());
+                    map.put("image", actuality.getImage());
                     map.put("description", actuality.getDescription());
                     map.put("event", actuality.getEvent());
-                    map.put("publicationDate", actuality.getPublicationDate());
-                    return map;
+                    map.put("publicationDate", actuality.getPublicationDate()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));                    return map;
                 })
                 .collect(Collectors.toList());
     }
@@ -78,4 +79,10 @@ public class ActualityService {
         }
         return actualityRepository.save(actuality);
     }
+
+    public boolean isUserSubscribedToEvent(Long actualityId, Authentication auth) {
+        UserModel user = userService.authenticate(auth);
+        return userActualityRepository.existsByUserIdAndActualityId(user.getId(), actualityId);
+    }
+
 }

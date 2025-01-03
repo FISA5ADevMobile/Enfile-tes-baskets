@@ -1,12 +1,18 @@
-
 import 'package:flutter/material.dart';
-
 import 'classes_page.dart';
 import 'communities_page.dart';
 import 'home_page.dart';
+import 'actuality_details_screen.dart';
+import '../widgets/custom_bottom_navigation_bar.dart';
+import '../widgets/custom_app_bar.dart';
 
 class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});
+
+  static void navigateToActualityDetails(BuildContext context, int actualityId) {
+    final state = context.findAncestorStateOfType<_MainNavigationPageState>();
+    state?._showActualityDetails(actualityId);
+  }
 
   @override
   _MainNavigationPageState createState() => _MainNavigationPageState();
@@ -14,42 +20,68 @@ class MainNavigationPage extends StatefulWidget {
 
 class _MainNavigationPageState extends State<MainNavigationPage> {
   int _selectedIndex = 0;
+  int? _selectedActualityId;
 
-  // List of screens for navigation
   final List<Widget> _screens = [
     const HomePage(),
     const CommunitiesPage(),
-    ClassesPage(), // Directement utilisé sans Provider ici
+    ClassesPage(),
   ];
 
-  // Function to handle navigation
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _selectedActualityId = null;
     });
+  }
+
+  void _showActualityDetails(int actualityId) {
+    setState(() {
+      _selectedActualityId = actualityId;
+    });
+  }
+
+  bool _shouldShowBackButton() {
+    return _selectedIndex != 0 || _selectedActualityId != null;
+  }
+
+  Widget _getCurrentScreen() {
+    if (_selectedActualityId != null) {
+      return ActualityDetailPage(actualityId: _selectedActualityId!);
+    } else {
+      return _screens[_selectedIndex];
+    }
+  }
+
+  int _getCurrentNavigationIndex() {
+    if (_selectedActualityId != null) {
+      return 0;
+    }
+    return _selectedIndex;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex], // Display the selected screen
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
+      appBar: CustomAppBar(
+        showBackButton: _shouldShowBackButton(),
+        onBackButtonPressed: () {
+          setState(() {
+            if (_selectedActualityId != null) {
+              _selectedActualityId = null;
+            } else {
+              _selectedIndex = 0;
+            }
+          });
+        },
+        onPersonIconPressed: () {
+          print('Icône de profil cliquée');
+        },
+      ),
+      body: _getCurrentScreen(),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _getCurrentNavigationIndex(),
         onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Accueil',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'Communautés',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'Parcours',
-          ),
-        ],
       ),
     );
   }

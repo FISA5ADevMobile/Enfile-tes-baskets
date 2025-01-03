@@ -6,9 +6,6 @@ class CommunitiesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Communautés'),
-      ),
       body: const Center(
         child: Text(
           'Page des communautés',

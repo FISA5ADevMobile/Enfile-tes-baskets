@@ -1,9 +1,7 @@
 package com.enfiletesbaskets.enfiletesbaskets.controllers;
 
 import com.enfiletesbaskets.enfiletesbaskets.models.ActualityModel;
-import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 import com.enfiletesbaskets.enfiletesbaskets.services.ActualityService;
-import com.enfiletesbaskets.enfiletesbaskets.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -49,4 +47,11 @@ public class ActualityController {
         actualityService.deleteActualityById(id);
         return ResponseEntity.ok("Actuality deleted successfully");
     }
+
+    @GetMapping("/is_subscribed/{actualityId}")
+    public ResponseEntity<Boolean> isUserSubscribedToEvent(@PathVariable Long actualityId, Authentication auth) {
+        boolean isSubscribed = actualityService.isUserSubscribedToEvent(actualityId, auth);
+        return ResponseEntity.ok(isSubscribed);
+    }
+
 }
