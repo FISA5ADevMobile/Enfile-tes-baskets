@@ -6,11 +6,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ActualityService {
   static const String _baseUrl = 'http://10.0.2.2:8081/api/actualities';
 
+  /// ✅ Récupération du Token JWT
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('jwt_token');
   }
 
+  /// ✅ Récupération de toutes les actualités
   Future<List<Actuality>> fetchAllActualities() async {
     final token = await _getToken();
     if (token == null) {
@@ -34,7 +36,8 @@ class ActualityService {
     }
   }
 
-  Future<Actuality?> fetchActualityById(String id) async {
+  /// ✅ Récupération d'une actualité par son ID
+  Future<Actuality?> fetchActualityById(int id) async {
     final token = await _getToken();
     if (token == null) {
       throw Exception('No token found. User might not be authenticated.');
@@ -57,4 +60,49 @@ class ActualityService {
     }
   }
 
+  /// ✅ Vérifier si l'utilisateur est inscrit à un événement
+  Future<bool> checkIfSubscribed(int id) async {
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('No token found. User might not be authenticated.');
+    }
+
+    final url = Uri.parse('$_baseUrl/is_subscribed/$id');
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return response.body == 'true';
+    } else {
+      throw Exception('Failed to check subscription status');
+    }
+  }
+
+  /// ✅ Inscription à un événement
+  Future<void> subscribeToEvent(int id) async {
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('No token found. User might not be authenticated.');
+    }
+
+    final url = Uri.parse('$_baseUrl/subscribe/$id');
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print('Successfully subscribed to the event.');
+    } else {
+      throw Exception('Failed to subscribe to the event');
+    }
+  }
 }

@@ -6,7 +6,6 @@ import com.enfiletesbaskets.enfiletesbaskets.repositories.ActualityRepository;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.UserActualityRepository;
 import com.enfiletesbaskets.enfiletesbaskets.models.ActualityModel;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 
@@ -80,4 +79,10 @@ public class ActualityService {
         }
         return actualityRepository.save(actuality);
     }
+
+    public boolean isUserSubscribedToEvent(Long actualityId, Authentication auth) {
+        UserModel user = userService.authenticate(auth);
+        return userActualityRepository.existsByUserIdAndActualityId(user.getId(), actualityId);
+    }
+
 }
