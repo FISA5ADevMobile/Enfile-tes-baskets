@@ -44,4 +44,13 @@ public class CourseTagValidationController {
         return validationService.getValidatedTagsByCourseId(courseId);
     }
 
+    /**
+     * Réinitialise les tags pour une course spécifique.
+     */
+    @PutMapping("/{courseId}/reset")
+    public ResponseEntity<Void> resetTags(@PathVariable Long courseId, Authentication authentication) {
+        validationService.resetTags(courseId, authentication);
+        return ResponseEntity.ok().build();
+    }
+
 }
