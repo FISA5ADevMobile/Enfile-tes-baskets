@@ -39,7 +39,8 @@ class TagsProvider extends ChangeNotifier {
   /// Récupère toutes les balises pour une classe et un cours
   Future<void> fetchTags(int classId, int courseId, String token) async {
     try {
-      _tags = await _tagsService.fetchClassTags(classId, token);
+      _tags = await _tagsService.fetchClassTags(courseId, classId, token);
+      print('Balise récupérée dans le provider : $_tags');
       notifyListeners();
     } catch (e) {
       print('Error fetching tags: $e');
@@ -47,11 +48,11 @@ class TagsProvider extends ChangeNotifier {
   }
 
   /// Réinitialise l'état des balises pour un cours
-  Future<void> resetTags(int courseId) async {
+  Future<void> resetTags(int courseId,String token) async {
     try {
-      await _tagsService.resetTags(courseId);
+      await _tagsService.resetTags(courseId,token);
       for (var tag in _tags) {
-        tag.validated = false; // Met toutes les balises à non validé
+        tag.validated = false;
       }
       notifyListeners();
     } catch (e) {
@@ -60,15 +61,15 @@ class TagsProvider extends ChangeNotifier {
   }
 
   /// Valide une balise spécifique
-  Future<void> validateTag(int classId, int courseId, int tagId, int userId) async {
+  Future<void> validateTag(int courseId, int tagId, String token) async {
     try {
-      await _tagsService.validateTag(classId, courseId, tagId, userId);
+      await _tagsService.validateTag(courseId, tagId, token);
       final tag = _tags.firstWhere(
             (tag) => tag.id == tagId,
         orElse: () => Tag(
           id: tagId,
-          name: "Unknown Tag",
-          description: "Tag not found",
+          name: "Balise inconnue",
+          description: "Balise non reconnue",
           validated: false,
           xPos: 0.0,
           yPos: 0.0,
@@ -79,24 +80,23 @@ class TagsProvider extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print('Error validating tag: $e');
+      print('Erreur lors de la validation de la balise : $e');
     }
   }
-
   /// Traite une balise scannée
   Future<void> processScannedTag(String tagId, int classId, int courseId) async {
     try {
       final parsedTagId = int.tryParse(tagId);
       if (parsedTagId == null) {
-        print('Invalid tag ID: $tagId');
+        print('ID de la balise invalide : $tagId');
         return;
       }
       final tag = _tags.firstWhere(
             (tag) => tag.id == parsedTagId,
         orElse: () => Tag(
           id: parsedTagId,
-          name: "Unknown Tag",
-          description: "Tag not found",
+          name: "Balise inconnue ",
+          description: "Balise non trouvée",
           validated: false,
           xPos: 0.0,
           yPos: 0.0,
@@ -107,7 +107,7 @@ class TagsProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      print('Error processing scanned tag: $e');
+      print('Erreur lors du traitement de la balise : $e');
     }
   }
 }

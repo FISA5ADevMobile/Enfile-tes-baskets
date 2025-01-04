@@ -2,6 +2,7 @@ package com.enfiletesbaskets.enfiletesbaskets.services;
 
 import com.enfiletesbaskets.enfiletesbaskets.dto.ClassDTO;
 import com.enfiletesbaskets.enfiletesbaskets.dto.CourseDTO;
+import com.enfiletesbaskets.enfiletesbaskets.dto.CourseTagsDTO;
 import com.enfiletesbaskets.enfiletesbaskets.dto.TagDTO;
 import com.enfiletesbaskets.enfiletesbaskets.models.ClassModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.CourseModel;
@@ -9,6 +10,7 @@ import com.enfiletesbaskets.enfiletesbaskets.models.TagModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.ClassRepository;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.CourseRepository;
+import com.enfiletesbaskets.enfiletesbaskets.repositories.CourseTagValidationRepository;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -31,6 +33,9 @@ public class CourseService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CourseTagValidationRepository validationRepository;
 
     @Autowired
     private UserService userService;
@@ -182,18 +187,25 @@ public class CourseService {
                 .map(course -> ClassDTO.toDTO(course.getClassModel()))
                 .collect(Collectors.toList());
     }
-
+    
     /**
-     * Récupère tous les tags liés à une course.
+     * Récupère tous les tags liés à une course avec leur statut.
      */
-    public List<TagDTO> getTagsByCourse(Long courseId) {
-        CourseModel course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Course non trouvée avec l'ID : " + courseId));
+    public List<CourseTagsDTO> getTagsByCourse(Long classId, Long courseId) {
+        // Fetch all tags associated with the class
+        List<TagModel> allTags = classRepository.findById(classId)
+                .orElseThrow(() -> new RuntimeException("La classe n'a pas été trouvée"))
+                .getTags();
 
-        List<TagModel> tags = course.getClassModel().getTags();
+        List<Long> validatedTagIds = validationRepository.findByCourseId(courseId)
+                .stream()
+                .map(validation -> validation.getTag().getId())
+                .collect(Collectors.toList());
+        System.out.println("Les tags validés sont "+ validatedTagIds);
+        System.out.println("All tags est "+ allTags);
 
-        return tags.stream()
-                .map(TagDTO::toDTO)
+        return allTags.stream()
+                .map(tag -> CourseTagsDTO.from(tag, validatedTagIds.contains(tag.getId())))
                 .collect(Collectors.toList());
     }
 

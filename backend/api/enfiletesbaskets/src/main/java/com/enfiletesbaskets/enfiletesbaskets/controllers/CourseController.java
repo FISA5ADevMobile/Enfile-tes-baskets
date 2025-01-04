@@ -2,6 +2,7 @@ package com.enfiletesbaskets.enfiletesbaskets.controllers;
 
 import com.enfiletesbaskets.enfiletesbaskets.dto.ClassDTO;
 import com.enfiletesbaskets.enfiletesbaskets.dto.CourseDTO;
+import com.enfiletesbaskets.enfiletesbaskets.dto.CourseTagsDTO;
 import com.enfiletesbaskets.enfiletesbaskets.dto.TagDTO;
 import com.enfiletesbaskets.enfiletesbaskets.models.CourseModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
@@ -91,12 +92,17 @@ public class CourseController {
     }
 
     /**
-     * Affiche tous les tags associés à une course spécifique.
+     * Affiche tous les tags associés à une course spécifique avec le status.
      */
     @GetMapping("/{courseId}/tags")
-    public ResponseEntity<List<TagDTO>> getTagsByCourse(@PathVariable Long courseId) {
-        List<TagDTO> tags = courseService.getTagsByCourse(courseId);
-        return ResponseEntity.ok(tags);
+    public ResponseEntity<List<CourseTagsDTO>> getTagsByCourseId(
+            @PathVariable Long courseId,
+            @RequestParam Long classId,
+            Authentication authentication) {
+        List<CourseTagsDTO> courseTags = courseService.getTagsByCourse(classId, courseId);
+
+        return ResponseEntity.ok(courseTags);
     }
+
 
 }

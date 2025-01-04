@@ -72,4 +72,22 @@ public class CourseTagValidationService {
                 .map(validation -> TagDTO.toDTO(validation.getTag()))
                 .collect(Collectors.toList());
     }
+    /**
+     * Réinitialise les tags pour une course spécifique.
+     */
+    public void resetTags(Long courseId, Authentication authentication) {
+        UserModel user = userService.authenticate(authentication);
+
+        CourseModel course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course non trouvée avec l'ID : " + courseId));
+
+        if (!course.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Vous n'êtes pas inscrit à cette course.");
+        }
+
+        List<CourseTagValidation> validations = validationRepository.findByCourseId(courseId);
+
+        validationRepository.deleteAll(validations);
+    }
+
 }
