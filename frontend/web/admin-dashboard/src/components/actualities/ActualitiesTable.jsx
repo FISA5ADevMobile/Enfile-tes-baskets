@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import DataGridComponent from "./../common/DataGridComponent";
+import DataGridComponent from "../common/DataGridComponent";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
@@ -13,7 +13,7 @@ import { AppContext } from "../../services/context/AppContext";
 import { DATA_GRID_COLUMN_DEFAULT_WIDTH } from "../../utils/constants";
 import { ToastContainer, toast } from "react-toastify";
 import { dispatchToast } from "../../utils/helper";
-import { mapUserForDataGrid } from "../../utils/mapping";
+import { mapActualityForDataGrid } from "../../utils/mapping";
 
 const columns = [
   {
@@ -22,26 +22,26 @@ const columns = [
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
   },
   {
-    field: "pseudo",
-    headerName: "Pseudo",
+    field: "title",
+    headerName: "Titre",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
   {
-    field: "fullName",
-    headerName: "Nom complet",
+    field: "description",
+    headerName: "Description",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
   {
-    field: "email",
-    headerName: "Email",
+    field: "event",
+    headerName: "Evènement",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
   {
-    field: "role",
-    headerName: "Rôle",
+    field: "publicationDate",
+    headerName: "Publiée le",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
@@ -60,7 +60,7 @@ const columns = [
           onClick={() => {
             console.log("id : " + id);
             console.log("row : " + JSON.stringify(row));
-            window.location.href = `/utilisateurs/${id}`;
+            window.location.href = `/actualites/${id}`;
           }}
         />,
       ];
@@ -71,91 +71,65 @@ const columns = [
 const rows = [
   {
     id: 1,
-    pseudo: "jsnow",
-    fullName: "John Snow",
-    email: "john@example.com",
-    role: "Admin",
+    title: "Actualité 1",
+    description: "Description de l'actualité 1",
+    event: true,
+    publicationDate: "2023-01-01",
   },
   {
     id: 2,
-    pseudo: "zzcer",
-    fullName: "Jaime Lannister",
-    email: "jane@example.com",
-    role: "Customer",
+    title: "Actualité 2",
+    description: "Description de l'actualité 2",
+    event: false,
+    publicationDate: "2023-02-01",
   },
   {
     id: 3,
-    pseudo: "lann",
-    fullName: "Cersei Lannister",
-    email: "bob@example.com",
-    role: "Admin",
+    title: "Actualité 3",
+    description: "Description de l'actualité 3",
+    event: true,
+    publicationDate: "2023-03-01",
   },
   {
     id: 4,
-    pseudo: "aryaS",
-    fullName: "Arya Stark",
-    email: "alice@example.com",
-    role: "Customer",
+    title: "Actualité 4",
+    description: "Description de l'actualité 4",
+    event: false,
+    publicationDate: "2023-04-01",
   },
   {
     id: 5,
-    pseudo: "daen",
-    fullName: "Daenerys Targaryen",
-    email: "charlie@example.com",
-    role: "Moderator",
-  },
-  {
-    id: 6,
-    pseudo: "mel",
-    fullName: "Melisandre",
-    email: "frank@example.com",
-    role: "Admin",
-  },
-  {
-    id: 7,
-    pseudo: "cliff",
-    fullName: "Richard Barron",
-    email: "richard@example.com",
-    role: "Customer",
-  },
-  {
-    id: 8,
-    pseudo: "ross",
-    fullName: "James Ferrara",
-    email: "james@example.com",
-    role: "Admin",
-  },
-  {
-    id: 9,
-    pseudo: "rrooo",
-    fullName: "Julie Ferrara",
-    email: "julie@example.com",
-    role: "Admin",
+    title: "Actualité 5",
+    description: "Description de l'actualité 5",
+    event: true,
+    publicationDate: "2023-05-01",
   },
 ];
 
-const UsersTable = () => {
-  // const [usersData, setUsersData] = useState([]); // to uncomment during the integration
-  const [usersData, setUsersData] = useState(rows.map(mapUserForDataGrid)); //to comment during the integration
+const ActualitiesTable = () => {
+  // const [actualitiesData, setActualitiesData] = useState([]); // to uncomment during the integration
+  const [actualitiesData, setActualitiesData] = useState(
+    rows.map(mapActualityForDataGrid)
+  ); //to comment during the integration
 
-  const { userService } = useContext(AppContext);
+  const { actualityService } = useContext(AppContext);
 
   // to uncomment during the integration
 
-  // const getAllUsers = async () => {
-  //   const response = await userService.getAllUsers();
-  //   if (response.error) {
-  //     console.error(response.message);
-  //     dispatchToast("error", response.message);
-  //   } else {
-  //     const users = response.data;
-  //     setUsersData(users.map(mapUserForDataGrid));
-  //   }
-  // };
+  const getAllActualities = async () => {
+    const response = await actualityService.getAllActualities();
+    if (response.error) {
+      console.error(response.message);
+      dispatchToast("error", response.message);
+    } else {
+      const users = response.data;
+      setActualitiesData(users.map(mapUserForDataGrid));
+    }
+  };
 
-  // useEffect(() => {
-  //   getAllUsers();
-  // }, []);
+  useEffect(() => {
+    getAllActualities();
+  }, []);
 
   return (
     <motion.div
@@ -167,11 +141,11 @@ const UsersTable = () => {
       <ToastContainer />
       <div>
         <DataGridComponent
-          rows={usersData}
+          rows={actualitiesData}
           columns={columns}
         />
       </div>
     </motion.div>
   );
 };
-export default UsersTable;
+export default ActualitiesTable;

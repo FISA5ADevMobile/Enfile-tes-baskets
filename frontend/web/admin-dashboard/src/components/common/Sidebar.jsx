@@ -10,6 +10,8 @@ import {
   Newspaper,
   Route,
   MessagesSquare,
+  MessageSquareCode,
+  MessageSquareDashed,
 } from "lucide-react";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -17,7 +19,7 @@ import { Link } from "react-router-dom";
 
 const SIDEBAR_ITEMS = [
   {
-    name: "Overview",
+    name: "Aperçu",
     icon: BarChart2,
     color: "#6366f1",
     href: "/",
@@ -41,10 +43,16 @@ const SIDEBAR_ITEMS = [
     href: "/communautes",
   },
   {
+    name: "Posts",
+    icon: MessageSquareDashed,
+    color: "#3B82F6",
+    href: "/posts",
+  },
+  {
     name: "Parcours d'orientation",
     icon: Route,
     color: "#10B981",
-    href: "/parcours-d-orientation",
+    href: "/parcours-orientation/balises",
   },
 
   // { name: "Analytics", icon: TrendingUp, color: "#3B82F6", href: "/analytics" },

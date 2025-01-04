@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import DataGridComponent from "./../common/DataGridComponent";
+import DataGridComponent from "../common/DataGridComponent";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
@@ -13,7 +13,10 @@ import { AppContext } from "../../services/context/AppContext";
 import { DATA_GRID_COLUMN_DEFAULT_WIDTH } from "../../utils/constants";
 import { ToastContainer, toast } from "react-toastify";
 import { dispatchToast } from "../../utils/helper";
-import { mapUserForDataGrid } from "../../utils/mapping";
+import {
+  mapCommunityForDataGrid,
+  mapUserForDataGrid,
+} from "../../utils/mapping";
 
 const columns = [
   {
@@ -22,26 +25,26 @@ const columns = [
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
   },
   {
-    field: "pseudo",
-    headerName: "Pseudo",
+    field: "name",
+    headerName: "Nom",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
   {
-    field: "fullName",
-    headerName: "Nom complet",
+    field: "description",
+    headerName: "Description",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
   {
-    field: "email",
-    headerName: "Email",
+    field: "isPublic",
+    headerName: "Publique",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
   {
-    field: "role",
-    headerName: "Rôle",
+    field: "categoryName",
+    headerName: "Categorie",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
@@ -60,7 +63,7 @@ const columns = [
           onClick={() => {
             console.log("id : " + id);
             console.log("row : " + JSON.stringify(row));
-            window.location.href = `/utilisateurs/${id}`;
+            window.location.href = `/communautes/${id}`;
           }}
         />,
       ];
@@ -71,91 +74,63 @@ const columns = [
 const rows = [
   {
     id: 1,
-    pseudo: "jsnow",
-    fullName: "John Snow",
-    email: "john@example.com",
-    role: "Admin",
+    name: "Community 1",
+    description: "Description 1",
+    isPublic: true,
+    categoryName: "Categorie 1",
   },
   {
     id: 2,
-    pseudo: "zzcer",
-    fullName: "Jaime Lannister",
-    email: "jane@example.com",
-    role: "Customer",
+    name: "Community 2",
+    description: "Description 2",
+    isPublic: false,
+    categoryName: "Categorie 2",
   },
   {
     id: 3,
-    pseudo: "lann",
-    fullName: "Cersei Lannister",
-    email: "bob@example.com",
-    role: "Admin",
+    name: "Community 3",
+    description: "Description 3",
+    isPublic: true,
+    categoryName: "Categorie 3",
   },
   {
     id: 4,
-    pseudo: "aryaS",
-    fullName: "Arya Stark",
-    email: "alice@example.com",
-    role: "Customer",
+    name: "Community 4",
+    description: "Description 4",
+    isPublic: false,
+    categoryName: "Categorie 4",
   },
   {
     id: 5,
-    pseudo: "daen",
-    fullName: "Daenerys Targaryen",
-    email: "charlie@example.com",
-    role: "Moderator",
-  },
-  {
-    id: 6,
-    pseudo: "mel",
-    fullName: "Melisandre",
-    email: "frank@example.com",
-    role: "Admin",
-  },
-  {
-    id: 7,
-    pseudo: "cliff",
-    fullName: "Richard Barron",
-    email: "richard@example.com",
-    role: "Customer",
-  },
-  {
-    id: 8,
-    pseudo: "ross",
-    fullName: "James Ferrara",
-    email: "james@example.com",
-    role: "Admin",
-  },
-  {
-    id: 9,
-    pseudo: "rrooo",
-    fullName: "Julie Ferrara",
-    email: "julie@example.com",
-    role: "Admin",
+    name: "Community 5",
+    description: "Description 5",
+    isPublic: true,
+    categoryName: "Categorie 5",
   },
 ];
 
-const UsersTable = () => {
-  // const [usersData, setUsersData] = useState([]); // to uncomment during the integration
-  const [usersData, setUsersData] = useState(rows.map(mapUserForDataGrid)); //to comment during the integration
+const CommunitiesTable = () => {
+  // const [communitiesData, setCommunitiesData] = useState([]); // to uncomment during the integration
+  const [communitiesData, setCommunitiesData] = useState(rows); //to comment during the integration
 
-  const { userService } = useContext(AppContext);
+  const { communityService } = useContext(AppContext);
 
   // to uncomment during the integration
 
-  // const getAllUsers = async () => {
-  //   const response = await userService.getAllUsers();
-  //   if (response.error) {
-  //     console.error(response.message);
-  //     dispatchToast("error", response.message);
-  //   } else {
-  //     const users = response.data;
-  //     setUsersData(users.map(mapUserForDataGrid));
-  //   }
-  // };
+  const getAllCommunities = async () => {
+    const response = await communityService.getAllCommunities();
+    if (response.error) {
+      console.error(response.message);
+      dispatchToast("error", response.message);
+    } else {
+      const communities = response.data;
+      setCommunitiesData(communities.map(mapCommunityForDataGrid));
+    }
+  };
 
-  // useEffect(() => {
-  //   getAllUsers();
-  // }, []);
+  useEffect(() => {
+    getAllCommunities();
+  }, []);
 
   return (
     <motion.div
@@ -167,11 +142,11 @@ const UsersTable = () => {
       <ToastContainer />
       <div>
         <DataGridComponent
-          rows={usersData}
+          rows={communitiesData}
           columns={columns}
         />
       </div>
     </motion.div>
   );
 };
-export default UsersTable;
+export default CommunitiesTable;

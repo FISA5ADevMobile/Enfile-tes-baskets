@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import DataGridComponent from "./../common/DataGridComponent";
+import DataGridComponent from "../common/DataGridComponent";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
@@ -22,26 +22,27 @@ const columns = [
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
   },
   {
-    field: "pseudo",
-    headerName: "Pseudo",
+    field: "description",
+    headerName: "Description",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
   {
-    field: "fullName",
-    headerName: "Nom complet",
+    field: "userPseudo",
+    headerName: "Pseudo utilisateur",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
   {
-    field: "email",
-    headerName: "Email",
+    field: "datePost",
+    headerName: "Publié le",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
+
   {
-    field: "role",
-    headerName: "Rôle",
+    field: "nbLike",
+    headerName: "Nombre de like",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
@@ -60,7 +61,7 @@ const columns = [
           onClick={() => {
             console.log("id : " + id);
             console.log("row : " + JSON.stringify(row));
-            window.location.href = `/utilisateurs/${id}`;
+            window.location.href = `/posts/${id}`;
           }}
         />,
       ];
@@ -71,91 +72,49 @@ const columns = [
 const rows = [
   {
     id: 1,
-    pseudo: "jsnow",
-    fullName: "John Snow",
-    email: "john@example.com",
-    role: "Admin",
+    description: "description",
+    userPseudo: "pseudo",
+    datePost: "12/12/12",
+    nbLike: 0,
   },
   {
     id: 2,
-    pseudo: "zzcer",
-    fullName: "Jaime Lannister",
-    email: "jane@example.com",
-    role: "Customer",
+    description: "description",
+    userPseudo: "pseudo",
+    datePost: "12/12/12",
+    nbLike: 0,
   },
   {
     id: 3,
-    pseudo: "lann",
-    fullName: "Cersei Lannister",
-    email: "bob@example.com",
-    role: "Admin",
-  },
-  {
-    id: 4,
-    pseudo: "aryaS",
-    fullName: "Arya Stark",
-    email: "alice@example.com",
-    role: "Customer",
-  },
-  {
-    id: 5,
-    pseudo: "daen",
-    fullName: "Daenerys Targaryen",
-    email: "charlie@example.com",
-    role: "Moderator",
-  },
-  {
-    id: 6,
-    pseudo: "mel",
-    fullName: "Melisandre",
-    email: "frank@example.com",
-    role: "Admin",
-  },
-  {
-    id: 7,
-    pseudo: "cliff",
-    fullName: "Richard Barron",
-    email: "richard@example.com",
-    role: "Customer",
-  },
-  {
-    id: 8,
-    pseudo: "ross",
-    fullName: "James Ferrara",
-    email: "james@example.com",
-    role: "Admin",
-  },
-  {
-    id: 9,
-    pseudo: "rrooo",
-    fullName: "Julie Ferrara",
-    email: "julie@example.com",
-    role: "Admin",
+    description: "description",
+    userPseudo: "pseudo",
+    datePost: "12/12/12",
+    nbLike: 0,
   },
 ];
 
-const UsersTable = () => {
-  // const [usersData, setUsersData] = useState([]); // to uncomment during the integration
-  const [usersData, setUsersData] = useState(rows.map(mapUserForDataGrid)); //to comment during the integration
+const PostsTable = () => {
+  // const [postsData, setPostsData] = useState([]); // to uncomment during the integration
+  const [postsData, setPostsData] = useState(rows); //to comment during the integration
 
-  const { userService } = useContext(AppContext);
+  const { postService } = useContext(AppContext);
 
   // to uncomment during the integration
 
-  // const getAllUsers = async () => {
-  //   const response = await userService.getAllUsers();
-  //   if (response.error) {
-  //     console.error(response.message);
-  //     dispatchToast("error", response.message);
-  //   } else {
-  //     const users = response.data;
-  //     setUsersData(users.map(mapUserForDataGrid));
-  //   }
-  // };
+  const getAllPosts = async () => {
+    const response = await postService.getAllPosts();
+    if (response.error) {
+      console.error(response.message);
+      dispatchToast("error", response.message);
+    } else {
+      const posts = response.data;
+      setPostsData(users.map(mapPostForDataGrid));
+    }
+  };
 
-  // useEffect(() => {
-  //   getAllUsers();
-  // }, []);
+  useEffect(() => {
+    getAllPosts();
+  }, []);
 
   return (
     <motion.div
@@ -167,11 +126,11 @@ const UsersTable = () => {
       <ToastContainer />
       <div>
         <DataGridComponent
-          rows={usersData}
+          rows={postsData}
           columns={columns}
         />
       </div>
     </motion.div>
   );
 };
-export default UsersTable;
+export default PostsTable;

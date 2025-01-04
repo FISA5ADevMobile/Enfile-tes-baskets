@@ -2,28 +2,35 @@ import { Route, Routes } from "react-router-dom";
 
 // import Sidebar from "./components/common/Sidebar";
 
-import OverviewPage from "./pages/OverviewPage";
-import UsersPage from "./pages/UsersPage";
-import SettingsPage from "./pages/SettingsPage";
+import OverviewPage from "./pages/overview/OverviewPage";
+import UsersPage from "./pages/users/UsersPage";
+import SettingsPage from "./pages/settings/SettingsPage";
 import DashboardLayout from "./layouts/DashboardLayout";
 
 import { AppProvider } from "./services/context/AppContext";
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/auth/LoginPage";
 import TestComponent from "./components/common/TestComponent";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import UserEditEmbedded from "./pages/UserEditEmbeddedPage";
-import CommunitiesPage from "./pages/CommunautiesPage";
-import OrientationCoursesPage from "./pages/OrientationCoursesPage";
-import NewsPage from "./pages/NewsPage";
+import CommunitiesPage from "./pages/communities/CommunitiesPage";
+import ActualitiesPage from "./pages/actualities/ActualitiesPage";
+import UserEditEmbeddedPage from "./pages/users/UserEditEmbeddedPage";
+import ActualityEditEmbeddedPage from "./pages/actualities/ActualityEditEmbeddedPage";
+import ActualityCreatePage from "./pages/actualities/ActulityCreatePage";
+import CommunityCreatePage from "./pages/communities/CommunityCreatePage";
+import CommunityEditEmbeddedPage from "./pages/communities/CommunityEditEmbeddedPage";
+import PostEditEmbeddedPage from "./pages/post-publication/PostEditEmbeddedPage";
+import PostsPage from "./pages/post-publication/PostsPage";
+import TagEditEmbeddedPage from "./pages/orientation-courses/TagEditEmbeddedPage";
+import TagCreatePage from "./pages/orientation-courses/TagCreatePage";
+import TagsPage from "./pages/orientation-courses/TagsPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
-      // primary: {
-      //   main: "#F3F4F6", // Couleur primaire
-      // },
       secondary: {
         main: "#374151", // Couleur secondaire
       },
@@ -53,14 +60,7 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline /> {/* Applique les styles globaux du thème */}
       <AppProvider>
-        {/* <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden"> */}
         <div>
-          {/* BG */}
-          {/* <div className='fixed inset-0 z-0'>
-				<div className='absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 opacity-80' />
-				<div className='absolute inset-0 backdrop-blur-sm' />
-			</div> */}
-
           <Routes>
             <Route
               path="/test"
@@ -70,10 +70,18 @@ function App() {
               path="/connexion"
               element={<LoginPage />}
             />
+            <Route
+              path="/reset-password"
+              element={<ResetPasswordPage />}
+            />
 
             <Route
               path="/"
-              element={<DashboardLayout />}
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout />
+                </ProtectedRoute>
+              }
             >
               <Route
                 index
@@ -81,7 +89,15 @@ function App() {
               />
               <Route
                 path="/actualites"
-                element={<NewsPage />}
+                element={<ActualitiesPage />}
+              />
+              <Route
+                path="/actualites/:actualityId"
+                element={<ActualityEditEmbeddedPage />}
+              />
+              <Route
+                path="/nouvelle-actualite"
+                element={<ActualityCreatePage />}
               />
               <Route
                 path="/utilisateurs"
@@ -89,19 +105,43 @@ function App() {
               />
               <Route
                 path="/utilisateurs/:userId"
-                element={<UserEditEmbedded />}
-              />
-              <Route
-                path="/parcours-d-orientation"
-                element={<OrientationCoursesPage />}
+                element={<UserEditEmbeddedPage />}
               />
               <Route
                 path="/communautes"
                 element={<CommunitiesPage />}
               />
               <Route
+                path="/communautes/:communityId"
+                element={<CommunityEditEmbeddedPage />}
+              />
+              <Route
+                path="/nouvelle-communaute"
+                element={<CommunityCreatePage />}
+              />
+              <Route
+                path="/posts"
+                element={<PostsPage />}
+              />
+              <Route
+                path="/posts/:postId"
+                element={<PostEditEmbeddedPage />}
+              />
+              <Route
                 path="/parametres"
                 element={<SettingsPage />}
+              />
+              <Route
+                path="/parcours-orientation/balises"
+                element={<TagsPage />}
+              />
+              <Route
+                path="/parcours-orientation/balises/:tagId"
+                element={<TagEditEmbeddedPage />}
+              />
+              <Route
+                path="/nouvelle-balise"
+                element={<TagCreatePage />}
               />
             </Route>
           </Routes>
