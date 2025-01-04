@@ -22,6 +22,8 @@ spring.profiles.active=dev
 
 ⚠️ Ne pas oublier de faire les migrations de bases de données nécessaires sur les différents environnements en cas de modifications des tables ou du script sql
 
+NB : to update
+
 ### 🐳 Docker
 
 - Lancer `docker`
