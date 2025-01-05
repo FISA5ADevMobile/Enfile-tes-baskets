@@ -96,8 +96,8 @@ const rows = [
 ];
 
 const TagsTable = () => {
-  // const [tagsData, setTagsData] = useState([]); // to uncomment during the integration
-  const [tagsData, setTagsData] = useState(rows); //to comment during the integration
+  const [tagsData, setTagsData] = useState([]); // to uncomment during the integration
+  // const [tagsData, setTagsData] = useState(rows); //to comment during the integration
 
   const { orientationCourseService } = useContext(AppContext);
 

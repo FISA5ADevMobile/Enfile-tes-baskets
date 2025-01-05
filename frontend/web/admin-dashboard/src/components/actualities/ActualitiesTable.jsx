@@ -107,14 +107,12 @@ const rows = [
 ];
 
 const ActualitiesTable = () => {
-  // const [actualitiesData, setActualitiesData] = useState([]); // to uncomment during the integration
-  const [actualitiesData, setActualitiesData] = useState(
-    rows.map(mapActualityForDataGrid)
-  ); //to comment during the integration
+  const [actualitiesData, setActualitiesData] = useState([]); // to uncomment during the integration
+  // const [actualitiesData, setActualitiesData] = useState(
+  //   rows.map(mapActualityForDataGrid)
+  // ); //to comment during the integration
 
   const { actualityService } = useContext(AppContext);
-
-  // to uncomment during the integration
 
   const getAllActualities = async () => {
     const response = await actualityService.getAllActualities();
@@ -123,7 +121,7 @@ const ActualitiesTable = () => {
       dispatchToast("error", response.message);
     } else {
       const users = response.data;
-      setActualitiesData(users.map(mapUserForDataGrid));
+      setActualitiesData(users.map(mapActualityForDataGrid));
     }
   };
 

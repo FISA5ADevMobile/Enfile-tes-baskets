@@ -1,5 +1,6 @@
 import axios from "axios";
-import { mapUserModel } from "../../utils/mapping";
+import { mapCommunityModel, mapUserModel } from "../../utils/mapping";
+import Cookies from 'js-cookie';
 
 export class CommunityService {
     apiUrl = import.meta.env.VITE_ETB_API_URL;
@@ -7,8 +8,12 @@ export class CommunityService {
     // CRUD operations
     async getAllCommunities() {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/communities/all`);
-            return { error: false, data: response.data.map(mapUserModel) };
+            const response = await axios.get(`${this.apiUrl}/communities/all`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
+            return { error: false, data: response.data.map(mapCommunityModel) };
         } catch (error) {
             return { error: true, message: error.message };
         }
@@ -16,8 +21,14 @@ export class CommunityService {
 
     async getCommunityById(id) {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/communities/${id}`);
-            return { error: false, data: response.data };
+            const response = await axios.get(`${this.apiUrl}/communities/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    }
+                }
+            );
+            return { error: false, data: mapCommunityModel(response.data) };
         } catch (error) {
             return { error: true, message: error.message };
         }
@@ -25,7 +36,13 @@ export class CommunityService {
 
     async createCommunity(community) {
         try {
-            const response = await axios.post(`${this.apiUrl}/api/communities`, community);
+            const response = await axios.post(`${this.apiUrl}/communities`, community,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    }
+                }
+            );
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
@@ -34,7 +51,13 @@ export class CommunityService {
 
     async updateCommunity(community) {
         try {
-            const response = await axios.put(`${this.apiUrl}/api/communities`, community);
+            const response = await axios.put(`${this.apiUrl}/communities`, community,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    }
+                }
+            );
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
@@ -43,7 +66,13 @@ export class CommunityService {
 
     async deleteCommunityById(id) {
         try {
-            const response = await axios.delete(`${this.apiUrl}/api/communities/${id}`);
+            const response = await axios.delete(`${this.apiUrl}/communities/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    }
+
+                });
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
@@ -52,7 +81,13 @@ export class CommunityService {
 
     async removePostFromCommunity(communityId, postId) {
         try {
-            const response = await axios.delete(`${this.apiUrl}/api/communities/${communityId}/post/${postId}`);
+            const response = await axios.delete(`${this.apiUrl}/communities/${communityId}/post/${postId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    }
+                }
+            );
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
@@ -71,8 +106,6 @@ export class CommunityService {
             total: communities.length,
             public: communities.filter((community) => community.isPublic).length,
             private: communities.filter((community) => !community.isPublic).length,
-            banned: communities.filter((community) => !!community.banDate).length,
-            active: communities.filter((community) => !community.banDate).length
         };
         return { error: false, data: communityStats };
     }

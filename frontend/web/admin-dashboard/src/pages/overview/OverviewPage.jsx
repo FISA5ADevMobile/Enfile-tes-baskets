@@ -26,7 +26,7 @@ const OverviewPage = () => {
 
         <PostStats title={"Posts"} />
 
-        <TagStats title={"Balises"} />
+        <TagStats title={"Parcours d'orientation - Balises"} />
       </main>
     </div>
   );

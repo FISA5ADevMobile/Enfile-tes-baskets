@@ -1,24 +1,33 @@
 
 import axios from "axios";
 import { mapUserModel } from "../../utils/mapping";
+import Cookies from 'js-cookie';
 
 export class UserService {
     apiUrl = import.meta.env.VITE_ETB_API_URL;
 
     // CRUD operations
-    async createUser(user) {
-        try {
-            const response = await axios.post(`${this.apiUrl}/api/users/add_user`, user);
-            return { error: false, data: response.data.map(mapUserModel) };
-        } catch (error) {
-            return { error: true, message: error.message };
-        }
-    }
+    // async createUser(user) {
+    //     try {
+    //         const response = await axios.post(`${this.apiUrl}/api/users/add_user`, user, {
+    //             headers: {
+    //                 Authorization: `Bearer ${Cookies.get('token')}`,
+    //             }
+    //         });
+    //         return { error: false, data: response.data.map(mapUserModel) };
+    //     } catch (error) {
+    //         return { error: true, message: error.message };
+    //     }
+    // }
 
 
     async getAllUsers() {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/users/all`);
+            const response = await axios.get(`${this.apiUrl}/api/users/all`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
             return { error: false, data: response.data.map(mapUserModel) };
         } catch (error) {
             return { error: true, message: error.message };
@@ -27,7 +36,24 @@ export class UserService {
 
     async getUserById(id) {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/users/get_1/${id}`);
+            const response = await axios.get(`${this.apiUrl}/api/users/get_1/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
+            return { error: false, data: mapUserModel(response.data) };
+        } catch (error) {
+            return { error: true, message: error.message };
+        }
+    }
+
+    async getUserMe() {
+        try {
+            const response = await axios.get(`${this.apiUrl}/api/users/me`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
             return { error: false, data: mapUserModel(response.data) };
         } catch (error) {
             return { error: true, message: error.message };
@@ -36,7 +62,11 @@ export class UserService {
 
     async banUserById(id) {
         try {
-            const response = await axios.put(`${this.apiUrl}/api/users/ban/${id}`);
+            const response = await axios.put(`${this.apiUrl}/api/users/ban/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
@@ -45,7 +75,11 @@ export class UserService {
 
     async unbanUserById(id) {
         try {
-            const response = await axios.put(`${this.apiUrl}/api/users/unban/${id}`);
+            const response = await axios.put(`${this.apiUrl}/api/users/unban/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
@@ -54,7 +88,11 @@ export class UserService {
 
     async deleteUserById(id) {
         try {
-            const response = await axios.delete(`${this.apiUrl}/api/users/delete/${id}`);
+            const response = await axios.delete(`${this.apiUrl}/api/users/delete/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
@@ -66,6 +104,10 @@ export class UserService {
             const response = await axios.post(`${this.apiUrl}/api/auth/validate-reset-password`, {
                 email: email,
                 code: code
+            }, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
             });
             return { error: false, data: response.data };
         } catch (error) {

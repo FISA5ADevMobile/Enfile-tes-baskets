@@ -8,19 +8,21 @@ import { dispatchToast, handleFormatDateTime } from "../../utils/helper";
 import { ToastContainer, toast } from "react-toastify";
 import { AppContext } from "../../services/context/AppContext";
 
-const PostEditEmbeddedPage = () => {
-  const { postId } = useParams();
+const UserEditEmbeddedPage = () => {
+  const { userId } = useParams();
   const navigate = useNavigate();
 
-  const { postService } = useContext(AppContext);
-
+  const { userService } = useContext(AppContext);
   // Default values
   const defaultValues = {
     id: "",
-    description: "",
-    userPseudo: "",
-    datePost: "",
-    nbLike: 0,
+    pseudo: "",
+    firstName: "",
+    name: "",
+    email: "",
+    role: "",
+    nbPostDeleted: "",
+    banDate: "",
   };
 
   // States
@@ -42,25 +44,41 @@ const PostEditEmbeddedPage = () => {
     setIsModified(false);
   };
 
-  // Fonction pour la suppression du post (exemple simple)
+  // Fonction pour la suppression du user (exemple simple)
   const handleDelete = async () => {
-    // setIsLoading(true);
-    // const response = await postService.deletePostById(postId);
-    // setIsLoading(false);
-    // if (response.error) {
-    //   console.error(response.message);
-    // dispatchToast("error", response.message);
-    // }
+    setIsLoading(true);
+    const response = await userService.deleteUserById(userId);
+    setIsLoading(false);
+    if (response.error) {
+      console.error(response.message);
+      dispatchToast("error", response.message);
+      return;
+    }
     handleReset();
-    console.log("Suppression du post");
-    dispatchToast("success", "Suppression du post");
+    console.log("Suppression du profil");
+    dispatchToast("success", "Suppression du profil");
     setTimeout(() => {
-      navigate("/posts");
+      navigate("/utilisateurs");
     }, 2000);
   };
 
-  const getPostById = async () => {
-    const response = await postService.getPostById(postId);
+  const handleBan = async () => {
+    setIsLoading(true);
+    const response = await userService.banUserById(userId);
+    setIsLoading(false);
+    if (response.error) {
+      console.error(response.message);
+      dispatchToast("error", response.message);
+      return;
+    }
+    dispatchToast("success", "Utilisateur banni");
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
+
+  const getUserById = async () => {
+    const response = await userService.getUserById(userId);
     if (response.error) {
       console.error(response.message);
       dispatchToast("error", response.message);
@@ -69,20 +87,39 @@ const PostEditEmbeddedPage = () => {
     const user = response.data;
     setValues({
       id: user.id,
-      description: user.description,
-      userPseudo: user.userPseudo,
-      datePost: handleFormatDateTime(new Date(user.datePost)),
-      nbLike: user.nbLike,
+      pseudo: user.pseudo,
+      firstName: user.firstName,
+      name: user.lastName,
+      email: user.email,
+      role: user.role,
+      nbPostDeleted: user.nbPostDeleted,
+      banDate: handleFormatDateTime(new Date(user.banDate)),
     });
   };
 
+  const handleResetPassword = async () => {
+    const code = Math.floor(100000 + Math.random() * 900000);
+    setIsLoading(true);
+    const response = await userService.authorizeResetPassword(
+      values.email,
+      code
+    );
+    setIsLoading(false);
+    if (response.error) {
+      console.error(response.message);
+      dispatchToast("error", response.message);
+      return;
+    }
+    dispatchToast("success", `Code ${code} envoyé par email`);
+  };
+
   useEffect(() => {
-    getPostById();
+    getUserById();
   }, []);
 
   return (
     <div className="flex-1 overflow-auto relative z-10">
-      <Header title={`Posts / ${postId}`} />
+      <Header title={`Utilisateurs / ${userId}`} />
 
       <main className="max-w-4xl mx-auto py-6 px-4 lg:px-8">
         <div className="flex justify-end mb-4 space-x-4">
@@ -115,30 +152,29 @@ const PostEditEmbeddedPage = () => {
             disabled
           />
           <TextField
-            label="Description"
-            multiline
+            label="Prénom"
             variant="outlined"
             fullWidth
-            name="description"
-            value={values.description}
+            name="firstName"
+            value={values.firstName}
             onChange={handleChange}
             disabled
           />
           <TextField
-            label="Pseudo Utilisateur"
+            label="Nom"
             variant="outlined"
             fullWidth
-            name="userPseudo"
-            value={values.userPseudo}
+            name="name"
+            value={values.name}
             onChange={handleChange}
             disabled
           />
           <TextField
-            label="Nombre de likes"
+            label="Pseudo"
             variant="outlined"
             fullWidth
-            name="nbLike"
-            value={values.nbLike}
+            name="pseudo"
+            value={values.pseudo}
             onChange={handleChange}
             disabled
           />
@@ -147,8 +183,32 @@ const PostEditEmbeddedPage = () => {
             variant="outlined"
             fullWidth
             name="email"
-            value={values.datePost}
+            value={values.email}
             onChange={handleChange}
+            disabled
+          />
+          <TextField
+            label="Role"
+            variant="outlined"
+            fullWidth
+            name="role"
+            value={values.role}
+            disabled
+          />
+          <TextField
+            label="Nombre de posts supprimés"
+            variant="outlined"
+            fullWidth
+            name="createdAt"
+            value={values.nbPostDeleted}
+            disabled
+          />
+          <TextField
+            label="Date de bannissement"
+            variant="outlined"
+            fullWidth
+            name="banDate"
+            value={values.banDate}
             disabled
           />
         </div>
@@ -160,6 +220,25 @@ const PostEditEmbeddedPage = () => {
             <CircularProgress />
           ) : (
             <>
+              <Button
+                variant="outlined"
+                onClick={handleResetPassword}
+                color="success"
+                startIcon={<LockOpen />}
+              >
+                Reinitialiser le mot de passe
+              </Button>
+
+              {/* Bouton Bannir */}
+              <Button
+                variant="outlined"
+                onClick={handleBan}
+                color="error"
+                startIcon={<Block />}
+              >
+                Bannir
+              </Button>
+
               {/* Bouton Supprimer */}
               <Button
                 variant="outlined"
@@ -177,4 +256,4 @@ const PostEditEmbeddedPage = () => {
   );
 };
 
-export default PostEditEmbeddedPage;
+export default UserEditEmbeddedPage;

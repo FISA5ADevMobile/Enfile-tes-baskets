@@ -5,8 +5,7 @@ import { AppContext } from "./services/context/AppContext";
 const ProtectedRoute = ({ children }) => {
   const { authService } = useContext(AppContext);
 
-  // const isAuthenticated = authService.isLoggedIn();
-  const isAuthenticated = true; // to uncomment during the integration
+  const isAuthenticated = authService.isLoggedIn();
 
   return isAuthenticated ? (
     children

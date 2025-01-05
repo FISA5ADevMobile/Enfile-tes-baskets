@@ -58,8 +58,6 @@ export const CommunityStats = ({ title }) => {
     total: "...",
     public: "...",
     private: "...",
-    banned: "...",
-    active: "...",
   });
   const { communityService } = useContext(AppContext);
 
@@ -103,22 +101,16 @@ export const CommunityStats = ({ title }) => {
           color="#6366F1"
         />
         <StatCard
-          name="Public"
+          name="Publique"
           icon={LockOpen}
           value={communityStats.public}
           color="#F59E0B"
         />
         <StatCard
-          name="Private"
+          name="Privée"
           icon={LockKeyhole}
           value={communityStats.private}
           color="#10B981"
-        />
-        <StatCard
-          name="Bannies"
-          icon={Ban}
-          value={communityStats.banned}
-          color="#EF4444"
         />
       </motion.div>
     </>

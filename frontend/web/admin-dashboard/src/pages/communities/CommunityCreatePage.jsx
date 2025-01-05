@@ -7,6 +7,7 @@ import { AppContext } from "../../services/context/AppContext";
 import { CircularProgress } from "@mui/material";
 import { dispatchToast, handleFormatDateTime } from "../../utils/helper";
 import { ToastContainer, toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 const CommunityCreatePage = () => {
   const { communityService, categoryService } = useContext(AppContext);
@@ -16,18 +17,19 @@ const CommunityCreatePage = () => {
     name: "",
     description: "",
     isPublic: false,
+    adminToken: "",
     categoryId: "",
   };
 
   // States
   const [values, setValues] = useState(defaultValues);
   const [isLoading, setIsLoading] = useState(false);
-  //   const [categories, setCategories] = useState(null);
-  const [categories, setCategories] = useState([
-    { label: "Categorie 1", value: "1" },
-    { label: "Categorie 2", value: "2" },
-    { label: "Categorie 3", value: "3" },
-  ]);
+  const [categories, setCategories] = useState(null);
+  // const [categories, setCategories] = useState([
+  //   { label: "Categorie 1", value: "1" },
+  //   { label: "Categorie 2", value: "2" },
+  //   { label: "Categorie 3", value: "3" },
+  // ]);
   const [categoryCreationNameField, setCategoryCreationNameField] =
     useState("");
 
@@ -44,11 +46,12 @@ const CommunityCreatePage = () => {
 
   const handleCreate = async () => {
     setIsLoading(true);
-    const response = await communityService.createUser({
-      name: values.name,
+    const response = await communityService.createCommunity({
+      nom: values.name,
       description: values.description,
       isPublic: values.isPublic,
-      categoryId: values.categoryId,
+      categoryId: "",
+      adminToken: Cookies.get("token"),
     });
     setIsLoading(false);
     if (response.error) {
@@ -75,7 +78,7 @@ const CommunityCreatePage = () => {
         value: user.id,
       };
     });
-    setUsers(categoriesData);
+    setCategories(categoriesData);
   };
 
   const handleCreateCategory = async () => {
@@ -93,9 +96,9 @@ const CommunityCreatePage = () => {
     await getCategories();
   };
 
-  React.useEffect(() => {
-    getCategories();
-  }, []);
+  // React.useEffect(() => {
+  //   getCategories();
+  // }, []);
 
   return (
     <div className="flex-1 overflow-auto relative z-10">
@@ -141,6 +144,7 @@ const CommunityCreatePage = () => {
           <Autocomplete
             disablePortal
             options={categories}
+            disabled
             fullWidth
             onChange={(event, newValue) => {
               setValues({ ...values, categoryId: newValue?.value });
@@ -169,6 +173,7 @@ const CommunityCreatePage = () => {
             variant="outlined"
             fullWidth
             name="name"
+            disabled
             value={categoryCreationNameField}
             onChange={(e) => setCategoryCreationNameField(e.target.value)}
           />
@@ -194,9 +199,7 @@ const CommunityCreatePage = () => {
           ) : (
             <Button
               variant="contained"
-              disabled={
-                !values.name || !values.description || !values.categoryId
-              }
+              disabled={!values.name || !values.description}
               startIcon={<Add />}
               onClick={handleCreate}
             >

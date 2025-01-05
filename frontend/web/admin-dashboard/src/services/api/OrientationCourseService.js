@@ -1,5 +1,6 @@
 import axios from "axios";
-import { mapUserModel } from "../../utils/mapping";
+import { mapClassModel, mapTagModel, mapUserModel } from "../../utils/mapping";
+import Cookies from 'js-cookie';
 
 export class OrientationCourseService {
     apiUrl = import.meta.env.VITE_ETB_API_URL;
@@ -9,8 +10,14 @@ export class OrientationCourseService {
 
     async getAllClasses() {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/classes/all`);
-            return { error: false, data: response.data.map(mapUserModel) };
+            const response = await axios.get(`${this.apiUrl}/api/classes/all`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    }
+                }
+            );
+            return { error: false, data: response.data.map(mapClassModel) };
         } catch (error) {
             return { error: true, message: error.message };
         }
@@ -18,8 +25,14 @@ export class OrientationCourseService {
 
     async getAllTags() {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/tags/all`);
-            return { error: false, data: response.data.map(mapUserModel) };
+            const response = await axios.get(`${this.apiUrl}/api/tags/all`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    }
+                }
+            );
+            return { error: false, data: response.data.map(mapTagModel) };
         } catch (error) {
             return { error: true, message: error.message };
         }
@@ -29,7 +42,13 @@ export class OrientationCourseService {
 
     async deleteTagById(id) {
         try {
-            const response = await axios.delete(`${this.apiUrl}/api/tags/${id}`);
+            const response = await axios.delete(`${this.apiUrl}/api/tags/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    }
+                }
+            );
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
@@ -39,8 +58,13 @@ export class OrientationCourseService {
 
     async createTag(tag) {
         try {
-            const response = await axios.post(`${this.apiUrl}/api/tags/add_tag`, tag);
-            return { error: false, data: response.data.map(mapUserModel) };
+            const response = await axios.post(`${this.apiUrl}/api/tags/add_tag`, tag,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    }
+                });
+            return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
         }
@@ -48,7 +72,12 @@ export class OrientationCourseService {
 
     async getTagById(id) {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/tags/${id}`);
+            const response = await axios.get(`${this.apiUrl}/api/tags/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    }
+                });
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };

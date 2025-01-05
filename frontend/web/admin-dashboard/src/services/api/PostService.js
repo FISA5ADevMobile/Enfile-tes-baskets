@@ -1,5 +1,6 @@
 import axios from "axios";
 import { mapPostModel, mapUserModel } from "../../utils/mapping";
+import Cookies from 'js-cookie';
 
 export class PostService {
     apiUrl = import.meta.env.VITE_ETB_API_URL;
@@ -7,7 +8,13 @@ export class PostService {
     // CRUD operations
     async getAllPosts() {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/post/all`);
+            const response = await axios.get(`${this.apiUrl}/api/post/all`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    }
+                }
+            );
             return { error: false, data: response.data.map(mapPostModel) };
         } catch (error) {
             return { error: true, message: error.message };
@@ -16,7 +23,11 @@ export class PostService {
 
     async getPostById(id) {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/post/${id}`);
+            const response = await axios.get(`${this.apiUrl}/api/post/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
@@ -25,7 +36,11 @@ export class PostService {
 
     async banPostById(id) {
         try {
-            const response = await axios.put(`${this.apiUrl}/api/post/ban/${id}`);
+            const response = await axios.put(`${this.apiUrl}/api/post/ban/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
@@ -34,7 +49,11 @@ export class PostService {
 
     async hidePostById(id) {
         try {
-            const response = await axios.put(`${this.apiUrl}/api/post/hide/${id}`);
+            const response = await axios.put(`${this.apiUrl}/api/post/hide/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
@@ -43,7 +62,11 @@ export class PostService {
 
     async deletePostById(id) {
         try {
-            const response = await axios.delete(`${this.apiUrl}/api/post/delete/${id}`);
+            const response = await axios.delete(`${this.apiUrl}/api/post/delete/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
             return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };

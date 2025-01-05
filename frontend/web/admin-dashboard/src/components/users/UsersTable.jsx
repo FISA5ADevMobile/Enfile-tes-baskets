@@ -135,27 +135,27 @@ const rows = [
 ];
 
 const UsersTable = () => {
-  // const [usersData, setUsersData] = useState([]); // to uncomment during the integration
-  const [usersData, setUsersData] = useState(rows.map(mapUserForDataGrid)); //to comment during the integration
+  const [usersData, setUsersData] = useState([]); // to uncomment during the integration
+  // const [usersData, setUsersData] = useState(rows.map(mapUserForDataGrid)); //to comment during the integration
 
   const { userService } = useContext(AppContext);
 
   // to uncomment during the integration
 
-  // const getAllUsers = async () => {
-  //   const response = await userService.getAllUsers();
-  //   if (response.error) {
-  //     console.error(response.message);
-  //     dispatchToast("error", response.message);
-  //   } else {
-  //     const users = response.data;
-  //     setUsersData(users.map(mapUserForDataGrid));
-  //   }
-  // };
+  const getAllUsers = async () => {
+    const response = await userService.getAllUsers();
+    if (response.error) {
+      console.error(response.message);
+      dispatchToast("error", response.message);
+    } else {
+      const users = response.data;
+      setUsersData(users.map(mapUserForDataGrid));
+    }
+  };
 
-  // useEffect(() => {
-  //   getAllUsers();
-  // }, []);
+  useEffect(() => {
+    getAllUsers();
+  }, []);
 
   return (
     <motion.div

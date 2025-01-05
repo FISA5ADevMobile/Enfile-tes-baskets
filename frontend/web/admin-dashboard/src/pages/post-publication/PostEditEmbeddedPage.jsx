@@ -1,27 +1,26 @@
 import React, { useState, useContext, useEffect } from "react";
-import { TextField, Button, Checkbox } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import Header from "../../components/common/Header";
-import { Add, Delete, Edit, LockOpen, Save } from "@mui/icons-material";
+import { Add, Block, Delete, Edit, LockOpen, Save } from "@mui/icons-material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import { dispatchToast, handleFormatDateTime } from "../../utils/helper";
 import { ToastContainer, toast } from "react-toastify";
 import { AppContext } from "../../services/context/AppContext";
 
-const ActualityEditEmbeddedPage = () => {
-  const { actualityId } = useParams();
+const PostEditEmbeddedPage = () => {
+  const { postId } = useParams();
   const navigate = useNavigate();
 
-  const { actualityService } = useContext(AppContext);
+  const { postService } = useContext(AppContext);
+
   // Default values
   const defaultValues = {
     id: "",
-    title: "",
     description: "",
-    event: false,
-    // imageFile: null, // Fichier brut
-    image: null, // URL pour le preview or fichier brut
-    publicationDate: "",
+    creatorId: "",
+    datePost: "",
+    nbLike: 0,
   };
 
   // States
@@ -43,26 +42,26 @@ const ActualityEditEmbeddedPage = () => {
     setIsModified(false);
   };
 
-  // Fonction pour la suppression de l'actuality (exemple simple)
+  // Fonction pour la suppression du post (exemple simple)
   const handleDelete = async () => {
     setIsLoading(true);
-    const response = await actualityService.deleteActualityById(actualityId);
+    const response = await postService.deletePostById(postId);
     setIsLoading(false);
     if (response.error) {
       console.error(response.message);
       dispatchToast("error", response.message);
+      return;
     }
-
     handleReset();
-    console.log("Suppression de l'actualité");
-    dispatchToast("success", "Actualité supprimée");
+    console.log("Suppression du post");
+    dispatchToast("success", "Suppression du post");
     setTimeout(() => {
-      navigate("/actualites");
+      navigate("/posts");
     }, 2000);
   };
 
-  const getActualityById = async () => {
-    const response = await actualityService.getActualityById(actualityId);
+  const getPostById = async () => {
+    const response = await postService.getPostById(postId);
     if (response.error) {
       console.error(response.message);
       dispatchToast("error", response.message);
@@ -71,21 +70,20 @@ const ActualityEditEmbeddedPage = () => {
     const user = response.data;
     setValues({
       id: user.id,
-      title: user.title,
       description: user.description,
-      event: user.event,
-      image: user.image,
-      publicationDate: handleFormatDateTime(new Date(user.publicationDate)),
+      creatorId: user.creatorId,
+      datePost: handleFormatDateTime(new Date(user.datePost)),
+      nbLike: user.nbLike ?? 0,
     });
   };
 
   useEffect(() => {
-    getActualityById();
+    getPostById();
   }, []);
 
   return (
     <div className="flex-1 overflow-auto relative z-10">
-      <Header title={`Actualités / ${actualityId}`} />
+      <Header title={`Posts / ${postId}`} />
 
       <main className="max-w-4xl mx-auto py-6 px-4 lg:px-8">
         <div className="flex justify-end mb-4 space-x-4">
@@ -118,16 +116,8 @@ const ActualityEditEmbeddedPage = () => {
             disabled
           />
           <TextField
-            label="Titre"
-            variant="outlined"
-            fullWidth
-            name="title"
-            value={values.title}
-            onChange={handleChange}
-            disabled
-          />
-          <TextField
             label="Description"
+            multiline
             variant="outlined"
             fullWidth
             name="description"
@@ -135,25 +125,31 @@ const ActualityEditEmbeddedPage = () => {
             onChange={handleChange}
             disabled
           />
-          <div className="flex items-center justify-start mb-6">
-            <Checkbox
-              color="primary"
-              name="event"
-              checked={values.event}
-              onChange={(e) =>
-                setValues({ ...values, event: e.target.checked })
-              }
-              disabled
-            />
-            <p className="text-white-600">C'est un evenement ?</p>
-          </div>
-
           <TextField
-            label="Publiée le"
+            label="ID Utilisateur"
             variant="outlined"
             fullWidth
-            name="publicationDate"
-            value={values.publicationDate}
+            name="creatorId"
+            value={values.creatorId}
+            onChange={handleChange}
+            disabled
+          />
+          <TextField
+            label="Nombre de likes"
+            variant="outlined"
+            fullWidth
+            name="nbLike"
+            value={values.nbLike}
+            onChange={handleChange}
+            disabled
+          />
+          <TextField
+            label="Email"
+            variant="outlined"
+            fullWidth
+            name="email"
+            value={values.datePost}
+            onChange={handleChange}
             disabled
           />
         </div>
@@ -182,4 +178,4 @@ const ActualityEditEmbeddedPage = () => {
   );
 };
 
-export default ActualityEditEmbeddedPage;
+export default PostEditEmbeddedPage;

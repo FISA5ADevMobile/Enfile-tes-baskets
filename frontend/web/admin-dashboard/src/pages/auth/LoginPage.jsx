@@ -57,7 +57,6 @@ const LoginPage = () => {
           <div className="mb-4">
             <TextField
               fullWidth
-              id="outlined-basic"
               label="Adresse email"
               variant="outlined"
               color="primary"
@@ -70,7 +69,6 @@ const LoginPage = () => {
           <div className="mb-6">
             <TextField
               fullWidth
-              id="outlined-basic"
               label="Mot de passe"
               variant="outlined"
               color="primary"

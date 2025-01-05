@@ -8,7 +8,7 @@ import { dispatchToast } from "../../utils/helper";
 
 const Profile = () => {
   const [currentUser, setCurrentUser] = useState(null);
-  const { authService } = useContext(AppContext);
+  const { authService, userService } = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -46,7 +46,7 @@ const Profile = () => {
         <div>
           <h3 className="text-lg font-semibold text-gray-100">
             {currentUser
-              ? `${currentUser?.firstName} ${currentUser?.lastName}`
+              ? `${currentUser?.firstName} ${currentUser?.name}`
               : "..."}
           </h3>
           <p className="text-gray-400">

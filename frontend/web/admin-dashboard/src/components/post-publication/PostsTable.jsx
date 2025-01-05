@@ -13,7 +13,7 @@ import { AppContext } from "../../services/context/AppContext";
 import { DATA_GRID_COLUMN_DEFAULT_WIDTH } from "../../utils/constants";
 import { ToastContainer, toast } from "react-toastify";
 import { dispatchToast } from "../../utils/helper";
-import { mapUserForDataGrid } from "../../utils/mapping";
+import { mapPostForDataGrid, mapUserForDataGrid } from "../../utils/mapping";
 
 const columns = [
   {
@@ -28,8 +28,8 @@ const columns = [
     editable: false,
   },
   {
-    field: "userPseudo",
-    headerName: "Pseudo utilisateur",
+    field: "creatorId",
+    headerName: "ID Utilisateur",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
@@ -94,8 +94,8 @@ const rows = [
 ];
 
 const PostsTable = () => {
-  // const [postsData, setPostsData] = useState([]); // to uncomment during the integration
-  const [postsData, setPostsData] = useState(rows); //to comment during the integration
+  const [postsData, setPostsData] = useState([]); // to uncomment during the integration
+  // const [postsData, setPostsData] = useState(rows); //to comment during the integration
 
   const { postService } = useContext(AppContext);
 
@@ -108,7 +108,7 @@ const PostsTable = () => {
       dispatchToast("error", response.message);
     } else {
       const posts = response.data;
-      setPostsData(users.map(mapPostForDataGrid));
+      setPostsData(posts.map(mapPostForDataGrid));
     }
   };
 

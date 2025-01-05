@@ -1,7 +1,7 @@
 // models mapping
 
 import { Category } from "@mui/icons-material"
-import { handleFormatDate } from "./helper"
+import { handleFormatDate, handleFormatBoolean } from "./helper"
 
 export const mapActualityModel = (actuality) => {
     return {
@@ -10,7 +10,7 @@ export const mapActualityModel = (actuality) => {
         description: actuality.description,
         image: actuality.image,
         event: actuality.event,
-        publicationDate: actuality.publicationDate
+        publicationDate: new Date(actuality.publicationDate[0], actuality.publicationDate[1] - 1, actuality.publicationDate[2], actuality.publicationDate[3], actuality.publicationDate[4], actuality.publicationDate[5], Math.floor(actuality.publicationDate[6] / 1e6)),
     }
 }
 
@@ -20,10 +20,10 @@ export const mapUserModel = (user) => {
         email: user.email,
         pseudo: user.pseudo,
         firstName: user.firstName,
-        name: user.lastName,
+        name: user.name,
         role: user.role,
         nbPostDeleted: user.nbPostDeleted,
-        banDate: user.banDate,
+        banDate: new Date(user.banDate),
         code: user.code,
         tags: user.tags,
         courses: user.courses
@@ -40,7 +40,7 @@ export const mapPostModel = (post) => {
         nbLike: post.nbLike,
         nbPost: post.nbPost,
         banDate: post.banDate,
-        user: mapUserModel(post.user),
+        creatorId: post.creatorId,
     }
 }
 
@@ -59,13 +59,13 @@ export const mapCommunityModel = (community) => {
         name: community.nom,
         description: community.description,
         banDate: community.banDate,
-        isPublic: community.isPublic,
-        admin: mapUserModel(community.admin),
-        users: community.users.map(mapUserModel),
-        moderators: community.moderators.map(mapUserModel),
-        posts: community.posts.map(mapPostModel),
-        bannedUsers: community.bannedUsers.map(mapUserModel),
-        category: mapCategoryModel(community.category)?.name
+        isPublic: handleFormatBoolean(community.isPublic),
+        adminId: community.adminId,
+        userIds: community.userIds,
+        moderatorIds: community.moderatorIds,
+        postIds: community.postIds,
+        bannedUserIds: community.bannedUserIds,
+        categoryId: community.categoryId
     }
 }
 
@@ -131,8 +131,8 @@ export const mapActualityForDataGrid = (actuality) => {
         id: mapModel.id,
         title: mapModel.title,
         description: mapModel.description,
-        event: mapModel.event,
-        publicationDate: handleFormatDate(new Date(mapModel.publicationDate)),
+        event: handleFormatBoolean(mapModel.event),
+        publicationDate: handleFormatDate(mapModel.publicationDate),
     }
 }
 
@@ -143,7 +143,7 @@ export const mapCommunityForDataGrid = (community) => {
         name: mapModel.name,
         description: mapModel.description,
         isPublic: mapModel.isPublic,
-        categoryName: mapModel.category?.name,
+        categoryId: mapModel.categoryId,
     }
 }
 
@@ -153,9 +153,9 @@ export const mapPostForDataGrid = (post) => {
     return {
         id: mapModel.id,
         description: mapModel.description,
-        userPseudo: mapModel.user?.pseudo,
+        creatorId: mapModel.creatorId,
         datePost: handleFormatDate(new Date(mapModel.datePost)),
-        nbLike: mapModel.nbLike,
+        nbLike: mapModel.nbLike ?? 0,
     }
 }
 

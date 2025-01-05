@@ -3,19 +3,7 @@ import { motion } from "framer-motion";
 import Header from "../../components/common/Header";
 import StatCard from "../../components/common/StatCard";
 
-import {
-  AlertTriangle,
-  DollarSign,
-  Newspaper,
-  Package,
-  Shapes,
-  Tags,
-  TrendingUp,
-} from "lucide-react";
-import CategoryDistributionChart from "../../components/overview/CategoryDistributionChart";
-import SalesTrendChart from "../../components/actualities/SalesTrendChart";
-import ProductsTable from "../../components/actualities/ProductsTable";
-import ActualitiesTable from "../../components/actualities/ActualitiesTable";
+import { Shapes, Tags } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
@@ -23,6 +11,7 @@ import { AppContext } from "../../services/context/AppContext";
 import { useState, useContext, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import TagsTable from "../../components/orientation-courses/TagsTable";
+import { dispatchToast } from "../../utils/helper";
 
 const TagsPage = () => {
   return (
@@ -60,10 +49,10 @@ export const TagStats = ({ title }) => {
     totalTags: "...",
     totalClasses: "...",
   });
-  const { actualityService } = useContext(AppContext);
+  const { orientationCourseService } = useContext(AppContext);
 
-  const getTagStats = async () => {
-    const response = await actualityService.getTagStats();
+  const getOrientationCourseStats = async () => {
+    const response = await orientationCourseService.getOrientationCourseStats();
     if (response.error) {
       console.error(response.message);
       dispatchToast("error", response.message);
@@ -73,7 +62,7 @@ export const TagStats = ({ title }) => {
   };
 
   useEffect(() => {
-    getTagStats();
+    getOrientationCourseStats();
   }, []);
 
   return (

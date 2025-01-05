@@ -10,9 +10,6 @@ import {
   Package,
   TrendingUp,
 } from "lucide-react";
-import CategoryDistributionChart from "../../components/overview/CategoryDistributionChart";
-import SalesTrendChart from "../../components/actualities/SalesTrendChart";
-import ProductsTable from "../../components/actualities/ProductsTable";
 import ActualitiesTable from "../../components/actualities/ActualitiesTable";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";

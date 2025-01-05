@@ -1,30 +1,27 @@
 import React, { useState, useContext, useEffect } from "react";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Checkbox } from "@mui/material";
 import Header from "../../components/common/Header";
-import { Add, Block, Delete, Edit, LockOpen, Save } from "@mui/icons-material";
+import { Add, Delete, Edit, LockOpen, Save } from "@mui/icons-material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
-import {
-  dispatchToast,
-  handleFormatBoolean,
-  handleFormatDateTime,
-} from "../../utils/helper";
+import { dispatchToast, handleFormatDateTime } from "../../utils/helper";
 import { ToastContainer, toast } from "react-toastify";
 import { AppContext } from "../../services/context/AppContext";
 
-const CommunityEditEmbeddedPage = () => {
-  const { communityId } = useParams();
+const ActualityEditEmbeddedPage = () => {
+  const { actualityId } = useParams();
   const navigate = useNavigate();
 
-  const { communityService } = useContext(AppContext);
+  const { actualityService } = useContext(AppContext);
   // Default values
   const defaultValues = {
     id: "",
-    name: "",
+    title: "",
     description: "",
-    isPublic: handleFormatBoolean(false),
-    categoryId: "",
-    banDate: "",
+    event: false,
+    // imageFile: null, // Fichier brut
+    image: null, // URL pour le preview or fichier brut
+    publicationDate: "",
   };
 
   // States
@@ -46,68 +43,65 @@ const CommunityEditEmbeddedPage = () => {
     setIsModified(false);
   };
 
-  // Fonction pour la suppression de la communauté (exemple simple)
+  // Fonction pour la suppression de l'actuality (exemple simple)
   const handleDelete = async () => {
     setIsLoading(true);
-    const response = await communityService.deleteCommunityById(communityId);
+    const response = await actualityService.deleteActualityById(actualityId);
     setIsLoading(false);
     if (response.error) {
       console.error(response.message);
       dispatchToast("error", response.message);
       return;
     }
+
     handleReset();
-    console.log("Suppression de la communauté");
-    dispatchToast("success", "Suppression de la communauté");
+    console.log("Suppression de l'actualité");
+    dispatchToast("success", "Actualité supprimée");
     setTimeout(() => {
-      navigate("/communautes");
+      navigate("/actualites");
     }, 2000);
   };
 
-  const getCommunityById = async () => {
-    const response = await communityService.getCommunityById(communityId);
+  const getActualityById = async () => {
+    const response = await actualityService.getActualityById(actualityId);
     if (response.error) {
       console.error(response.message);
       dispatchToast("error", response.message);
       return;
     }
-    const community = response.data;
+    const actuality = response.data;
     setValues({
-      id: community.id,
-      name: community.name,
-      description: community.description,
-      isPublic: community.isPublic ? "Oui" : "Non",
-      categoryId: community.categoryId,
-      banDate: handleFormatDateTime(new Date(community.banDate)),
-      //
-      //   nbModerators: community.moderators.length,
-      //   nbUsers: community.users.length,
-      //   nbPosts: community.posts.length,
-      //   nbBannedUsers: community.bannedUsers.length,
-      //   admin: `${community.admin.firstName} ${community.admin.lastName}`,
+      id: actuality.id,
+      title: actuality.title,
+      description: actuality.description,
+      event: actuality.event,
+      image: actuality.image,
+      publicationDate: handleFormatDateTime(
+        new Date(actuality.publicationDate)
+      ),
     });
   };
 
   useEffect(() => {
-    getCommunityById();
+    getActualityById();
   }, []);
 
   return (
     <div className="flex-1 overflow-auto relative z-10">
-      <Header title={`Communautés / ${communityId}`} />
+      <Header title={`Actualités / ${actualityId}`} />
 
       <main className="max-w-4xl mx-auto py-6 px-4 lg:px-8">
         <div className="flex justify-end mb-4 space-x-4">
           {!isLoading && (
             <>
-              <Link to="/nouvelle-communaute">
+              {/* <Link to="/nouveau-utilisateur">
                 <Button
                   variant="text"
                   startIcon={<Add />}
                 >
-                  Créer une nouvelle
+                  Créer un nouveau
                 </Button>
-              </Link>
+              </Link> */}
             </>
           )}
         </div>
@@ -127,11 +121,11 @@ const CommunityEditEmbeddedPage = () => {
             disabled
           />
           <TextField
-            label="Nom"
+            label="Titre"
             variant="outlined"
             fullWidth
-            name="name"
-            value={values.description}
+            name="title"
+            value={values.title}
             onChange={handleChange}
             disabled
           />
@@ -144,22 +138,25 @@ const CommunityEditEmbeddedPage = () => {
             onChange={handleChange}
             disabled
           />
+          <div className="flex items-center justify-start mb-6">
+            <Checkbox
+              color="primary"
+              name="event"
+              checked={values.event}
+              onChange={(e) =>
+                setValues({ ...values, event: e.target.checked })
+              }
+              disabled
+            />
+            <p className="text-white-600">C'est un evenement ?</p>
+          </div>
+
           <TextField
-            label="Est publique ?"
+            label="Publiée le"
             variant="outlined"
             fullWidth
-            name="isPublic"
-            value={values.isPublic}
-            onChange={handleChange}
-            disabled
-          />
-          <TextField
-            label="ID Categorie"
-            variant="outlined"
-            fullWidth
-            name="category"
-            value={values.category}
-            onChange={handleChange}
+            name="publicationDate"
+            value={values.publicationDate}
             disabled
           />
         </div>
@@ -188,4 +185,4 @@ const CommunityEditEmbeddedPage = () => {
   );
 };
 
-export default CommunityEditEmbeddedPage;
+export default ActualityEditEmbeddedPage;

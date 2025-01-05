@@ -43,8 +43,8 @@ const columns = [
     editable: false,
   },
   {
-    field: "categoryName",
-    headerName: "Categorie",
+    field: "categoryId",
+    headerName: "ID Categorie",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
@@ -110,8 +110,8 @@ const rows = [
 ];
 
 const CommunitiesTable = () => {
-  // const [communitiesData, setCommunitiesData] = useState([]); // to uncomment during the integration
-  const [communitiesData, setCommunitiesData] = useState(rows); //to comment during the integration
+  const [communitiesData, setCommunitiesData] = useState([]); // to uncomment during the integration
+  // const [communitiesData, setCommunitiesData] = useState(rows); //to comment during the integration
 
   const { communityService } = useContext(AppContext);
 

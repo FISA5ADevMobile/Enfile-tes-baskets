@@ -37,7 +37,7 @@ const ActualityCreatePage = () => {
 
   const handleCreate = async () => {
     setIsLoading(true);
-    const response = await actualityService.createUser({
+    const response = await actualityService.createActuality({
       title: values.title,
       description: values.description,
       event: values.event,
