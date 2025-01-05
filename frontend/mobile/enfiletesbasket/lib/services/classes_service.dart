@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:enfiletesbasket/model/course.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/AppConfig.dart';
+
 class ClassesService {
-  final String baseUrl = "http://10.0.2.2:8081/classes";
+  final String baseUrl = "${AppConfig.baseUrl}/classes";
 
   /// Fetch classes subscribed by the user and return a list of Course objects
   Future<List<Course>> fetchSubscribedClasses(int idUser, String token) async {

@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:enfiletesbasket/model/user.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/AppConfig.dart';
+
 class UserService {
-  final String baseUrl = "http://10.0.2.2:8081/api/users";
+  final String baseUrl = "${AppConfig.baseUrl}/api/users";
 
   /// Récupère les informations de l'utilisateur actuel
   Future<User> getMe(String token) async {

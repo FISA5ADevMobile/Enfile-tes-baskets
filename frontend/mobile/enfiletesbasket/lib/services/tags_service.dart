@@ -2,11 +2,14 @@ import '../model/tag.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../utils/AppConfig.dart';
+
 class TagsService {
 
-  final String baseUrl = "http://10.0.2.2:8081/api";
+  final String baseUrl = "${AppConfig.baseUrl}/api";
 
   Future<List<Tag>> fetchClassTags(int courseId, int classId, String token) async {
+
     final response = await http.get(
       Uri.parse('$baseUrl/courses/$courseId/tags?classId=$classId'),
       headers: {

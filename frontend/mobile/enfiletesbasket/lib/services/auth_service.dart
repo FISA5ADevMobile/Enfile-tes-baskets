@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'package:enfiletesbasket/utils/AppConfig.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  final String baseUrl = "http://10.0.2.2:8081/api/auth";
+  final String baseUrl = "${AppConfig.baseUrl}/api/auth";
 
   Future<void> register({
     required String username,
@@ -41,6 +42,8 @@ class AuthService {
   }
 
   Future<Map<String, dynamic>> login(String email, String password) async {
+    print("Base URL: $baseUrl");
+
     final response = await http.post(
       Uri.parse('$baseUrl/login'),
       headers: {"Content-Type": "application/json"},
