@@ -77,6 +77,21 @@ const UserEditEmbeddedPage = () => {
     }, 2000);
   };
 
+  const handleUnban = async () => {
+    setIsLoading(true);
+    const response = await userService.unbanUserById(userId);
+    setIsLoading(false);
+    if (response.error) {
+      console.error(response.message);
+      dispatchToast("error", response.message);
+      return;
+    }
+    dispatchToast("success", "Utilisateur debanni");
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
+
   const getUserById = async () => {
     const response = await userService.getUserById(userId);
     if (response.error) {
@@ -230,14 +245,26 @@ const UserEditEmbeddedPage = () => {
               </Button>
 
               {/* Bouton Bannir */}
-              <Button
-                variant="outlined"
-                onClick={handleBan}
-                color="error"
-                startIcon={<Block />}
-              >
-                Bannir
-              </Button>
+
+              {!values.banDate ? (
+                <Button
+                  variant="outlined"
+                  onClick={handleBan}
+                  color="error"
+                  startIcon={<Block />}
+                >
+                  Bannir
+                </Button>
+              ) : (
+                <Button
+                  variant="outlined"
+                  onClick={handleUnban}
+                  color="success"
+                  startIcon={<Save />}
+                >
+                  D&eacute;bannir
+                </Button>
+              )}
 
               {/* Bouton Supprimer */}
               <Button

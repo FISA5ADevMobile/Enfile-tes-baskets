@@ -49,7 +49,7 @@ export class UserService {
 
     async getUserMe() {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/users/me`, {
+            const response = await axios.get(`${this.apiUrl}/api/users/me`, {}, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }
@@ -62,7 +62,7 @@ export class UserService {
 
     async banUserById(id) {
         try {
-            const response = await axios.put(`${this.apiUrl}/api/users/ban/${id}`, {
+            const response = await axios.put(`${this.apiUrl}/api/users/ban/${id}`, {}, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }
@@ -75,7 +75,7 @@ export class UserService {
 
     async unbanUserById(id) {
         try {
-            const response = await axios.put(`${this.apiUrl}/api/users/unban/${id}`, {
+            const response = await axios.put(`${this.apiUrl}/api/users/unban/${id}`, {}, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }
@@ -88,7 +88,7 @@ export class UserService {
 
     async deleteUserById(id) {
         try {
-            const response = await axios.delete(`${this.apiUrl}/api/users/delete/${id}`, {
+            const response = await axios.delete(`${this.apiUrl}/api/users/delete/${id}`, {}, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }
@@ -103,10 +103,12 @@ export class UserService {
         try {
             const response = await axios.post(`${this.apiUrl}/api/auth/validate-reset-password`, {
                 email: email,
-                code: code
+                code: Number(code)
             }, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
+                    "Content-Length": 58,
+                    "Content-Type": "application/json"
                 }
             });
             return { error: false, data: response.data };
