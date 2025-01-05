@@ -38,6 +38,13 @@ docker-compose up -d
 
 ## 🎨 Frontend
 
-### 📱 Mobile : Flutter
+### 📱 Mobile
 
-### 📊 Dashboard : React
+- Flutter
+
+### 📊 Web Admin Dashboard
+
+- React
+- Tailwind CSS
+- Recharts
+- Framer Motion
