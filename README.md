@@ -34,7 +34,7 @@ NB : to update
 docker-compose up -d
 ```
 
-- Normalement, cela va lancer une base de données postgres en local et un serveur spring qui va écouter en localhost au port `8080` => `http://localhost:8080/` dans l'environnement souhaité (par défaut `dev`)
+- Normalement, cela va lancer une base de données postgres en local et un serveur spring qui va écouter en localhost au port `8081` => `http://localhost:8081/` dans l'environnement souhaité (par défaut `docker`)
 
 ## 🎨 Frontend
 
