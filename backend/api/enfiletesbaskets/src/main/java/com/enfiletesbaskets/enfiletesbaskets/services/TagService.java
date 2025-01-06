@@ -1,68 +1,72 @@
 package com.enfiletesbaskets.enfiletesbaskets.services;
 
+import com.enfiletesbaskets.enfiletesbaskets.dto.TagDTO;
 import com.enfiletesbaskets.enfiletesbaskets.models.TagModel;
-import com.enfiletesbaskets.enfiletesbaskets.repositories.CourseRepository;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.TagRepository;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class TagService {
-    private final TagRepository tagRepository;
-    private final CourseRepository courseRepository;
 
-    public TagService(TagRepository tagRepository, CourseRepository courseRepository) {
-        this.tagRepository = tagRepository;
-        this.courseRepository = courseRepository;
-    }
-    public String getTagDescription(Long tagId) {
-        return tagRepository.findTagDescriptionById(tagId);
-    }
-    
-    @Transactional
-    public void validateTag(Long courseId, Long classId, Long tagId) {
-        // Validation du tag
-        boolean alreadyValidated = courseRepository.isValidatedTag(courseId, tagId);
-        if (alreadyValidated) {
-            throw new IllegalArgumentException("La balise est déjà validée");
-        }
-        int rowsInserted = courseRepository.validateTag(courseId, classId, tagId);
-        if (rowsInserted == 0) {
-            throw new IllegalArgumentException("Cette balise ne fait pas partie du parcours");
-        }
-    }
-    public List<Map<String, Object>> getTagsByClass(Long classId) {
-        List<Object[]> results = tagRepository.findAllByClassId(classId);
-        return mapTagResults(results);
-    }
-    public List<Map<String, Object>> getTagsByCourse(Long courseId) {
-        List<Object[]> results = tagRepository.findAllByCourseId(courseId);
-        return mapTagResults(results);
-    }
-    public Optional<TagModel> getTagByIdAndUser(Long tagId, Long userId) {
-        return tagRepository.findByIdAndUserId(tagId, userId);
+    @Autowired
+    private TagRepository tagRepository;
+
+    /**
+     * Récupère tous les tags et les transforme en DTO.
+     */
+    public List<TagDTO> getAllTags() {
+        return tagRepository.findAll().stream()
+                .map(tag -> {
+                    TagDTO dto = new TagDTO();
+                    dto.setId(tag.getId());
+                    dto.setName(tag.getName());
+                    dto.setDescription(tag.getDescription());
+                    return dto;
+                }).collect(Collectors.toList());
     }
 
-    private List<Map<String, Object>> mapTagResults(List<Object[]> results) {
-        return results.stream().map(row -> {
-            if (row.length < 5) {
-                throw new IllegalStateException("Pas la bonne structure.");
-            }
-            Map<String, Object> tag = new HashMap<>();
-            tag.put("id", row[0]);
-            tag.put("name", row[1]);
-            tag.put("description", row[2]);
-            tag.put("xPos", row[3]);
-            tag.put("yPos", row[4]);
-            return tag;
-        }).collect(Collectors.toList());
+    /**
+     * Crée un nouveau tag à partir d'un DTO.
+     */
+    public TagDTO createTag(TagDTO tagDTO) {
+        TagModel tag = new TagModel();
+        tag.setName(tagDTO.getName());
+        tag.setDescription(tagDTO.getDescription());
+
+        TagModel savedTag = tagRepository.save(tag);
+
+        TagDTO dto = new TagDTO();
+        dto.setId(savedTag.getId());
+        dto.setName(savedTag.getName());
+        dto.setDescription(savedTag.getDescription());
+        return dto;
     }
 
+    /**
+     * Crée une liste de tags.
+     */
+    public List<TagDTO> createTags(List<TagDTO> tagDTOs) {
+        List<TagModel> tags = tagDTOs.stream()
+                .map(dto -> {
+                    TagModel tag = new TagModel();
+                    tag.setName(dto.getName());
+                    tag.setDescription(dto.getDescription());
+                    return tag;
+                }).collect(Collectors.toList());
+
+        List<TagModel> savedTags = tagRepository.saveAll(tags);
+
+        return savedTags.stream()
+                .map(tag -> {
+                    TagDTO dto = new TagDTO();
+                    dto.setId(tag.getId());
+                    dto.setName(tag.getName());
+                    dto.setDescription(tag.getDescription());
+                    return dto;
+                }).collect(Collectors.toList());
+    }
 }

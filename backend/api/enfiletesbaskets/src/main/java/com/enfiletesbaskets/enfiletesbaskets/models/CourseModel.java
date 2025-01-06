@@ -1,22 +1,41 @@
 package com.enfiletesbaskets.enfiletesbaskets.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 @Entity
 @Table(name = "Course")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CourseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "userdb")
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties("courses") // Évite les boucles infinies avec UserModel
     private UserModel user;
+
+    @ManyToOne
+    @JoinColumn(name = "class_id", nullable = false)
+    @JsonIgnoreProperties("courses") // Évite les boucles infinies avec ClassModel
+    private ClassModel classModel;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @ToString.Exclude // Évite les boucles infinies
+    @JsonIgnoreProperties("course")
+    private List<CourseTagValidation> tagValidations;
 
     @Column(name = "begin_date")
     private LocalDate beginDate;
@@ -24,66 +43,4 @@ public class CourseModel {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @ManyToMany(mappedBy = "courses")
-    @JsonBackReference // Prevent serialization of this side
-    private List<ClassModel> classes;
-    
-
-    @ManyToMany
-    @JoinTable(
-            name = "Course_Tags",
-            joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-    @JsonManagedReference // Control serialization for tags
-    private List<TagModel> tags;
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public UserModel getUser() {
-        return user;
-    }
-
-    public void setUser(UserModel user) {
-        this.user = user;
-    }
-
-    public LocalDate getBeginDate() {
-        return beginDate;
-    }
-
-    public void setBeginDate(LocalDate beginDate) {
-        this.beginDate = beginDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public List<ClassModel> getClasses() {
-        return classes;
-    }
-
-    public void setClasses(List<ClassModel> classes) {
-        this.classes = classes;
-    }
-
-    public List<TagModel> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<TagModel> tags) {
-        this.tags = tags;
-    }
 }
