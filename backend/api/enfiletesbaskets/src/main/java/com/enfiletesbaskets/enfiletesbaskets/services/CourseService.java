@@ -191,11 +191,11 @@ public class CourseService {
     /**
      * Récupère tous les tags liés à une course avec leur statut.
      */
-    public List<CourseTagsDTO> getTagsByCourse(Long classId, Long courseId) {
-        // Fetch all tags associated with the class
-        List<TagModel> allTags = classRepository.findById(classId)
-                .orElseThrow(() -> new RuntimeException("La classe n'a pas été trouvée"))
-                .getTags();
+    public List<CourseTagsDTO> getTagsByCourse(Long courseId) {
+        CourseModel course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course non trouvée avec l'ID : " + courseId));
+
+        List<TagModel> allTags = course.getClassModel().getTags();
 
         List<Long> validatedTagIds = validationRepository.findByCourseId(courseId)
                 .stream()
