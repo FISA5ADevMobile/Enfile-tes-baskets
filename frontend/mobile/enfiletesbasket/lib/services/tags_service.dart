@@ -6,9 +6,9 @@ class TagsService {
 
   final String baseUrl = "http://10.0.2.2:8081/api";
 
-  Future<List<Tag>> fetchClassTags(int courseId, int classId, String token) async {
+  Future<List<Tag>> fetchClassTags(int courseId, String token) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/courses/$courseId/tags?classId=$classId'),
+      Uri.parse('$baseUrl/courses/$courseId/tags'),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Authorization': 'Bearer $token',
