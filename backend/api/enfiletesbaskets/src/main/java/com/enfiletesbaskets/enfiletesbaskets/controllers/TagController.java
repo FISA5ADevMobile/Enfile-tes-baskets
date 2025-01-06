@@ -1,63 +1,40 @@
 package com.enfiletesbaskets.enfiletesbaskets.controllers;
 
-import com.enfiletesbaskets.enfiletesbaskets.models.TagModel;
+import com.enfiletesbaskets.enfiletesbaskets.dto.TagDTO;
 import com.enfiletesbaskets.enfiletesbaskets.services.TagService;
-
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/tags")
+@RequestMapping("/api/tags")
 public class TagController {
 
-    private final TagService tagService;
+    @Autowired
+    private TagService tagService;
 
-
-    public TagController(TagService tagService) {
-        this.tagService = tagService;
+    /**
+     * Récupère tous les tags.
+     */
+    @GetMapping
+    public List<TagDTO> getAllTags() {
+        return tagService.getAllTags();
     }
 
-    // Récupérer tous les tags d'une classe
-    @GetMapping("/class/{classId}")
-    public ResponseEntity<List<Map<String, Object>>> getTagsByClass(@PathVariable Long classId) {
-        List<Map<String, Object>> tags = tagService.getTagsByClass(classId);
-        return ResponseEntity.ok(tags);
+    /**
+     * Crée un nouveau tag.
+     */
+    @PostMapping
+    public TagDTO createTag(@RequestBody TagDTO tagDTO) {
+        return tagService.createTag(tagDTO);
     }
 
-    // Récupérer tous les tags validés d'un utilisateur pour un parcours
-    @GetMapping("/course/{courseId}")
-    public ResponseEntity<List<Map<String, Object>>> getTags(@PathVariable Long courseId) {
-        List<Map<String, Object>> tags = tagService.getTagsByCourse(courseId);
-        return ResponseEntity.ok(tags);
-    }
-    
-    @GetMapping("/{tagId}/description")
-    public ResponseEntity<String> getTagDescription(@PathVariable Long tagId) {
-        return ResponseEntity.ok(tagService.getTagDescription(tagId));
-    }
-
-
-    // // Récupérer tous les tags d'une classe et d'un utilisateur
-    // @GetMapping("/class/{classId}/user/{userId}")
-    // public ResponseEntity<List<TagModel>> getTagsByClassAndUser(
-    //     @PathVariable Long classId, 
-    //     @PathVariable Long userId
-    // ) {
-    //     List<TagModel> tags = tagRepository.findAllByClassIdAndUserId(classId, userId);
-    //     return ResponseEntity.ok(tags);
-    // }
-
-    // Récupérer un tag par ID et utilisateur
-    @GetMapping("/{tagId}/user/{userId}")
-    public ResponseEntity<TagModel> getTagByIdAndUser(
-        @PathVariable Long tagId, 
-        @PathVariable Long userId
-    ) {
-        return tagService.getTagByIdAndUser(tagId, userId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    /**
+     * Crée une liste de tags.
+     */
+    @PostMapping("/bulk")
+    public List<TagDTO> createTags(@RequestBody List<TagDTO> tagDTOs) {
+        return tagService.createTags(tagDTOs);
     }
 }

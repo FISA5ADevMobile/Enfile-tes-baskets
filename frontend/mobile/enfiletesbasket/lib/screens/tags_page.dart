@@ -31,7 +31,8 @@ class TagsPage extends StatelessWidget {
               return IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () {
-                  provider.resetTags(courseId);
+                  final String token = authProvider.token ?? '';
+                  provider.resetTags(courseId,token);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Tags reset successfully')),
                   );
@@ -91,7 +92,8 @@ class TagsPage extends StatelessWidget {
                           return TagCard(
                             tag: tag,
                             onValidate: (tagId) {
-                              provider.validateTag(classId, courseId, tagId, 1);
+                              final String token = authProvider.token ?? '';
+                              provider.validateTag(courseId, tagId,token);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                     content: Text('Tag ${tag.name} validated!')),

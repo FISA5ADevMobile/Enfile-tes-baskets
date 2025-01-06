@@ -20,8 +20,8 @@ class Tag {
       id: json['id'],
       name: json['name'],
       description: json['description'],
-      xPos: (json['xPos'] as num).toDouble(),
-      yPos: (json['yPos'] as num).toDouble(),
+      xPos: (json['xpos'] ?? 0).toDouble(),
+      yPos: (json['ypos'] ?? 0).toDouble(),
       validated: json['validated'] ?? false,
     );
   }
