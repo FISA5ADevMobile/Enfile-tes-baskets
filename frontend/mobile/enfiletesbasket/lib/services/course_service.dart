@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../model/course.dart';
+import '../models/course.dart';
+
 
 class CourseService {
   final String baseUrl = "http://10.0.2.2:8081/api/courses";
