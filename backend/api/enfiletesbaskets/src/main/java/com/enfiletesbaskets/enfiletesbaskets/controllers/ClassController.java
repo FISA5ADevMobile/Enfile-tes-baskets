@@ -99,37 +99,37 @@ public class ClassController {
         return ResponseEntity.ok("Parcours supprimé.");
     }
 
-//    // Not working at the moment
-//    @PostMapping("/create")
-//    public ResponseEntity<?> createClass(@RequestBody @Valid ClassCreate classCreateDTO) {
-//        System.out.println(classCreateDTO);
-//        // Charger l'utilisateur propriétaire à partir de l'ID
-//        UserModel owner = userService.findById(classCreateDTO.getOwnerId());
-//        if (owner == null) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Owner not found with ID: " + classCreateDTO.getOwnerId());
-//        }
-//
-//        // Charger les tags et les cours si nécessaires (exemples ci-dessous)
-//        List<TagModel> tags = tagService.findByIds(classCreateDTO.getTagIds());
-//
-//        if (tags.size() != classCreateDTO.getTagIds().size()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Some tags not found");
-//        }
-//
-//        List<CourseModel> courses = courseService.findByIds(classCreateDTO.getCourseIds());
-//
-//        if (courses.size() != classCreateDTO.getCourseIds().size()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Some courses not found");
-//        }
-//
-//        // Mapper le DTO vers l'entité
-//        ClassModel classModel = ClassMapper.toEntity(classCreateDTO, owner, tags, courses);
-//
-//        // Sauvegarder l'entité
-//        classService.save(classModel);
-//
-//        return ResponseEntity.ok("Class created successfully!");
-//    }
+    // Not working at the moment
+    @PostMapping("/create")
+    public ResponseEntity<?> createClass(@RequestBody @Valid ClassCreate classCreateDTO) {
+        System.out.println(classCreateDTO);
+        // Charger l'utilisateur propriétaire à partir de l'ID
+        UserModel owner = userService.findById(classCreateDTO.getOwnerId());
+        if (owner == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Owner not found with ID: " + classCreateDTO.getOwnerId());
+        }
+
+        // Charger les tags et les cours si nécessaires (exemples ci-dessous)
+        List<TagModel> tags = tagService.findByIds(classCreateDTO.getTagIds());
+
+        if (tags.size() != classCreateDTO.getTagIds().size()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Some tags not found");
+        }
+
+        List<CourseModel> courses = courseService.findByIds(classCreateDTO.getCourseIds());
+
+        if (courses.size() != classCreateDTO.getCourseIds().size()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Some courses not found");
+        }
+
+        // Mapper le DTO vers l'entité
+        ClassModel classModel = ClassMapper.toEntity(classCreateDTO, owner, tags, courses);
+
+        // Sauvegarder l'entité
+        classService.save(classModel);
+
+        return ResponseEntity.ok("Class created successfully!");
+    }
 
 
 }

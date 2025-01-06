@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ClassCreate {
+    private Long id;
     private String name;
     private String description;
     private Long ownerId; // Utilisez un ID pour référencer le propriétaire
@@ -15,6 +16,14 @@ public class ClassCreate {
     private List<Long> courseIds; // Utilisez des IDs pour les cours
 
     // Getters and setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }

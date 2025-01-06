@@ -4,6 +4,7 @@ import com.enfiletesbaskets.enfiletesbaskets.models.CourseModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.TagModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 
+import com.enfiletesbaskets.enfiletesbaskets.repositories.CourseRepository;
 import com.enfiletesbaskets.enfiletesbaskets.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,11 @@ import java.util.stream.Collectors;
 public class CourseController {
 
     private final CourseService courseService;
+    private final CourseRepository courseRepository;
 
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService, CourseRepository courseRepository) {
         this.courseService = courseService;
+        this.courseRepository = courseRepository;
     }
 
     @GetMapping("/user/{userId}")

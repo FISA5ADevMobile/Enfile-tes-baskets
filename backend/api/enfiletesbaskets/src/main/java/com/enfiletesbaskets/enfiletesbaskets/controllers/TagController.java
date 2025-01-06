@@ -1,6 +1,7 @@
 package com.enfiletesbaskets.enfiletesbaskets.controllers;
 
 import com.enfiletesbaskets.enfiletesbaskets.models.TagModel;
+import com.enfiletesbaskets.enfiletesbaskets.repositories.TagRepository;
 import com.enfiletesbaskets.enfiletesbaskets.services.TagService;
 
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,12 @@ import java.util.Map;
 public class TagController {
 
     private final TagService tagService;
+    private final TagRepository tagRepository;
 
 
-    public TagController(TagService tagService) {
+    public TagController(TagService tagService, TagRepository tagRepository) {
         this.tagService = tagService;
+        this.tagRepository = tagRepository;
     }
 
     // Récupérer tous les tags d'une classe
