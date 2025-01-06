@@ -18,16 +18,6 @@ class ClassesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'My Courses',
-          style: TextStyle(
-            color: Color(0xFFC8A14E),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: const Color(0xFF0081A1),
-      ),
       body: FutureBuilder<void>(
         future: _fetchCourses(context),
         builder: (context, snapshot) {
