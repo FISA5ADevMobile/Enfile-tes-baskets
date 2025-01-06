@@ -10,6 +10,7 @@ import com.enfiletesbaskets.enfiletesbaskets.exception.CustomException;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.UserRepository;
 import com.enfiletesbaskets.enfiletesbaskets.security.JwtTokenProvider;
 import com.enfiletesbaskets.enfiletesbaskets.util.PasswordUtil;
+import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +20,10 @@ import java.util.Optional;
 @Service
 public class AuthService {
 
-    private final UserRepository userRepository;
-    private final JwtTokenProvider jwtTokenProvider;
-
-    public AuthService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
-        this.userRepository = userRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
+    @Resource
+    private UserRepository userRepository;
+    @Resource
+    private JwtTokenProvider jwtTokenProvider;
 
     public void register(RegisterRequest request) {
         // Vérifiez si l'email existe déjà

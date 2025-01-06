@@ -1,17 +1,16 @@
 package com.enfiletesbaskets.enfiletesbaskets.services;
 
 import com.enfiletesbaskets.enfiletesbaskets.repositories.CourseRepository;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 public class CourseService {
-    private final CourseRepository courseRepository;
 
-    public CourseService(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
-    }
+    @Resource
+    private CourseRepository courseRepository;
 
     @Transactional
     public void resetTagsForCourse(Long courseId) {

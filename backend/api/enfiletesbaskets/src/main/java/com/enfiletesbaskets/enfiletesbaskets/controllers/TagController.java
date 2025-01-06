@@ -3,6 +3,7 @@ package com.enfiletesbaskets.enfiletesbaskets.controllers;
 import com.enfiletesbaskets.enfiletesbaskets.models.TagModel;
 import com.enfiletesbaskets.enfiletesbaskets.services.TagService;
 
+import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,12 +14,8 @@ import java.util.Map;
 @RequestMapping("/tags")
 public class TagController {
 
-    private final TagService tagService;
-
-
-    public TagController(TagService tagService) {
-        this.tagService = tagService;
-    }
+    @Resource
+    private TagService tagService;
 
     // Récupérer tous les tags d'une classe
     @GetMapping("/class/{classId}")

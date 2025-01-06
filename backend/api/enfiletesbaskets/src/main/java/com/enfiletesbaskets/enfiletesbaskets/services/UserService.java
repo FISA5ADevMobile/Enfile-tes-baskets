@@ -20,16 +20,9 @@ import java.util.List;
 public class UserService implements UserDetailsService {
 
     @Resource
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
     @Resource
-    private final JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    public UserService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
-        this.userRepository = userRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
-
+    private JwtTokenProvider jwtTokenProvider;
 
     public List<UserModel> getAllUsers() {
         return userRepository.findAll();

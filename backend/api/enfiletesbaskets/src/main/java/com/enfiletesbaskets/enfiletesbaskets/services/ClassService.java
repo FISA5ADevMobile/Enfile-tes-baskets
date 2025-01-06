@@ -7,6 +7,7 @@ import com.enfiletesbaskets.enfiletesbaskets.repositories.ClassRepository;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.CourseRepository;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.UserRepository;
 
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,15 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ClassService {
-    private final ClassRepository classRepository;
-    private final CourseRepository courseRepository;
-    private final UserRepository userRepository;
-
-    public ClassService(ClassRepository classRepository, CourseRepository courseRepository, UserRepository userRepository) {
-        this.classRepository = classRepository;
-        this.courseRepository = courseRepository;
-        this.userRepository = userRepository;
-    }
+    @Resource
+    private ClassRepository classRepository;
+    @Resource
+    private CourseRepository courseRepository;
+    @Resource
+    private UserRepository userRepository;
 
     // Fetch all subscribed classes and return filtered fields
     public List<Map<String, String>> getSubscribedClasses(Long userId) {

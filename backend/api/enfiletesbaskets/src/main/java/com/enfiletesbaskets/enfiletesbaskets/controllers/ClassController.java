@@ -8,21 +8,19 @@ import com.enfiletesbaskets.enfiletesbaskets.services.TagService;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/classes")
 public class ClassController {
-    private final ClassService classService;
-    private final TagService tagService;
-    private final CourseService courseService;
-
-    public ClassController(ClassService classService, TagService tagService, CourseService courseService) {
-        this.classService = classService;
-        this.tagService = tagService;
-        this.courseService = courseService;
-    }
+    @Resource
+    private ClassService classService;
+    @Resource
+    private TagService tagService;
+    @Resource
+    private CourseService courseService;
 
     //récupérer les parcours auquel l'utilisateur est inscrit
     @GetMapping("/subscribed/{userId}")

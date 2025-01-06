@@ -4,6 +4,7 @@ import com.enfiletesbaskets.enfiletesbaskets.models.TagModel;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.CourseRepository;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.TagRepository;
 
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,13 +16,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class TagService {
-    private final TagRepository tagRepository;
-    private final CourseRepository courseRepository;
 
-    public TagService(TagRepository tagRepository, CourseRepository courseRepository) {
-        this.tagRepository = tagRepository;
-        this.courseRepository = courseRepository;
-    }
+    @Resource
+    private TagRepository tagRepository;
+
+    @Resource
+    private CourseRepository courseRepository;
+
     public String getTagDescription(Long tagId) {
         return tagRepository.findTagDescriptionById(tagId);
     }

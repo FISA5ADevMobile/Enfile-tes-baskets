@@ -5,6 +5,7 @@ import com.enfiletesbaskets.enfiletesbaskets.models.TagModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 
 import com.enfiletesbaskets.enfiletesbaskets.services.CourseService;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +18,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/courses")
 public class CourseController {
 
-    private final CourseService courseService;
-
-    public CourseController(CourseService courseService) {
-        this.courseService = courseService;
-    }
+    @Resource
+    private CourseService courseService;
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<Long> getCourseIdByUserAndClass(
