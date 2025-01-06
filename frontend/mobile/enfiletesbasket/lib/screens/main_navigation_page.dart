@@ -74,9 +74,6 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
             }
           });
         },
-        onPersonIconPressed: () {
-          print('Icône de profil cliquée');
-        },
       ),
       body: _getCurrentScreen(),
       bottomNavigationBar: CustomBottomNavigationBar(

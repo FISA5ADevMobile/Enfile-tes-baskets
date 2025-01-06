@@ -1,22 +1,28 @@
-import 'package:enfiletesbasket/services/actuality_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:enfiletesbasket/services/auth_provider.dart';
 import 'package:enfiletesbasket/services/classes_provider.dart';
 import 'package:enfiletesbasket/services/tags_provider.dart';
 import 'package:enfiletesbasket/services/course_provider.dart';
+import 'package:enfiletesbasket/services/actuality_provider.dart';
 import 'package:enfiletesbasket/app_routes.dart';
-import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final authProvider = AuthProvider();
+  await authProvider.autoLogin();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => authProvider),
         ChangeNotifierProvider(create: (_) => ClassesProvider()),
         ChangeNotifierProvider(create: (_) => TagsProvider()),
         ChangeNotifierProvider(create: (_) => CourseProvider()),
-        ChangeNotifierProvider(create: (_) => ActualityProvider())
+        ChangeNotifierProvider(create: (_) => ActualityProvider()),
       ],
       child: MyApp(),
     ),
@@ -26,16 +32,22 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Enfile tes Baskets',
-      theme: ThemeData(
-        primaryColor: const Color(0xFF0081A1),
-        scaffoldBackgroundColor: Colors.white,
-        textTheme: GoogleFonts.montserratTextTheme(),
-      ),
-      debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.login,
-      routes: AppRoutes.getRoutes(),
+    return Consumer<AuthProvider>(
+      builder: (context, authProvider, child) {
+        return MaterialApp(
+          title: 'Enfile tes Baskets',
+          theme: ThemeData(
+            primaryColor: const Color(0xFF0081A1),
+            scaffoldBackgroundColor: Colors.white,
+            textTheme: GoogleFonts.montserratTextTheme(),
+          ),
+          debugShowCheckedModeBanner: false,
+          initialRoute: authProvider.isAuthenticated
+              ? AppRoutes.mainNavigation
+              : AppRoutes.login,
+          routes: AppRoutes.getRoutes(),
+        );
+      },
     );
   }
 }

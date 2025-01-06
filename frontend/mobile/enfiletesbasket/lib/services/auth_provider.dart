@@ -15,7 +15,6 @@ class AuthProvider extends ChangeNotifier {
   User? get currentUser => _currentUser;
   bool get isAuthenticated => _token != null;
 
-  /// Enregistrer un nouvel utilisateur
   Future<void> register({
     required String username,
     required String email,
@@ -28,44 +27,84 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  /// Connexion d'un utilisateur
-  Future<void> login(String email, String password) async {
+  Future<void> login(String email, String password, bool rememberMe) async {
     try {
       final response = await _authService.login(email, password);
       _token = response['token'];
       await saveToken(_token!);
-      await fetchCurrentUser(); // Récupérer les informations utilisateur après la connexion
+
+      if (rememberMe) {
+        await saveRememberMe(true);
+      } else {
+        await saveRememberMe(false);
+      }
+
+      await fetchCurrentUser();
       notifyListeners();
     } catch (e) {
       throw e;
     }
   }
 
-  /// Déconnexion d'un utilisateur
+  Future<void> saveRememberMe(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('remember_me', value);
+  }
+
+  Future<bool> loadRememberMe() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('remember_me') ?? false;
+  }
+
+
+  Future<void> autoLogin() async {
+    final rememberMe = await loadRememberMe();
+    if (rememberMe) {
+      await loadToken();
+      if (_token == null) {
+        print("Aucun token valide trouvé. Redirection vers l'écran de connexion.");
+      }
+    } else {
+      print("Connexion automatique désactivée par l'utilisateur.");
+    }
+  }
+
   Future<void> logout() async {
+    if (_token != null) {
+      try {
+        await _authService.logout(_token!);
+      } catch (e) {
+        print("Erreur lors de la déconnexion API : $e");
+      }
+    }
     _token = null;
     _currentUser = null;
     await removeToken();
+    await saveRememberMe(false);
     notifyListeners();
   }
 
-  /// Charger le token depuis SharedPreferences
   Future<void> loadToken() async {
     final prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
+
     if (_token != null) {
-      await fetchCurrentUser(); // Charger les informations utilisateur si le token existe
+      try {
+        await fetchCurrentUser();
+      } catch (e) {
+        await logout();
+      }
     }
+
     notifyListeners();
   }
 
-  /// Sauvegarder le token dans SharedPreferences
+
   Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('jwt_token', token);
   }
 
-  /// Supprimer le token depuis SharedPreferences
   Future<void> removeToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwt_token');
@@ -76,7 +115,6 @@ class AuthProvider extends ChangeNotifier {
     return _token!;
   }
 
-  /// Récupérer les informations de l'utilisateur actuel
   Future<void> fetchCurrentUser() async {
     if (_token == null) {
       throw Exception("Token manquant. Impossible de récupérer les informations utilisateur.");
@@ -85,11 +123,10 @@ class AuthProvider extends ChangeNotifier {
     try {
       final user = await _userService.getMe(_token!);
       _currentUser = user;
-      print("Utilisateur actuel : ${_currentUser?.pseudo}, ${_currentUser?.email}");
       notifyListeners();
     } catch (e) {
-      print("Erreur lors de la récupération des informations utilisateur : $e");
-      throw e;
+      throw Exception("Token invalide ou expiré.");
     }
   }
+
 }
