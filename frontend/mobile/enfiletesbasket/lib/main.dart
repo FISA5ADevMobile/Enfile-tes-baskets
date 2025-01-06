@@ -9,6 +9,9 @@ import 'package:enfiletesbasket/services/tags_provider.dart';
 import 'package:enfiletesbasket/services/course_provider.dart';
 import 'package:enfiletesbasket/services/actuality_provider.dart';
 import 'package:enfiletesbasket/app_routes.dart';
+import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'screens/community_screen.dart';
 
 Future<void> main() async {
   // Sélection du fichier .env en fonction d'un argument
