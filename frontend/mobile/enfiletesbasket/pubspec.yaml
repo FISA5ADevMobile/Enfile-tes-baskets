@@ -30,3 +30,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: fonts/Montserrat/static/Montserrat-Regular.ttf
+        - asset: fonts/Montserrat/static/Montserrat-Bold.ttf
+          weight: 700
+        - asset: fonts/Montserrat/static/Montserrat-Italic.ttf
+          style: italic

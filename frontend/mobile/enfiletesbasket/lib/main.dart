@@ -7,6 +7,7 @@ import 'package:enfiletesbasket/services/course_provider.dart';
 import 'package:enfiletesbasket/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'screens/community_screen.dart';
 
 void main() {
   runApp(
