@@ -10,7 +10,7 @@ public class CommunityMapper {
     public static CommunityDTO toDTO(CommunityModel communityModel) {
         CommunityDTO dto = new CommunityDTO();
         dto.setId(communityModel.getId());
-        dto.setNom(communityModel.getNom());
+        dto.setName(communityModel.getNom());
         dto.setDescription(communityModel.getDescription());
         dto.setBanDate(communityModel.getBanDate());
         dto.setIsPublic(communityModel.getPublic());
@@ -19,9 +19,9 @@ public class CommunityMapper {
         // Convertir les listes d'entités en listes d'IDs
         dto.setUserIds(communityModel.getUsers().stream().map(user -> user.getId()).collect(Collectors.toList()));
         dto.setModeratorIds(communityModel.getModerators().stream().map(user -> user.getId()).collect(Collectors.toList()));
-        dto.setPostIds(communityModel.getPosts().stream().map(post -> post.getId()).collect(Collectors.toList()));
+        dto.setPostIds(communityModel.getPosts().stream().map(PostMapper::toDTO).collect(Collectors.toList()));
         dto.setBannedUserIds(communityModel.getBannedUsers().stream().map(user -> user.getId()).collect(Collectors.toList()));
-        dto.setCategoryId(communityModel.getCategory() != null ? communityModel.getCategory().getId() : null);
+        dto.setCategoryName(communityModel.getCategory() != null ? communityModel.getCategory().getName() : null);
 
         return dto;
     }
@@ -29,7 +29,7 @@ public class CommunityMapper {
     public static CommunityModel toEntity(CommunityDTO dto) {
         CommunityModel communityModel = new CommunityModel();
         communityModel.setId(dto.getId());
-        communityModel.setNom(dto.getNom());
+        communityModel.setNom(dto.getName());
         communityModel.setDescription(dto.getDescription());
         communityModel.setBanDate(dto.getBanDate());
         communityModel.setPublic(dto.getIsPublic());

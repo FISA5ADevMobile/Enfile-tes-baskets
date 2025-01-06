@@ -5,14 +5,14 @@ import java.util.Date;
 
 public class PostDTO {
     private Long id;
-    private String description;
+    private String content;
     private Date datePost;
-    private String imageBase64; // Image encodée en base64 pour transfert
+    private String imageUrl; // Image encodée en base64 pour transfert
     private Integer nbLike;
     private Integer nbPost;
     private Boolean visible;
     private Date banDate;
-    private Long creatorId; // ID de l'utilisateur créateur
+    private String username; // ID de l'utilisateur créateur
     private Long relatedPostId; // ID du post lié
 
     // Getters et Setters
@@ -24,12 +24,12 @@ public class PostDTO {
         this.id = id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getContent() {
+        return content;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Date getDatePost() {
@@ -40,12 +40,12 @@ public class PostDTO {
         this.datePost = datePost;
     }
 
-    public String getImageBase64() {
-        return imageBase64;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageBase64(String imageBase64) {
-        this.imageBase64 = imageBase64;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Integer getNbLike() {
@@ -80,12 +80,12 @@ public class PostDTO {
         this.banDate = banDate;
     }
 
-    public Long getCreatorId() {
-        return creatorId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setCreatorId(Long creatorId) {
-        this.creatorId = creatorId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Long getRelatedPostId() {
