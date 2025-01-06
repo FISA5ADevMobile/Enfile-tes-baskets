@@ -5,16 +5,16 @@ import java.util.List;
 
 public class CommunityDTO {
     private Long id;
-    private String nom;
+    private String name;
     private String description;
     private Date banDate;
     private Boolean isPublic;
     private Long adminId; // ID de l'admin
     private List<Long> userIds; // Liste des IDs des utilisateurs
     private List<Long> moderatorIds; // Liste des IDs des modérateurs
-    private List<Long> postIds; // Liste des IDs des posts
+    private List<PostDTO> postIds; // Liste des IDs des posts
     private List<Long> bannedUserIds; // Liste des IDs des utilisateurs bannis
-    private Long categoryId; // ID de la catégorie
+    private String categoryName; // ID de la catégorie
 
     // Getters et Setters
     public Long getId() {
@@ -25,12 +25,12 @@ public class CommunityDTO {
         this.id = id;
     }
 
-    public String getNom() {
-        return nom;
+    public String getName() {
+        return name;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -81,11 +81,11 @@ public class CommunityDTO {
         this.moderatorIds = moderatorIds;
     }
 
-    public List<Long> getPostIds() {
+    public List<PostDTO> getPostIds() {
         return postIds;
     }
 
-    public void setPostIds(List<Long> postIds) {
+    public void setPostIds(List<PostDTO> postIds) {
         this.postIds = postIds;
     }
 
@@ -97,11 +97,11 @@ public class CommunityDTO {
         this.bannedUserIds = bannedUserIds;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }
