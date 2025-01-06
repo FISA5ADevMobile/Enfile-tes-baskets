@@ -26,6 +26,11 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/{id}")
+    public UserModel getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
+
     @PutMapping("/ban/{id}")
     public void banUser(@PathVariable Long id) {
         userService.banUser(id);
@@ -50,6 +55,5 @@ public class UserController {
 
         return ResponseEntity.ok(userDetails);
     }
-
 
 }
