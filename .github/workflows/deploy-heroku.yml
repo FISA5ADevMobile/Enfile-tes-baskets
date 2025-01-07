@@ -21,7 +21,10 @@ jobs:
 
       - name: 🐳 Build Docker Image
         run: |
+          echo "🔧 Running Docker Build Command:"
+          echo "docker build -t enfiletesbaskets-api -f ${{ env.DOCKER_CONTEXT }}/${{ env.DOCKERFILE }} ${{ env.DOCKER_CONTEXT }}"
           docker build -t enfiletesbaskets-api -f ${{ env.DOCKER_CONTEXT }}/${{ env.DOCKERFILE }} ${{ env.DOCKER_CONTEXT }}
+
 
       - name: 🛡️ Save Docker Image Artifact
         uses: actions/upload-artifact@v4
