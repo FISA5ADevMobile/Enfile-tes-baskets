@@ -1,19 +1,20 @@
-name: 🚀 Deploy API to Heroku (Preprod & Prod)
+name: 🚀 Deploy API to Heroku (Test & Prod)
 
 on:
   push:
     branches:
-      - deploy_back  # Déploiement sur Préproduction
-      - develop      # Déploiement en Production
+      - deploy_back  # Déploiement de test sur la même application
+      - develop      # Déploiement officiel en Production
 
 env:
   DOCKER_CONTEXT: backend/api/enfiletesbaskets
   DOCKERFILE: Dockerfile
   DOCKER_IMAGE_NAME: enfiletesbaskets-api
+  HEROKU_APP_NAME: enfiletesbaskets-api
 
 jobs:
   build:
-    name: 🛠️ Build and Publish Docker Image
+    name: 🛠️ Build Docker Image
     runs-on: ubuntu-latest
 
     steps:
@@ -27,17 +28,16 @@ jobs:
 
       - name: 🐳 Tag Docker Image for Heroku
         run: |
-          docker tag ${{ env.DOCKER_IMAGE_NAME }} registry.heroku.com/${{ secrets.HEROKU_APP_NAME_PREPROD }}/web
-          docker tag ${{ env.DOCKER_IMAGE_NAME }} registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+          docker tag ${{ env.DOCKER_IMAGE_NAME }} registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
 
-      - name: 🐳 Save Docker Image as Artifact
+      - name: 🐳 Save Docker Image Artifact
         uses: actions/upload-artifact@v4
         with:
           name: docker-image
           path: /var/lib/docker/volumes
 
-  deploy-preprod:
-    name: 🚀 Deploy to Heroku (Preproduction)
+  deploy-test:
+    name: 🚀 Deploy to Heroku (Test on `deploy_back`)
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/deploy_back'
@@ -48,20 +48,20 @@ jobs:
 
       - name: 🔑 Authenticate with Heroku
         run: |
-          echo "::add-mask::${{ secrets.HEROKU_PREPROD_API_KEY }}"
-          echo "${{ secrets.HEROKU_PREPROD_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
+          echo "::add-mask::${{ secrets.HEROKU_API_KEY }}"
+          echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
 
-      - name: 🚀 Push Docker Image to Heroku (Preprod)
+      - name: 🚀 Push Docker Image to Heroku (Test)
         run: |
-          docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME_PREPROD }}/web
+          docker push registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
 
-      - name: 🚀 Release to Heroku (Preprod)
+      - name: 🚀 Release to Heroku (Test)
         run: |
-          heroku container:release web --app ${{ secrets.HEROKU_APP_NAME_PREPROD }}
-          heroku config:set ENVIRONMENT=docker --app ${{ secrets.HEROKU_APP_NAME_PREPROD }}
+          heroku container:release web --app ${{ env.HEROKU_APP_NAME }}
+          heroku config:set ENVIRONMENT=test --app ${{ env.HEROKU_APP_NAME }}
 
   deploy-prod:
-    name: 🚀 Deploy to Heroku (Production)
+    name: 🚀 Deploy to Heroku (Production on `develop`)
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
@@ -77,9 +77,9 @@ jobs:
 
       - name: 🚀 Push Docker Image to Heroku (Prod)
         run: |
-          docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+          docker push registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
 
       - name: 🚀 Release to Heroku (Prod)
         run: |
-          heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
-          heroku config:set ENVIRONMENT=docker --app ${{ secrets.HEROKU_APP_NAME }}
+          heroku container:release web --app ${{ env.HEROKU_APP_NAME }}
+          heroku config:set ENVIRONMENT=prod --app ${{ env.HEROKU_APP_NAME }}
