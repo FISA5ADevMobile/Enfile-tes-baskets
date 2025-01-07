@@ -9,6 +9,7 @@ on:
 env:
   DOCKER_CONTEXT: backend/api/enfiletesbaskets
   DOCKERFILE: Dockerfile
+  DOCKER_IMAGE_NAME: my-image
 
 jobs:
   build:
@@ -19,29 +20,11 @@ jobs:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🛠️ Debug GitHub Workspace
-        run: |
-          echo "🔍 GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
-          echo "🔍 Current Directory: $(pwd)"
-          echo "🔍 List contents of root:"
-          ls -al
-          echo "🔍 List contents of backend/api/enfiletesbaskets:"
-          ls -al backend/api/enfiletesbaskets || echo "❌ Directory not found"
-
-      - name: 🛡️ Check Directory Permissions
-        working-directory: backend/api/enfiletesbaskets
-        run: |
-          echo "🔑 Checking permissions"
-          ls -l
-          chmod +x mvnw
-
       - name: 🐳 Build Docker Image
         working-directory: backend/api/enfiletesbaskets
         run: |
           echo "🔧 Running Docker Build Command in $(pwd)"
-          docker build -t enfiletesbaskets-api -f Dockerfile .
-
-
+          docker build . --file Dockerfile
 
       - name: 🛡️ Save Docker Image Artifact
         uses: actions/upload-artifact@v4
