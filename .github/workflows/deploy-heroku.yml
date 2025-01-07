@@ -7,7 +7,7 @@ on:
       - develop      # Déploiement en Production
 
 env:
-  DOCKER_CONTEXT: ./backend/api/enfiletesbaskets
+  DOCKER_CONTEXT: backend/api/enfiletesbaskets
   DOCKERFILE: Dockerfile
 
 jobs:
@@ -21,8 +21,7 @@ jobs:
 
       - name: 🐳 Build Docker Image
         run: |
-          docker build -t enfiletesbaskets-api -f backend/api/enfiletesbaskets/Dockerfile backend/api/enfiletesbaskets
-
+          docker build -t enfiletesbaskets-api -f ${{ env.DOCKER_CONTEXT }}/${{ env.DOCKERFILE }} ${{ env.DOCKER_CONTEXT }}
 
       - name: 🛡️ Save Docker Image Artifact
         uses: actions/upload-artifact@v4
@@ -47,7 +46,6 @@ jobs:
 
       - name: 🚀 Push Docker Image to Heroku (Preprod)
         run: |
-          cd ${{ env.DOCKER_CONTEXT }}
           docker tag enfiletesbaskets-api registry.heroku.com/${{ secrets.HEROKU_APP_NAME_PREPROD }}/web
           docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME_PREPROD }}/web
 
@@ -73,7 +71,6 @@ jobs:
 
       - name: 🚀 Push Docker Image to Heroku (Prod)
         run: |
-          cd ${{ env.DOCKER_CONTEXT }}
           docker tag enfiletesbaskets-api registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
           docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
 
