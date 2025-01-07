@@ -19,6 +19,14 @@ jobs:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
 
+      - name: 🗂️ Debug Directory Structure
+        run: |
+          echo "🔍 Current Directory: $(pwd)"
+          echo "🔍 List contents of root:"
+          ls -al
+          echo "🔍 List contents of backend/api/enfiletesbaskets:"
+          ls -al backend/api/enfiletesbaskets
+
       - name: 🐳 Build Docker Image
         run: |
           echo "🔧 Running Docker Build Command:"
