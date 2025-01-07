@@ -1,3 +1,6 @@
 build:
   docker:
     web: ./backend/api/enfiletesbaskets/Dockerfile
+
+run:
+  web: java -jar /app/app.jar
