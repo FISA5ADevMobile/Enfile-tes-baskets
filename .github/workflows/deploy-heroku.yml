@@ -9,11 +9,11 @@ on:
 env:
   DOCKER_CONTEXT: backend/api/enfiletesbaskets
   DOCKERFILE: Dockerfile
-  DOCKER_IMAGE_NAME: my-image
+  DOCKER_IMAGE_NAME: enfiletesbaskets-api
 
 jobs:
   build:
-    name: 🛠️ Build Docker Image
+    name: 🛠️ Build and Publish Docker Image
     runs-on: ubuntu-latest
 
     steps:
@@ -21,16 +21,20 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 🐳 Build Docker Image
-        working-directory: backend/api/enfiletesbaskets
         run: |
-          echo "🔧 Running Docker Build Command in $(pwd)"
-          docker build . --file Dockerfile
+          echo "🔧 Building Docker Image"
+          docker build -t ${{ env.DOCKER_IMAGE_NAME }} -f ${{ env.DOCKER_CONTEXT }}/${{ env.DOCKERFILE }} ${{ env.DOCKER_CONTEXT }}
 
-      - name: 🛡️ Save Docker Image Artifact
+      - name: 🐳 Tag Docker Image for Heroku
+        run: |
+          docker tag ${{ env.DOCKER_IMAGE_NAME }} registry.heroku.com/${{ secrets.HEROKU_APP_NAME_PREPROD }}/web
+          docker tag ${{ env.DOCKER_IMAGE_NAME }} registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+
+      - name: 🐳 Save Docker Image as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: enfiletesbaskets-api
-          path: ${{ env.DOCKER_CONTEXT }}
+          name: docker-image
+          path: /var/lib/docker/volumes
 
   deploy-preprod:
     name: 🚀 Deploy to Heroku (Preproduction)
@@ -49,7 +53,6 @@ jobs:
 
       - name: 🚀 Push Docker Image to Heroku (Preprod)
         run: |
-          docker tag enfiletesbaskets-api registry.heroku.com/${{ secrets.HEROKU_APP_NAME_PREPROD }}/web
           docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME_PREPROD }}/web
 
       - name: 🚀 Release to Heroku (Preprod)
@@ -74,7 +77,6 @@ jobs:
 
       - name: 🚀 Push Docker Image to Heroku (Prod)
         run: |
-          docker tag enfiletesbaskets-api registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
           docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
 
       - name: 🚀 Release to Heroku (Prod)
