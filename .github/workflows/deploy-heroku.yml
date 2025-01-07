@@ -3,7 +3,7 @@ name: 🚀 Deploy API to Heroku (Test & Prod)
 on:
   push:
     branches:
-      - deploy_back  # Déploiement de test sur la même application
+      - deploy_back  # Déploiement de test
       - develop      # Déploiement officiel en Production
 
 env:
@@ -21,65 +21,28 @@ jobs:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🐳 Build Docker Image
+      - name: 🐳 Enable Docker BuildKit
         run: |
-          echo "🔧 Building Docker Image"
-          docker build -t ${{ env.DOCKER_IMAGE_NAME }} -f ${{ env.DOCKER_CONTEXT }}/${{ env.DOCKERFILE }} ${{ env.DOCKER_CONTEXT }}
+          echo "Enabling Docker BuildKit"
+          export DOCKER_BUILDKIT=1
 
-      - name: 🐳 Tag Docker Image for Heroku
+      - name: 🐳 Build Docker Image for Branch
         run: |
-          docker tag ${{ env.DOCKER_IMAGE_NAME }} registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
+          echo "🔧 Building Docker Image for branch ${{ github.ref_name }}"
+          if [ "${{ github.ref_name }}" == "deploy_back" ]; then
+            docker build -t ${{ env.DOCKER_IMAGE_NAME }}:test -f ${{ env.DOCKER_CONTEXT }}/${{ env.DOCKERFILE }} ${{ env.DOCKER_CONTEXT }}
+          elif [ "${{ github.ref_name }}" == "develop" ]; then
+            docker build -t ${{ env.DOCKER_IMAGE_NAME }}:latest -f ${{ env.DOCKER_CONTEXT }}/${{ env.DOCKERFILE }} ${{ env.DOCKER_CONTEXT }}
+          else
+            echo "⚠️ Unsupported branch: ${{ github.ref_name }}"
+            exit 1
+          fi
 
-      - name: 🐳 Save Docker Image Artifact
+      - name: 🐳 Show Docker Images
+        run: docker images
+
+      - name: 🛡️ Save Docker Image Artifact
         uses: actions/upload-artifact@v4
         with:
           name: docker-image
           path: /var/lib/docker/volumes
-
-  deploy-test:
-    name: 🚀 Deploy to Heroku (Test on `deploy_back`)
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/deploy_back'
-
-    steps:
-      - name: 📥 Checkout Code
-        uses: actions/checkout@v4
-
-      - name: 🔑 Authenticate with Heroku
-        run: |
-          echo "::add-mask::${{ secrets.HEROKU_API_KEY }}"
-          echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
-
-      - name: 🚀 Push Docker Image to Heroku (Test)
-        run: |
-          docker push registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
-
-      - name: 🚀 Release to Heroku (Test)
-        run: |
-          heroku container:release web --app ${{ env.HEROKU_APP_NAME }}
-          heroku config:set ENVIRONMENT=test --app ${{ env.HEROKU_APP_NAME }}
-
-  deploy-prod:
-    name: 🚀 Deploy to Heroku (Production on `develop`)
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
-
-    steps:
-      - name: 📥 Checkout Code
-        uses: actions/checkout@v4
-
-      - name: 🔑 Authenticate with Heroku
-        run: |
-          echo "::add-mask::${{ secrets.HEROKU_API_KEY }}"
-          echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
-
-      - name: 🚀 Push Docker Image to Heroku (Prod)
-        run: |
-          docker push registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
-
-      - name: 🚀 Release to Heroku (Prod)
-        run: |
-          heroku container:release web --app ${{ env.HEROKU_APP_NAME }}
-          heroku config:set ENVIRONMENT=prod --app ${{ env.HEROKU_APP_NAME }}
