@@ -68,8 +68,17 @@ jobs:
           echo "🔧 Installing dpl locally"
           gem install --user-install dpl
           export PATH="$HOME/.local/bin:$PATH"
-          echo "::add-mask::${{ secrets.HEROKU_API_KEY }}"
-          echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
+
+      - name: 🔑 Authenticate with Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          if [ -z "${HEROKU_API_KEY}" ]; then
+            echo "❌ HEROKU_API_KEY is empty. Please check your GitHub Secrets."
+            exit 1
+          fi
+          echo "${HEROKU_API_KEY}" | docker login --username=_ --password-stdin registry.heroku.com
+
 
 
       - name: 🚀 Push Docker Image to Heroku
