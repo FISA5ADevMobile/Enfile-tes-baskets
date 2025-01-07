@@ -34,16 +34,18 @@ jobs:
 
       - name: 🐳 Tag Docker Image
         run: |
-          if [ "${{ github.ref_name }}" == "refs/heads/deploy_back" ]; then
-            docker tag ${{ env.DOCKER_IMAGE_NAME }} registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
-          elif [ "${{ github.ref_name }}" == "refs/heads/develop" ]; then
+          if [[ "${{ github.ref_name }}" == "deploy_back" ]]; then
+            docker tag ${{ env.DOCKER_IMAGE_NAME }} registry.heroku.com/${{ env.HEROKU_APP_NAME }}-test/web
+          elif [[ "${{ github.ref_name }}" == "develop" ]]; then
             docker tag ${{ env.DOCKER_IMAGE_NAME }} registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
           fi
+
 
       - name: 🐳 Save Docker Image as Artifact
         run: |
           echo "🔧 Saving Docker Image as a .tar file"
-          docker save -o enfiletesbaskets-api.tar ${{ env.DOCKER_IMAGE_NAME }}:${{ github.ref_name }}
+          docker save -o enfiletesbaskets-api.tar ${{ env.DOCKER_IMAGE_NAME }}
+
 
       - name: 🛡️ Upload Docker Image Artifact
         uses: actions/upload-artifact@v4
@@ -69,7 +71,12 @@ jobs:
 
       - name: 🚀 Push Docker Image to Heroku
         run: |
-          docker push registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
+          if [[ "${{ github.ref_name }}" == "deploy_back" ]]; then
+            docker push registry.heroku.com/${{ env.HEROKU_APP_NAME }}-test/web
+          elif [[ "${{ github.ref_name }}" == "develop" ]]; then
+            docker push registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
+          fi
+
 
       - name: 🚀 Release on Heroku
         run: |
