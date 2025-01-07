@@ -19,19 +19,21 @@ jobs:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🗂️ Debug Directory Structure
+      - name: 🛠️ Debug GitHub Workspace
         run: |
+          echo "🔍 GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           echo "🔍 Current Directory: $(pwd)"
           echo "🔍 List contents of root:"
           ls -al
           echo "🔍 List contents of backend/api/enfiletesbaskets:"
-          ls -al backend/api/enfiletesbaskets
+          ls -al backend/api/enfiletesbaskets || echo "❌ Directory not found"
+
 
       - name: 🐳 Build Docker Image
         run: |
           echo "🔧 Running Docker Build Command:"
-          echo "docker build -t enfiletesbaskets-api -f $GITHUB_WORKSPACE/${{ env.DOCKER_CONTEXT }}/${{ env.DOCKERFILE }} $GITHUB_WORKSPACE/${{ env.DOCKER_CONTEXT }}"
-          docker build -t enfiletesbaskets-api -f $GITHUB_WORKSPACE/${{ env.DOCKER_CONTEXT }}/${{ env.DOCKERFILE }} $GITHUB_WORKSPACE/${{ env.DOCKER_CONTEXT }}
+          echo "docker build -t enfiletesbaskets-api -f $GITHUB_WORKSPACE/backend/api/enfiletesbaskets/Dockerfile $GITHUB_WORKSPACE/backend/api/enfiletesbaskets"
+          docker build -t enfiletesbaskets-api -f $GITHUB_WORKSPACE/backend/api/enfiletesbaskets/Dockerfile $GITHUB_WORKSPACE/backend/api/enfiletesbaskets
 
 
 
