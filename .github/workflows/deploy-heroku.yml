@@ -28,6 +28,9 @@ jobs:
 
       - name: 🔍 Verify Docker Context
         run: |
+          echo "Current directory: $(pwd)"
+          echo "Listing directory contents:"
+          ls -R
           if [ ! -d "${{ env.DOCKER_CONTEXT }}" ]; then
             echo "⚠️ Docker context directory ${{ env.DOCKER_CONTEXT }} does not exist"
             exit 1
