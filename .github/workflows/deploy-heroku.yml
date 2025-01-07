@@ -28,13 +28,18 @@ jobs:
           echo "🔍 List contents of backend/api/enfiletesbaskets:"
           ls -al backend/api/enfiletesbaskets || echo "❌ Directory not found"
 
+      - name: 🛡️ Check Directory Permissions
+        working-directory: backend/api/enfiletesbaskets
+        run: |
+          echo "🔑 Checking permissions"
+          ls -l
+          chmod +x mvnw
 
       - name: 🐳 Build Docker Image
+        working-directory: backend/api/enfiletesbaskets
         run: |
-          echo "🔧 Running Docker Build Command:"
-          echo "docker build -t enfiletesbaskets-api -f $GITHUB_WORKSPACE/backend/api/enfiletesbaskets/Dockerfile $GITHUB_WORKSPACE/backend/api/enfiletesbaskets"
-          docker build -t enfiletesbaskets-api -f $GITHUB_WORKSPACE/backend/api/enfiletesbaskets/Dockerfile $GITHUB_WORKSPACE/backend/api/enfiletesbaskets
-
+          echo "🔧 Running Docker Build Command in $(pwd)"
+          docker build -t enfiletesbaskets-api -f Dockerfile .
 
 
 
