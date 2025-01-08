@@ -1,4 +1,4 @@
-name: 🚀 CI/CD Pipeline to Heroku
+name: 🚀 Deploy to Heroku
 
 on:
   push:
@@ -7,90 +7,26 @@ on:
       - develop      # Déploiement officiel en Production
 
 env:
+  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   HEROKU_APP_NAME: enfiletesbaskets-api
-  DOCKER_IMAGE_NAME: enfiletesbaskets-api
+  HEROKU_EMAIL: "rem59570@gmail.com" # Remplace par ton email Heroku
+  APP_DIR: "backend/api/enfiletesbaskets"
 
 jobs:
-  docker-build:
-    name: 🛠️ Build Docker Image
-    runs-on: ubuntu-latest
-    services:
-      docker:
-        image: docker:20.10.7
-        options: --privileged
-
-    steps:
-      - name: 📥 Checkout Code
-        uses: actions/checkout@v4
-
-      - name: 🐳 Enable Docker BuildKit
-        run: |
-          export DOCKER_BUILDKIT=1
-
-      - name: 🐳 Build Docker Image
-        run: |
-          echo "🔧 Building Docker Image for branch ${{ github.ref_name }}"
-          docker build -t ${{ env.DOCKER_IMAGE_NAME }} -f ./backend/api/enfiletesbaskets/Dockerfile ./backend/api/enfiletesbaskets
-
-      - name: 🐳 Tag Docker Image
-        run: |
-          if [[ "${{ github.ref_name }}" == "deploy_back" ]]; then
-            docker tag ${{ env.DOCKER_IMAGE_NAME }} registry.heroku.com/${{ env.HEROKU_APP_NAME }}-test/web
-          elif [[ "${{ github.ref_name }}" == "develop" ]]; then
-            docker tag ${{ env.DOCKER_IMAGE_NAME }} registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
-          fi
-
-
-      - name: 🐳 Save Docker Image as Artifact
-        run: |
-          echo "🔧 Saving Docker Image as a .tar file"
-          docker save -o enfiletesbaskets-api.tar ${{ env.DOCKER_IMAGE_NAME }}
-
-
-      - name: 🛡️ Upload Docker Image Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: docker-image
-          path: enfiletesbaskets-api.tar
-
-
-  heroku-deploy:
+  deploy:
     name: 🚀 Deploy to Heroku
-    needs: docker-build
     runs-on: ubuntu-latest
 
     steps:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🔑 Install dpl and Authenticate with Heroku
-        run: |
-          echo "🔧 Installing dpl locally"
-          gem install --user-install dpl
-          export PATH="$HOME/.local/bin:$PATH"
-
-      - name: 🔑 Authenticate with Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: |
-          if [ -z "${HEROKU_API_KEY}" ]; then
-            echo "❌ HEROKU_API_KEY is empty. Please check your GitHub Secrets."
-            exit 1
-          fi
-          echo "${HEROKU_API_KEY}" | docker login --username=_ --password-stdin registry.heroku.com
-
-
-
-      - name: 🚀 Push Docker Image to Heroku
-        run: |
-          if [[ "${{ github.ref_name }}" == "deploy_back" ]]; then
-            docker push registry.heroku.com/${{ env.HEROKU_APP_NAME }}-test/web
-          elif [[ "${{ github.ref_name }}" == "develop" ]]; then
-            docker push registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
-          fi
-
-
-      - name: 🚀 Release on Heroku
-        run: |
-          heroku container:release web --app ${{ env.HEROKU_APP_NAME }}
-          heroku config:set ENVIRONMENT=${{ github.ref_name == 'develop' && 'prod' || 'test' }} --app ${{ env.HEROKU_APP_NAME }}
+      - name: 🔑 Set up Heroku Deployment
+        uses: akhileshns/heroku-deploy@v3.13.15
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ env.HEROKU_APP_NAME }}
+          heroku_email: ${{ env.HEROKU_EMAIL }}
+          appdir: ${{ env.APP_DIR }}
+          branch: ${{ github.ref_name }}
+          usedocker: true
