@@ -9,7 +9,7 @@ on:
 env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   HEROKU_APP_NAME: enfiletesbaskets-api
-  HEROKU_EMAIL: "rem59570@gmail.com" # Remplace par ton email Heroku
+  HEROKU_EMAIL: "your-email@example.com"
   APP_DIR: "backend/api/enfiletesbaskets"
 
 jobs:
@@ -20,6 +20,11 @@ jobs:
     steps:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
+
+      - name: 🔧 Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+          heroku --version
 
       - name: 🔑 Set up Heroku Deployment
         uses: akhileshns/heroku-deploy@v3.13.15
