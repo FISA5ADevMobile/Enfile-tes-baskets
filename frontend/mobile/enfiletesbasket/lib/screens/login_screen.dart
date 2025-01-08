@@ -4,6 +4,8 @@ import 'package:enfiletesbasket/services/auth_provider.dart';
 import 'package:enfiletesbasket/widgets/custom_text_field.dart';
 import 'package:enfiletesbasket/widgets/primary_button.dart';
 
+import '../widgets/custom_popup.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -52,6 +54,43 @@ class _LoginScreenState extends State<LoginScreen> {
         isLoading = false;
       });
     }
+  }
+  void _showForgotPasswordPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomPopup(
+          title: "Mot de passe oublié",
+          description: "Veuillez contacter le service des sports à l'adresse mail sports@uphf.fr",
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushNamed(context, '/request-reset-password');
+              },
+              child: const Text("OK",
+                style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFFC8A14E),
+                      fontWeight: FontWeight.bold,
+                      ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Annuler",style: TextStyle(
+                fontSize: 16,
+                color: Color(0xFFC8A14E),
+                fontWeight: FontWeight.bold,
+              ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -139,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/reset-password');
+                    _showForgotPasswordPopup(context);
                   },
                   child: const Text(
                     'mot de passe oublié',
