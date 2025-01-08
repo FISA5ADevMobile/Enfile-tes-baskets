@@ -3,8 +3,10 @@ import 'package:http/http.dart' as http;
 import '../models/actuality.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils/app_config.dart';
+
 class ActualityService {
-  static const String _baseUrl = 'http://10.0.2.2:8081/api/actualities';
+  final String _baseUrl = "${AppConfig.baseUrl}/api/actualities";
 
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();

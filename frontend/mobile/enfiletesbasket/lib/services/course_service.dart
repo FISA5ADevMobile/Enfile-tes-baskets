@@ -3,16 +3,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../models/course.dart';
+import '../utils/app_config.dart';
 
 
 class CourseService {
-  final String baseUrl = "http://10.0.2.2:8081/api/courses";
+  final String _baseUrl = "${AppConfig.baseUrl}/api/courses";
 
   /// Récupère les cours associés à l'utilisateur connecté
   Future<List<Course>> fetchMyClasses(String token) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/my-classes'),
+        Uri.parse('$_baseUrl/my-classes'),
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
           'Authorization': 'Bearer $token',
@@ -36,7 +37,7 @@ class CourseService {
   Future<String> subscribeToCourseWithPassword(String classPassword, String token) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/subscribe/password?classPassword=$classPassword'),
+        Uri.parse('$_baseUrl/subscribe/password?classPassword=$classPassword'),
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
           'Authorization': 'Bearer $token',
@@ -59,7 +60,7 @@ class CourseService {
   Future<int?> getCourseIdForClass(int userId, int classId, String token) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/user/$userId?classId=$classId'),
+        Uri.parse('$_baseUrl/user/$userId?classId=$classId'),
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
           'Authorization': 'Bearer $token', // Ajout du token JWT

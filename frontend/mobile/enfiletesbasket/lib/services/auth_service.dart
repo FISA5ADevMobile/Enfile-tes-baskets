@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../utils/app_config.dart';
+
 class AuthService {
-  final String baseUrl = "http://10.0.2.2:8081/api/auth";
+  final String _baseUrl = "${AppConfig.baseUrl}/api/auth";
 
   Future<void> register({
     required String username,
@@ -10,7 +12,7 @@ class AuthService {
     required String password,
   }) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/register'),
+      Uri.parse('$_baseUrl/register'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "username": username,
@@ -42,7 +44,7 @@ class AuthService {
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/login'),
+      Uri.parse('$_baseUrl/login'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({"email": email, "password": password}),
     );
@@ -61,7 +63,7 @@ class AuthService {
 
   Future<void> resetPassword(String email) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/reset-password'),
+      Uri.parse('$_baseUrl/reset-password'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({"email": email}),
     );
@@ -87,7 +89,7 @@ class AuthService {
 
   Future<void> logout(String token) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/logout'),
+      Uri.parse('$_baseUrl/logout'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"

@@ -2,13 +2,15 @@ import '../models/tag.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../utils/app_config.dart';
+
 class TagsService {
 
-  final String baseUrl = "http://10.0.2.2:8081/api";
+  final String _baseUrl = "${AppConfig.baseUrl}/api";
 
   Future<List<Tag>> fetchClassTags(int courseId, String token) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/courses/$courseId/tags'),
+      Uri.parse('$_baseUrl/courses/$courseId/tags'),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Authorization': 'Bearer $token',
@@ -28,7 +30,7 @@ class TagsService {
   /// Réinitialise toutes les balises à non validées
   Future<void> resetTags(int courseId, String token) async {
     final response = await http.put(
-      Uri.parse('$baseUrl/validations/$courseId/reset'),
+      Uri.parse('$_baseUrl/validations/$courseId/reset'),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Authorization': 'Bearer $token',
@@ -43,7 +45,7 @@ class TagsService {
   /// Valide une balise spécifique
   Future<void> validateTag(int courseId, int tagId, String token) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/validations/$courseId/tags/$tagId/validate'),
+      Uri.parse('$_baseUrl/validations/$courseId/tags/$tagId/validate'),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Authorization': 'Bearer $token',
