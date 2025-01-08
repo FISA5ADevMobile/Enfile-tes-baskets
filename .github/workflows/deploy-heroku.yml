@@ -3,8 +3,8 @@ name: 🚀 Deploy to Heroku
 on:
   push:
     branches:
-      - deploy_back  # Déploiement de test
-      - develop      # Déploiement officiel en Production
+      - deploy_back
+      - develop
 
 env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
@@ -26,7 +26,15 @@ jobs:
           curl https://cli-assets.heroku.com/install.sh | sh
           heroku --version
 
-      - name: 🔑 Set up Heroku Deployment
+      - name: 🔑 Authenticate with Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          echo "🔑 Authenticating with Heroku"
+          echo "${HEROKU_API_KEY}" | docker login --username=_ --password-stdin registry.heroku.com
+          heroku auth:token
+
+      - name: 🚀 Deploy to Heroku with Heroku Deploy Action
         uses: akhileshns/heroku-deploy@v3.13.15
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
