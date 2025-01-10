@@ -9,43 +9,60 @@ import '../models/course.dart';
 class CourseCard extends StatelessWidget {
   final Course course;
 
-  const CourseCard({required this.course});
+  const CourseCard({required this.course, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 4,
       child: ListTile(
-        title: Text(course.name),
+        title: Text(
+          course.name,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         subtitle: Text(course.description),
-        trailing: Icon(Icons.chevron_right),
+        trailing: const Icon(Icons.chevron_right),
         onTap: () => _navigateToTagsPage(context, course),
       ),
     );
   }
 
+  /// Navigation vers la page des tags avec vérification de l'ID du cours
   Future<void> _navigateToTagsPage(BuildContext context, Course course) async {
     final courseProvider = Provider.of<CourseProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final String token = authProvider.token ?? '';
-    final courseId = await courseProvider.fetchCourseId(authProvider.currentUser!.id, int.parse(course.id), token); // Exemple : ID utilisateur = 1
 
-    if (courseId != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => TagsPage(
-            className: course.name,
-            classId: int.parse(course.id),
-            courseId: courseId,
+    try {
+      var courseId = course.id;
+
+      if (courseId != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TagsPage(
+              className: course.name,
+              classId: course.id,
+              courseId: courseId,
+            ),
           ),
-        ),
-      );
-    } else {
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to fetch course ID. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to fetch courseId')),
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }

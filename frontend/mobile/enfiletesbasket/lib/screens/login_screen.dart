@@ -17,10 +17,12 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
   bool isLoading = false;
   bool isEmailEmpty = false;
   bool isPasswordEmpty = false;
   bool isLoginError = false;
+  bool rememberMe = false;
 
   Future<void> _login(BuildContext context) async {
     final email = emailController.text.trim();
@@ -41,10 +43,11 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      // Appel à l'authentification via AuthProvider
-      await Provider.of<AuthProvider>(context, listen: false).login(email, password);
+      await Provider.of<AuthProvider>(context, listen: false)
+          .login(email, password, rememberMe);
       print("Connexion réussie !");
-      Navigator.pushNamed(context, '/main-navigation');    } catch (e) {
+      Navigator.pushNamed(context, '/main-navigation');
+    } catch (e) {
       print("Erreur de connexion : $e");
       setState(() {
         isLoginError = true;
@@ -143,8 +146,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 labelText: 'mot de passe *',
                 obscureText: true,
                 controller: passwordController,
+                obscuringCharacter: '•',
+                obscureTextDelay: Duration(milliseconds: 500),
                 borderColor: (isPasswordEmpty || isLoginError) ? Colors.red : null,
               ),
+
               if (isPasswordEmpty)
                 const Padding(
                   padding: EdgeInsets.only(top: 8.0),
@@ -161,6 +167,28 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(color: Colors.red, fontSize: 14),
                   ),
                 ),
+
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Checkbox(
+                    value: rememberMe,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        rememberMe = value ?? false;
+                      });
+                    },
+                    activeColor: Color(0xFF0081A1),
+                  ),
+                  const Text(
+                    "Se souvenir de moi",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
 
               const SizedBox(height: 32),
 

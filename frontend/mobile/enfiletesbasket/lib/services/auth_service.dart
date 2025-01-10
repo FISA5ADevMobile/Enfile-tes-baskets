@@ -80,12 +80,26 @@ class AuthService {
     } else {
       try {
         final error = jsonDecode(response.body);
-        throw Exception(
-            "Erreur lors de la réinitialisation : ${error['message']}");
+        throw Exception("Erreur lors de la réinitialisation : ${error['message']}");
       } catch (_) {
-        throw Exception(
-            "Erreur lors de la réinitialisation : ${response.body}");
+        throw Exception("Erreur lors de la réinitialisation : ${response.body}");
       }
+    }
+  }
+
+  Future<void> logout(String token) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/logout'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token"
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print("Déconnexion réussie côté serveur.");
+    } else {
+      throw Exception("Échec de la déconnexion côté serveur : ${response.body}");
     }
   }
   Future<void> validateResetCode(String email, String code) async {
