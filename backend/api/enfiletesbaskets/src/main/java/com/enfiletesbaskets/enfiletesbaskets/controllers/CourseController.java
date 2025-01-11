@@ -97,9 +97,8 @@ public class CourseController {
     @GetMapping("/{courseId}/tags")
     public ResponseEntity<List<CourseTagsDTO>> getTagsByCourseId(
             @PathVariable Long courseId,
-            @RequestParam Long classId,
             Authentication authentication) {
-        List<CourseTagsDTO> courseTags = courseService.getTagsByCourse(classId, courseId);
+        List<CourseTagsDTO> courseTags = courseService.getTagsByCourse(courseId);
 
         return ResponseEntity.ok(courseTags);
     }

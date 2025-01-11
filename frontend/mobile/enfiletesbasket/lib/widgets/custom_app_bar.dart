@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:enfiletesbasket/services/auth_provider.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final VoidCallback? onPersonIconPressed;
-  final bool showBackButton;
   final VoidCallback? onBackButtonPressed;
+  final bool showBackButton;
 
   const CustomAppBar({
     Key? key,
-    this.onPersonIconPressed,
     this.showBackButton = false,
     this.onBackButtonPressed,
   }) : super(key: key);
@@ -34,13 +34,37 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               },
             ),
           if (!showBackButton)
-            IconButton(
+            PopupMenuButton<String>(
+              onSelected: (value) async {
+                if (value == 'logout') {
+                  await Provider.of<AuthProvider>(context, listen: false).logout();
+                  Navigator.pushReplacementNamed(context, '/login');
+                }
+              },
               icon: const Icon(
                 Icons.account_circle,
                 size: 32,
                 color: Color(0xFF49454F),
               ),
-              onPressed: onPersonIconPressed ?? () {},
+              offset: const Offset(0, 60),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              itemBuilder: (BuildContext context) => [
+                PopupMenuItem<String>(
+                  value: 'logout',
+                  child: Center(
+                    child: Text(
+                      'Déconnexion',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+              color: Colors.white,
             ),
           Expanded(
             child: Center(
