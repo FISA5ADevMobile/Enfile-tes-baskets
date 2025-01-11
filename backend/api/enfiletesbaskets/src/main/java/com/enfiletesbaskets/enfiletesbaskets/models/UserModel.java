@@ -46,6 +46,9 @@ public class UserModel {
     @JsonIgnoreProperties("user")
     private List<CourseModel> courses;
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClassModel> classes;
+
     public UserModel(Long id) {
         this.id = id;
     }
