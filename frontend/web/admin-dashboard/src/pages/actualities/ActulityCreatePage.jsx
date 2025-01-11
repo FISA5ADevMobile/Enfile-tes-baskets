@@ -18,6 +18,17 @@ const ActualityCreatePage = () => {
     event: false,
     imageFile: null, // Fichier brut
     image: null, // URL pour le preview
+    imageByteArray: null,
+  };
+
+  // Function to convert a file to base64
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
   };
 
   // States
@@ -41,7 +52,7 @@ const ActualityCreatePage = () => {
       title: values.title,
       description: values.description,
       event: values.event,
-      image: values.imageFile,
+      image: values.imageByteArray,
     });
     setIsLoading(false);
     if (response.error) {
@@ -53,8 +64,13 @@ const ActualityCreatePage = () => {
     handleReset();
   };
 
-  const handleChangeImage = (event) => {
+  const handleChangeImage = async (event) => {
     const file = event.target.files[0]; // Récupère le fichier
+    // Lire le fichier sous forme de tableau binaire
+    const arrayBuffer = await file.arrayBuffer();
+    const byteArray = new Uint8Array(arrayBuffer); // Conversion en tableau d'octets
+
+    //const base64 = fileToBase64(file);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -63,6 +79,7 @@ const ActualityCreatePage = () => {
           ...values,
           image: reader.result, // URL pour le preview
           imageFile: file, // Fichier brut
+          imageByteA: byteArray,
         });
       };
       reader.readAsDataURL(file); // Convertit le fichier en Data URL
