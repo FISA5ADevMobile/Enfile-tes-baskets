@@ -83,4 +83,26 @@ public class PostController {
         }
     }
 
+    @PutMapping("/ban/{id}")
+    public ResponseEntity<?> banPost(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(postService.banPost(id));
+        } catch (PostNotFound e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/invisible/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(postService.invisible(id));
+        } catch (PostNotFound e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
 }

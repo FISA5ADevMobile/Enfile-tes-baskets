@@ -18,11 +18,11 @@ public class PostModel {
     private Boolean visible;
     private Date banDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "creator")
     private UserModel creator;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "related")
     private PostModel related;
 
