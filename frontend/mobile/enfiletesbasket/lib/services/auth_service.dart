@@ -120,4 +120,8 @@ class AuthService {
       throw Exception("Erreur serveur : ${response.body}");
     }
   }
+  Future<String?> getEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('reset_email');
+  }
 }

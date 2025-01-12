@@ -29,19 +29,6 @@ class _ResetPasswordState extends State<ResetPassword> {
   @override
   void initState() {
     super.initState();
-    _loadEmail();
-  }
-
-  Future<void> _loadEmail() async {
-    final prefs = await SharedPreferences.getInstance();
-    final storedEmail = prefs.getString('reset_email');
-    print(storedEmail);
-    if (storedEmail != null) {
-      emailController.text = storedEmail;
-    } else {
-      emailController.text = 'Adresse e-mail introuvable';
-    }
-    setState(() {});
   }
 
   Future<void> _validatePassword(BuildContext context) async {
@@ -137,14 +124,30 @@ class _ResetPasswordState extends State<ResetPassword> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 32),
-              TextFormField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Adresse e-mail',
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  enabled: false,
-                ),
+              FutureBuilder<String?>(
+                future: authService.getEmail(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (snapshot.hasError || snapshot.data == null) {
+                    return const Text(
+                      'Adresse e-mail introuvable.',
+                      style: TextStyle(color: Colors.red),
+                    );
+                  }
+
+                  emailController.text = snapshot.data!;
+                  return TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Adresse e-mail',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      enabled: false,
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 24),
               CustomTextField(
