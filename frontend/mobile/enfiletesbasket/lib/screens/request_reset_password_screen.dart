@@ -5,8 +5,6 @@ import 'package:enfiletesbasket/widgets/primary_button.dart';
 import 'package:enfiletesbasket/utils/validators.dart';
 import '../widgets/custom_popup.dart';
 
-
-
 class RequestResetPassword extends StatefulWidget {
   const RequestResetPassword({Key? key}) : super(key: key);
 
@@ -25,6 +23,7 @@ class _RequestResetPasswordState extends State<RequestResetPassword> {
   bool isCodeEmpty = false;
   bool isCodeInvalid = false;
   bool isReinitError = false;
+
   Future<void> _validateResetCode(BuildContext context) async {
     final email = emailController.text.trim();
     final code = codeController.text.trim();
@@ -90,8 +89,6 @@ class _RequestResetPasswordState extends State<RequestResetPassword> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,6 +140,7 @@ class _RequestResetPasswordState extends State<RequestResetPassword> {
                     style: TextStyle(color: Colors.red, fontSize: 14),
                   ),
                 ),
+
               const SizedBox(height: 32),
 
               CustomTextField(
@@ -159,16 +157,15 @@ class _RequestResetPasswordState extends State<RequestResetPassword> {
                   ),
                 )
               else if (isCodeInvalid)
-              const Padding(
-                padding: EdgeInsets.only(top: 8.0),
-                child: Text(
-                  "Le code est incorrect.",
-                  style: TextStyle(color: Colors.red, fontSize: 14),
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "Le code est incorrect.",
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
                 ),
-              ),
 
-
-    const SizedBox(height: 50),
+              const SizedBox(height: 50),
 
               Center(
                 child: isLoading
