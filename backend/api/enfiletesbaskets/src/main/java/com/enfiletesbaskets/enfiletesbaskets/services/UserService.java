@@ -40,7 +40,18 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteUser (Long id) {
-        userRepository.deleteById(id);
+        UserModel user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'ID : " + id));
+
+//        Erase all the user's personnal data to comply with GDPR
+        user.setPseudo("deleted_"+user.getId());
+        user.setEmail("deleted_"+user.getId());
+        user.setPassword("deleted_"+user.getId());
+        user.setName("deleted_"+user.getId());
+        user.setFirstName("deleted_"+user.getId());
+
+        // Save the updated user to the database
+        userRepository.save(user);
     }
 
     @Override
