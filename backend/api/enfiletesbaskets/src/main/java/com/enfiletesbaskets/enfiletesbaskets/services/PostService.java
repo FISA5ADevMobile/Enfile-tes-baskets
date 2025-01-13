@@ -100,4 +100,18 @@ public class PostService {
         return PostMapper.toDTO(updatedPost);
     }
 
+    public Object banPost(Long id) {
+        PostModel post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFound("Post not found with ID: " + id));
+        post.setBanDate(new Date());
+        post.setVisible(false);
+        return postRepository.save(post);
+    }
+
+    public Object invisible(Long id) {
+        PostModel post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFound("Post not found with ID: " + id));
+        post.setVisible(false);
+        return postRepository.save(post);
+    }
 }
