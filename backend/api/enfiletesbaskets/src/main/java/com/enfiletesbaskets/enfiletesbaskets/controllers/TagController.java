@@ -37,4 +37,15 @@ public class TagController {
     public List<TagDTO> createTags(@RequestBody List<TagDTO> tagDTOs) {
         return tagService.createTags(tagDTOs);
     }
+
+    /**
+     * Met à jour un tag spécifique par son ID.
+     */
+    @PutMapping("/{tagId}")
+    public TagDTO updateTag(
+            @PathVariable Long tagId,
+            @RequestBody TagDTO tagDTO) {
+        return tagService.updateTag(tagId, tagDTO);
+    }
+
 }

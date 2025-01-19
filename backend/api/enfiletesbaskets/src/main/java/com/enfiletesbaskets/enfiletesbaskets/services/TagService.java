@@ -69,4 +69,23 @@ public class TagService {
                     return dto;
                 }).collect(Collectors.toList());
     }
+
+    /**
+     * Met à jour un tag si celui-ci existe.
+     */
+    public TagDTO updateTag(Long tagId, TagDTO tagDTO) {
+        TagModel tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new RuntimeException("Tag non trouvé avec l'ID : " + tagId));
+
+        if (tagDTO.getName() != null) {
+            tag.setName(tagDTO.getName());
+        }
+        if (tagDTO.getDescription() != null) {
+            tag.setDescription(tagDTO.getDescription());
+        }
+
+        TagModel updatedTag = tagRepository.save(tag);
+        return TagDTO.toDTO(updatedTag);
+    }
+
 }

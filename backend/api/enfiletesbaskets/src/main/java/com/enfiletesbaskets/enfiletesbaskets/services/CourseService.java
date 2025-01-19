@@ -209,5 +209,32 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Met à jour une course si l'utilisateur est inscrit ou est un administrateur.
+     */
+    public CourseDTO updateCourse(Long courseId, CourseDTO courseDTO, Authentication authentication) {
+        UserModel user = userService.authenticate(authentication);
+
+        CourseModel course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course non trouvée avec l'ID : " + courseId));
+
+        // Vérifier si l'utilisateur est le propriétaire de la course ou un administrateur
+        if (!course.getUser().getId().equals(user.getId()) && !"ADMIN".equals(user.getRole())) {
+            throw new RuntimeException("Vous n'avez pas les droits pour modifier cette course.");
+        }
+
+        // Mise à jour des informations
+        if (courseDTO.getBeginDate() != null) {
+            course.setBeginDate(courseDTO.getBeginDate());
+        }
+        if (courseDTO.getEndDate() != null) {
+            course.setEndDate(courseDTO.getEndDate());
+        }
+
+        CourseModel updatedCourse = courseRepository.save(course);
+        return CourseDTO.toDTO(updatedCourse);
+    }
+
+
 
 }
