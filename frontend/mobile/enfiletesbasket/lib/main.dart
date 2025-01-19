@@ -8,6 +8,8 @@ import 'package:enfiletesbasket/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/community_screen.dart';
+import 'services/community_provider.dart';
+import 'services/post_provider.dart';
 
 void main() {
   runApp(
@@ -17,7 +19,9 @@ void main() {
         ChangeNotifierProvider(create: (_) => ClassesProvider()),
         ChangeNotifierProvider(create: (_) => TagsProvider()),
         ChangeNotifierProvider(create: (_) => CourseProvider()),
-        ChangeNotifierProvider(create: (_) => ActualityProvider())
+        ChangeNotifierProvider(create: (_) => ActualityProvider()),
+        ChangeNotifierProvider(create: (_) => CommunityProvider()),
+        ChangeNotifierProvider(create: (_) => PostProvider()),
       ],
       child: MyApp(),
     ),

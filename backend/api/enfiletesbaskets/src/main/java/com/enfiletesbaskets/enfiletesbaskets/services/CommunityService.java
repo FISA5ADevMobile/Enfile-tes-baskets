@@ -98,6 +98,7 @@ public class CommunityService {
         community.setDescription(dto.getDescription());
         community.setPublic(dto.getIsPublic());
         community.setAdmin(admin);
+        community.setImage(dto.getImage());
         community.setCategory(category);
 
         CommunityModel savedCommunity = communityRepository.save(community);

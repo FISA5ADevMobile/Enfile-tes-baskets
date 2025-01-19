@@ -15,6 +15,15 @@ public class CommunityDTO {
     private List<PostDTO> postIds; // Liste des IDs des posts
     private List<Long> bannedUserIds; // Liste des IDs des utilisateurs bannis
     private String categoryName; // ID de la catégorie
+    private byte[] image;
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
     // Getters et Setters
     public Long getId() {
