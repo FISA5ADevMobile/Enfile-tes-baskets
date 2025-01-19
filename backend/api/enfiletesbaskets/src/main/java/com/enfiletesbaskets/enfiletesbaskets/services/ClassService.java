@@ -56,6 +56,41 @@ public class ClassService {
     }
 
     /**
+     * Modifie une classe existante.
+     */
+    public ClassDTO updateClass(Long classId, ClassDTO classDTO, Authentication authentication) {
+        ClassModel existingClass = classRepository.findById(classId)
+                .orElseThrow(() -> new RuntimeException("Classe non trouvée"));
+
+        UserModel user = userService.authenticate(authentication);
+
+        // Vérifier si l'utilisateur est le propriétaire ou un administrateur
+        if (!existingClass.getOwner().getId().equals(user.getId()) && !"ADMIN".equals(user.getRole())) {
+            throw new RuntimeException("Vous n'avez pas l'autorisation de modifier cette classe");
+        }
+
+        // Mise à jour des informations
+        if (classDTO.getName() != null) {
+            existingClass.setName(classDTO.getName());
+        }
+        if (classDTO.getDescription() != null) {
+            existingClass.setDescription(classDTO.getDescription());
+        }
+        if (classDTO.getPassword() != null) {
+            existingClass.setPassword(classDTO.getPassword());
+        }
+        if (classDTO.getBeginDate() != null) {
+            existingClass.setBeginDate(classDTO.getBeginDate());
+        }
+        if (classDTO.getEndDate() != null) {
+            existingClass.setEndDate(classDTO.getEndDate());
+        }
+
+        ClassModel updatedClass = classRepository.save(existingClass);
+        return ClassDTO.toDTO(updatedClass);
+    }
+
+    /**
      * Supprime une classe par ID si elle appartient à l'utilisateur authentifié ou à un administrateur.
      */
     public void deleteClassById(Long classId, Authentication authentication) {
@@ -104,5 +139,27 @@ public class ClassService {
         return tags.stream()
                 .map(TagDTO::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Supprime des tags d'une classe.
+     */
+    public ClassDTO removeTagsFromClass(Long classId, List<Long> tagIds) {
+        ClassModel clazz = classRepository.findById(classId)
+                .orElseThrow(() -> new RuntimeException("Classe non trouvée avec l'ID : " + classId));
+
+        // Filtrer et supprimer les tags correspondants
+        List<TagModel> tagsToRemove = clazz.getTags().stream()
+                .filter(tag -> tagIds.contains(tag.getId()))
+                .collect(Collectors.toList());
+
+        if (tagsToRemove.isEmpty()) {
+            throw new RuntimeException("Aucun tag correspondant trouvé dans cette classe.");
+        }
+
+        clazz.getTags().removeAll(tagsToRemove);
+        ClassModel updatedClass = classRepository.save(clazz);
+
+        return ClassDTO.toDTO(updatedClass);
     }
 }

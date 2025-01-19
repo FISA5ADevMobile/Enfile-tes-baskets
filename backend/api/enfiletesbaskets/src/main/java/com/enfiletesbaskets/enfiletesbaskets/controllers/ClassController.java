@@ -34,6 +34,19 @@ public class ClassController {
     }
 
     /**
+     * Modifie une classe existante.
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<ClassDTO> updateClass(
+            @PathVariable Long id,
+            @RequestBody ClassDTO classDTO,
+            Authentication authentication) {
+
+        ClassDTO updatedClass = classService.updateClass(id, classDTO, authentication);
+        return ResponseEntity.ok(updatedClass);
+    }
+
+    /**
      * Supprime une classe par ID.
      */
     @DeleteMapping("/{id}")
@@ -61,5 +74,19 @@ public class ClassController {
     public ResponseEntity<List<TagDTO>> getTagsByClass(@PathVariable Long classId) {
         List<TagDTO> tags = classService.getTagsByClass(classId);
         return ResponseEntity.ok(tags);
+    }
+
+
+    /**
+     * Supprime un ou plusieurs tags d'une classe.
+     */
+    @DeleteMapping("/{classId}/tags")
+    public ResponseEntity<ClassDTO> removeTagsFromClass(
+            @PathVariable Long classId,
+            @RequestBody List<Long> tagIds,
+            Authentication authentication) {
+
+        ClassDTO updatedClass = classService.removeTagsFromClass(classId, tagIds);
+        return ResponseEntity.ok(updatedClass);
     }
 }
