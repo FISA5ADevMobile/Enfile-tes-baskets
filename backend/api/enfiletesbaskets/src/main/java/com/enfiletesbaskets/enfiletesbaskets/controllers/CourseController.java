@@ -103,5 +103,16 @@ public class CourseController {
         return ResponseEntity.ok(courseTags);
     }
 
+    /**
+     * Met à jour une course spécifique.
+     */
+    @PutMapping("/{courseId}")
+    public ResponseEntity<CourseDTO> updateCourse(
+            @PathVariable Long courseId,
+            @RequestBody CourseDTO courseDTO,
+            Authentication authentication) {
+        CourseDTO updatedCourse = courseService.updateCourse(courseId, courseDTO, authentication);
+        return ResponseEntity.ok(updatedCourse);
+    }
 
 }
