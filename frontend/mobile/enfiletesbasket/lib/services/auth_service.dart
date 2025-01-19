@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final String baseUrl = "http://10.0.2.2:8081/api/auth";
@@ -59,11 +60,12 @@ class AuthService {
     }
   }
 
-  Future<void> resetPassword(String email) async {
+  Future<void> resetPassword(String email,String newPassword, String code) async {
     final response = await http.post(
       Uri.parse('$baseUrl/reset-password'),
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"email": email}),
+      body: jsonEncode(
+          {"email": email, "newPassword": newPassword, "code": code}),
     );
 
     if (response.statusCode == 200) {
@@ -99,5 +101,27 @@ class AuthService {
     } else {
       throw Exception("Échec de la déconnexion côté serveur : ${response.body}");
     }
+  }
+  Future<void> validateResetCode(String email, String code) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/request-password-reset'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"email": email, "code": code}),
+    );
+
+    if (response.statusCode == 200) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('reset_code', code);
+      await prefs.setString('reset_email', email);
+      return;
+    } else if (response.statusCode == 500) {
+      throw Exception("Code invalide.");
+    } else {
+      throw Exception("Erreur serveur : ${response.body}");
+    }
+  }
+  Future<String?> getEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('reset_email');
   }
 }
