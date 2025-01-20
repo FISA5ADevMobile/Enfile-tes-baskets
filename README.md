@@ -44,6 +44,12 @@ docker-compose up -d
 
 ### 📊 Web Admin Dashboard
 
+#### 🎆 Aperçu
+
+![alt text](readme-images/admin-dashboard-overview.png)
+
+#### 🧰 Technos utilisées
+
 - React
 - Tailwind CSS
 - Recharts
