@@ -1,41 +1,34 @@
 import React, { useState, useContext, useEffect } from "react";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Checkbox, InputAdornment } from "@mui/material";
 import Header from "../../components/common/Header";
 import {
   Add,
-  Block,
+  Cancel,
   Delete,
   Edit,
-  HideImage,
   LockOpen,
   Save,
+  Visibility,
 } from "@mui/icons-material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
-import {
-  dispatchToast,
-  handleFormatBoolean,
-  handleFormatDateTime,
-} from "../../utils/helper";
+import { dispatchToast, handleFormatDateTime } from "../../utils/helper";
 import { ToastContainer, toast } from "react-toastify";
 import { AppContext } from "../../services/context/AppContext";
+import { Edit2 } from "lucide-react";
 import { TIMEOUT_REFRESH } from "../../utils/constants";
-import { Eye, EyeOff } from "lucide-react";
 
-const PostEditEmbeddedPage = () => {
-  const { postId } = useParams();
+const ClassEditEmbeddedPage = () => {
+  const { classId } = useParams();
   const navigate = useNavigate();
 
-  const { postService } = useContext(AppContext);
-
+  const { orientationCourseService } = useContext(AppContext);
   // Default values
   const defaultValues = {
     id: "",
+    name: "",
     description: "",
-    creatorId: "",
-    datePost: "",
-    nbLike: 0,
-    visible: false,
+    password: "",
   };
 
   // States
@@ -57,87 +50,91 @@ const PostEditEmbeddedPage = () => {
     setIsModified(false);
   };
 
-  // Fonction pour la suppression du post (exemple simple)
+  // Fonction pour la suppression de la balise (exemple simple)
   const handleDelete = async () => {
     setIsLoading(true);
-    const response = await postService.deletePostById(postId);
+    const response = await orientationCourseService.deleteClassById(classId);
     setIsLoading(false);
     if (response.error) {
       console.error(response.message);
       dispatchToast("error", response.message);
-      return;
     }
+
     handleReset();
-    console.log("Suppression du post");
-    dispatchToast("success", "Post supprimé");
+    console.log("Suppression de la classe");
+    dispatchToast("success", "Classe supprimée");
     setTimeout(() => {
-      navigate("/posts");
+      navigate("/parcours-orientation");
     }, TIMEOUT_REFRESH);
   };
 
-  const getPostById = async () => {
-    const response = await postService.getPostById(postId);
+  const getClassById = async () => {
+    const response = await orientationCourseService.getClassById(classId);
     if (response.error) {
       console.error(response.message);
       dispatchToast("error", response.message);
       return;
     }
-    const post = response.data;
+    const aClass = response.data;
     setValues({
-      id: post.id,
-      description: post.description,
-      creatorId: post.creatorId,
-      datePost: handleFormatDateTime(new Date(post.datePost)),
-      nbLike: post.nbLike ?? 0,
-      visible: post.visible,
+      id: aClass.id,
+      name: aClass.name,
+      description: aClass.description,
+      password: aClass.password,
     });
   };
 
-  const makeVisiblePost = async () => {
-    setIsLoading(true);
-    const response = await postService.makeVisiblePost(postId);
-    setIsLoading(false);
-    if (response.error) {
-      console.error(response.message);
-      dispatchToast("error", response.message);
-      return;
-    }
-    dispatchToast("success", "Post est maintenant visible");
+  const handleCancelEditing = async () => {
+    handleReset();
+    setIsEditing(false);
+    getClassById();
   };
 
-  const makeInvisiblePost = async () => {
+  const handleSave = async () => {
     setIsLoading(true);
-    const response = await postService.makeInvisiblePost(postId);
+    const response = await orientationCourseService.updateClassById(
+      classId,
+      values
+    );
     setIsLoading(false);
     if (response.error) {
       console.error(response.message);
       dispatchToast("error", response.message);
       return;
     }
-    dispatchToast("success", "Post maintenant invisible");
-    getPostById();
+    dispatchToast("success", "Modifications enregistrées");
+    setIsEditing(false);
+    getClassById();
   };
 
   useEffect(() => {
-    getPostById();
+    getClassById();
   }, []);
 
   return (
     <div className="flex-1 overflow-auto relative z-10">
-      <Header title={`Posts / ${postId}`} />
+      <Header title={`Classes / ${classId}`} />
 
       <main className="max-w-4xl mx-auto py-6 px-4 lg:px-8">
         <div className="flex justify-end mb-4 space-x-4">
           {!isLoading && (
             <>
-              {/* <Link to="/nouveau-utilisateur">
+              <Button
+                variant="text"
+                startIcon={<Edit />}
+                onClick={() => setIsEditing(!isEditing)}
+              >
+                Modifier
+              </Button>
+
+              <Link to="/nouvelle-classe">
                 <Button
                   variant="text"
                   startIcon={<Add />}
                 >
-                  Créer un nouveau
+                  Créer une nouvelle classe
                 </Button>
-              </Link> */}
+              </Link>
             </>
           )}
         </div>
@@ -157,50 +154,32 @@ const PostEditEmbeddedPage = () => {
             disabled
           />
           <TextField
+            label="Nom de la classe"
+            variant="outlined"
+            fullWidth
+            name="name"
+            value={values.name}
+            onChange={handleChange}
+            disabled={!isEditing}
+          />
+          <TextField
             label="Description"
-            multiline
             variant="outlined"
             fullWidth
             name="description"
             value={values.description}
             onChange={handleChange}
-            disabled
+            disabled={!isEditing}
           />
           <TextField
-            label="ID Utilisateur"
+            label="Mot de passe"
             variant="outlined"
             fullWidth
-            name="creatorId"
-            value={values.creatorId}
+            name="password"
+            autoComplete="new-password"
+            value={values.password}
             onChange={handleChange}
-            disabled
-          />
-          <TextField
-            label="Nombre de likes"
-            variant="outlined"
-            fullWidth
-            name="nbLike"
-            value={values.nbLike}
-            onChange={handleChange}
-            disabled
-          />
-          <TextField
-            label="Date de publication"
-            variant="outlined"
-            fullWidth
-            name="datePost"
-            value={values.datePost}
-            onChange={handleChange}
-            disabled
-          />
-          <TextField
-            label="Visibilité du post"
-            variant="outlined"
-            fullWidth
-            name="visible"
-            value={handleFormatBoolean(values.visible)}
-            onChange={handleChange}
-            disabled
+            disabled={!isEditing}
           />
         </div>
 
@@ -211,25 +190,48 @@ const PostEditEmbeddedPage = () => {
             <CircularProgress />
           ) : (
             <>
-              {/* Bouton Supprimer */}
-              {/* <Button
+              {/* Boutons */}
+
+              {isEditing && (
+                <>
+                  <Button
+                    variant="outlined"
+                    onClick={handleCancelEditing}
+                    startIcon={<Cancel />}
+                  >
+                    Annuler
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={handleSave}
+                    startIcon={<Save />}
+                  >
+                    Enregistrer
+                  </Button>
+                </>
+              )}
+
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  navigate(
+                    `/parcours-orientation/mettre-a-jour-balises-classe/${classId}`
+                  );
+                }}
+                startIcon={<Edit />}
+                disabled={isModified}
+              >
+                Mettre à jour les balises
+              </Button>
+              <Button
                 variant="outlined"
                 onClick={handleDelete}
                 color="error"
                 startIcon={<Delete />}
+                disabled={isModified}
               >
-                Supprimer
-              </Button> */}
-
-              {values.visible && (
-                <Button
-                  variant="outlined"
-                  onClick={makeInvisiblePost}
-                  startIcon={<EyeOff />}
-                >
-                  Rendre invisible
-                </Button>
-              )}
+                Supprimer la classe
+              </Button>
             </>
           )}
         </div>
@@ -238,4 +240,4 @@ const PostEditEmbeddedPage = () => {
   );
 };
 
-export default PostEditEmbeddedPage;
+export default ClassEditEmbeddedPage;

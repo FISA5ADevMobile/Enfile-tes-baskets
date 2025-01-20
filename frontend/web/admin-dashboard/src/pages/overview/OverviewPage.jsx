@@ -9,7 +9,7 @@ import { UserStats } from "../users/UsersPage";
 import { ActualityStats } from "../actualities/ActualitiesPage";
 import { CommunityStats } from "../communities/CommunitiesPage";
 import { PostStats } from "../post-publication/PostsPage";
-import { TagStats } from "../orientation-courses/TagsPage";
+import { OrientationCourseStats } from "../orientation-courses/OrientationCoursesPage";
 
 const OverviewPage = () => {
   return (
@@ -26,7 +26,7 @@ const OverviewPage = () => {
 
         <PostStats title={"Posts"} />
 
-        <TagStats title={"Parcours d'orientation - Balises"} />
+        <OrientationCourseStats title={"Parcours d'orientation"} />
       </main>
     </div>
   );

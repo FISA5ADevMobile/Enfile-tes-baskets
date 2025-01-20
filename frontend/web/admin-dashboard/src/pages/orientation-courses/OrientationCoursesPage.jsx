@@ -12,17 +12,20 @@ import { useState, useContext, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import TagsTable from "../../components/orientation-courses/TagsTable";
 import { dispatchToast } from "../../utils/helper";
+import ClassesTable from "../../components/orientation-courses/ClassesTable";
 
-const TagsPage = () => {
+const OrientationCoursesPage = () => {
   return (
     <div className="flex-1 overflow-auto relative z-10">
-      <Header title="Parcours d'orientation - Balises" />
+      <Header title="Parcours d'orientation" />
 
       <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
         {/* STATS */}
-        <TagStats />
+        <OrientationCourseStats />
 
         {/* <ProductsTable /> */}
+
+        <div className="text-2xl font-semibold mt-8">Balises</div>
 
         <div className="flex justify-end mb-4 space-x-4">
           <Link to="/nouvelle-balise">
@@ -37,14 +40,29 @@ const TagsPage = () => {
 
         <TagsTable />
 
+        <div className="text-2xl font-semibold mt-8">Classes</div>
+
+        <div className="flex justify-end mb-4 space-x-4">
+          <Link to="/nouvelle-classe">
+            <Button
+              variant="text"
+              startIcon={<Add />}
+            >
+              Créer une nouvelle classe
+            </Button>
+          </Link>
+        </div>
+
+        <ClassesTable />
+
         <ToastContainer />
       </main>
     </div>
   );
 };
-export default TagsPage;
+export default OrientationCoursesPage;
 
-export const TagStats = ({ title }) => {
+export const OrientationCourseStats = ({ title }) => {
   const [tagStats, setTagStats] = useState({
     totalTags: "...",
     totalClasses: "...",
@@ -91,12 +109,12 @@ export const TagStats = ({ title }) => {
           color="#6366F1"
         />
 
-        {/* <StatCard
+        <StatCard
           name="Total Classes"
           icon={Shapes}
           value={tagStats.totalClasses}
           color="#10B981"
-        /> */}
+        />
       </motion.div>
     </>
   );

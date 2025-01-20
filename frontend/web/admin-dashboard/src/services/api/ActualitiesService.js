@@ -79,10 +79,11 @@ export class ActualityService {
         const actualyStats = {
             total: actualities.length,
             publishedLastSevenDays: actualities.filter((actuality) => {
-                const date = new Date(actuality.createdAt);
+                actuality.publicationDate = new Date(actuality.publicationDate);
                 const today = new Date();
-                const diffInDays = Math.floor((today - date) / (1000 * 60 * 60 * 24));
-                return diffInDays <= 7;
+                const sevenDaysAgo = new Date(today);
+                sevenDaysAgo.setDate(today.getDate() - 7);
+                return actuality.publicationDate >= sevenDaysAgo;
             }).length
         };
         return { error: false, data: actualyStats };

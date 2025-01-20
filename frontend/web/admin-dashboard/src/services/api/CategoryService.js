@@ -27,7 +27,7 @@ export class CategoryService {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }
             });
-            return { error: false, data: response.data };
+            return { error: false, data: mapCategoryModel(response.data) };
         } catch (error) {
             return { error: true, message: error.message };
         }

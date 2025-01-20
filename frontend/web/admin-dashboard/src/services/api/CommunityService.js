@@ -13,7 +13,7 @@ export class CommunityService {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }
             });
-            return { error: false, data: response.data.map(mapCommunityModel) };
+            return { error: false, data: response.data?.length ? response.data.map(mapCommunityModel) : [] };
         } catch (error) {
             return { error: true, message: error.message };
         }

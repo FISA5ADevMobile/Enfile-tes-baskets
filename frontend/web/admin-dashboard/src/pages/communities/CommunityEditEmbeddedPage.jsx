@@ -11,6 +11,7 @@ import {
 } from "../../utils/helper";
 import { ToastContainer, toast } from "react-toastify";
 import { AppContext } from "../../services/context/AppContext";
+import { TIMEOUT_REFRESH } from "../../utils/constants";
 
 const CommunityEditEmbeddedPage = () => {
   const { communityId } = useParams();
@@ -25,11 +26,11 @@ const CommunityEditEmbeddedPage = () => {
     isPublic: handleFormatBoolean(false),
     categoryId: "",
     banDate: "",
-    categoryName: "",
   };
 
   // States
   const [values, setValues] = useState(defaultValues);
+  const [category, setCategory] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,6 +46,7 @@ const CommunityEditEmbeddedPage = () => {
   const handleReset = () => {
     setValues(defaultValues);
     setIsModified(false);
+    setCategory(null);
   };
 
   // Fonction pour la suppression de la communauté (exemple simple)
@@ -62,7 +64,7 @@ const CommunityEditEmbeddedPage = () => {
     dispatchToast("success", "Suppression de la communauté");
     setTimeout(() => {
       navigate("/communautes");
-    }, 2000);
+    }, TIMEOUT_REFRESH);
   };
 
   const getCommunityById = async () => {
@@ -87,26 +89,25 @@ const CommunityEditEmbeddedPage = () => {
       //   nbBannedUsers: community.bannedUsers.length,
       //   admin: `${community.admin.firstName} ${community.admin.lastName}`,
     });
+    getCategoryById(community.categoryId);
   };
 
-  const getCategoryById = async () => {
-    if (!values.categoryId) {
+  const getCategoryById = async (id) => {
+    if (!id) {
       return;
     }
-    const response = await categoryService.getCategoryById(values.categoryId);
+    const response = await categoryService.getCategoryById(id);
     if (response.error) {
       console.error(response.message);
       dispatchToast("error", response.message);
       return;
     }
     const category = response.data;
-    setValues({ ...values, categoryName: category.name });
+    setCategory(category);
   };
 
   useEffect(() => {
-    getCommunityById().then(() => {
-      getCategoryById();
-    });
+    getCommunityById();
   }, []);
 
   return (
@@ -175,17 +176,17 @@ const CommunityEditEmbeddedPage = () => {
             variant="outlined"
             fullWidth
             name="category"
-            value={values.categoryId}
+            value={values.categoryId ?? ""}
             onChange={handleChange}
             disabled
           />
           <TextField
-            label="Categorie"
+            label="Nom de la categorie"
             variant="outlined"
             fullWidth
             name="categoryName"
-            value={values.categoryName}
-            onChange={handleChange}
+            value={category?.name ?? ""}
+            // onChange={(}
             disabled
           />
         </div>

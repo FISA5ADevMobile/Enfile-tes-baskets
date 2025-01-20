@@ -7,6 +7,7 @@ import { CircularProgress } from "@mui/material";
 import { dispatchToast, handleFormatDateTime } from "../../utils/helper";
 import { ToastContainer, toast } from "react-toastify";
 import { AppContext } from "../../services/context/AppContext";
+import { TIMEOUT_REFRESH } from "../../utils/constants";
 
 const UserEditEmbeddedPage = () => {
   const { userId } = useParams();
@@ -59,7 +60,7 @@ const UserEditEmbeddedPage = () => {
     dispatchToast("success", "Utilisateur supprimé");
     setTimeout(() => {
       navigate("/utilisateurs");
-    }, 2000);
+    }, TIMEOUT_REFRESH);
   };
 
   const handleBan = async () => {
@@ -74,7 +75,7 @@ const UserEditEmbeddedPage = () => {
     dispatchToast("success", "Utilisateur banni");
     setTimeout(() => {
       window.location.reload();
-    }, 2000);
+    }, TIMEOUT_REFRESH);
   };
 
   const handleUnban = async () => {
@@ -89,7 +90,7 @@ const UserEditEmbeddedPage = () => {
     dispatchToast("success", "Utilisateur debanni");
     setTimeout(() => {
       window.location.reload();
-    }, 2000);
+    }, TIMEOUT_REFRESH);
   };
 
   const getUserById = async () => {
@@ -115,7 +116,7 @@ const UserEditEmbeddedPage = () => {
   };
 
   const handleResetPassword = async () => {
-    const code = Math.floor(100000 + Math.random() * 900000);
+    const code = Math.floor(10000 + Math.random() * 90000);
     setIsLoading(true);
     const response = await userService.authorizeResetPassword(
       values.email,

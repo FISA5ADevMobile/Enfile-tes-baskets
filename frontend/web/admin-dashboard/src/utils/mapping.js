@@ -25,8 +25,8 @@ export const mapUserModel = (user) => {
         nbPostDeleted: user.nbPostDeleted,
         banDate: user.banDate ? new Date(user.banDate) : null,
         code: user.code,
-        tags: user.tags,
-        courses: user.courses
+        tags: user.tags ?? [],
+        courses: user.courses ?? [],
     }
 }
 
@@ -48,7 +48,7 @@ export const mapCategoryModel = (category) => {
     return {
         id: category.id,
         name: category.name,
-        communities: category.communities.map(mapCommunityModel)
+        communities: category.communities ?? [],
     }
 }
 
@@ -86,14 +86,10 @@ export const mapClassModel = (aClass) => {
         id: aClass.id,
         name: aClass.name,
         description: aClass.description,
-        owner: mapUserModel(aClass.owner),
-        tag: mapTagModel(aClass.tag),
         password: aClass.password,
         time: aClass.time,
         beginDate: aClass.beginDate,
         endDate: aClass.endDate,
-        tags: tags.map(mapTagModel),
-        courses: aClass.courses.map(mapCourseModel),
     }
 }
 
@@ -158,6 +154,15 @@ export const mapPostForDataGrid = (post) => {
 
 export const mapTagForDataGrid = (tag) => {
     const mapModel = mapTagModel(tag);
+    return {
+        id: mapModel.id,
+        name: mapModel.name,
+        description: mapModel.description,
+    }
+}
+
+export const mapClassForDataGrid = (aClass) => {
+    const mapModel = mapClassModel(aClass);
     return {
         id: mapModel.id,
         name: mapModel.name,

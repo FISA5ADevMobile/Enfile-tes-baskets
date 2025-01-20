@@ -13,7 +13,11 @@ import { AppContext } from "../../services/context/AppContext";
 import { DATA_GRID_COLUMN_DEFAULT_WIDTH } from "../../utils/constants";
 import { ToastContainer, toast } from "react-toastify";
 import { dispatchToast } from "../../utils/helper";
-import { mapTagForDataGrid, mapUserForDataGrid } from "../../utils/mapping";
+import {
+  mapClassForDataGrid,
+  mapTagForDataGrid,
+  mapUserForDataGrid,
+} from "../../utils/mapping";
 
 const columns = [
   {
@@ -110,7 +114,7 @@ const ClassesTable = () => {
       dispatchToast("error", response.message);
     } else {
       const classes = response.data;
-      setclassesData(classes.map(mapTagForDataGrid));
+      setclassesData(classes.map(mapClassForDataGrid));
     }
   };
 

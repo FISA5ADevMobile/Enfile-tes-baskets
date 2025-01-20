@@ -7,6 +7,7 @@ import { CircularProgress } from "@mui/material";
 import { dispatchToast, handleFormatDateTime } from "../../utils/helper";
 import { ToastContainer, toast } from "react-toastify";
 import { AppContext } from "../../services/context/AppContext";
+import { TIMEOUT_REFRESH } from "../../utils/constants";
 
 const ActualityEditEmbeddedPage = () => {
   const { actualityId } = useParams();
@@ -59,7 +60,7 @@ const ActualityEditEmbeddedPage = () => {
     dispatchToast("success", "Actualité supprimée");
     setTimeout(() => {
       navigate("/actualites");
-    }, 2000);
+    }, TIMEOUT_REFRESH);
   };
 
   const getActualityById = async () => {

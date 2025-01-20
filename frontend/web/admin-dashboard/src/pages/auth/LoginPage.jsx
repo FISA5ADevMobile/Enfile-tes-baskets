@@ -18,6 +18,8 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const adminContactEmail = import.meta.env.VITE_ETB_ADMIN_CONTACT_EMAIL;
+
   const { authService } = React.useContext(AppContext);
   const navigate = useNavigate();
 
@@ -107,7 +109,7 @@ const LoginPage = () => {
         <p className="mt-6 text-center text-sm text-white-600">
           Mot de passe oublié?{" "}
           <a
-            href="mailto:gpma.contact@gmail.com"
+            href={`mailto:${adminContactEmail}`}
             className="text-yellow-600 hover:underline"
           >
             Cliquez ici
@@ -116,7 +118,7 @@ const LoginPage = () => {
         <p className="mt-6 text-center text-sm text-white-600">
           Pas de compte?{" "}
           <a
-            href="mailto:gpma.contact@gmail.com"
+            href={`mailto:${adminContactEmail}`}
             className="text-yellow-600 hover:underline"
           >
             Contactez un administrateur

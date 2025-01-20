@@ -52,7 +52,7 @@ const SIDEBAR_ITEMS = [
     name: "Parcours d'orientation",
     icon: Route,
     color: "#10B981",
-    href: "/parcours-orientation/balises",
+    href: "/parcours-orientation",
   },
 
   // { name: "Analytics", icon: TrendingUp, color: "#3B82F6", href: "/analytics" },

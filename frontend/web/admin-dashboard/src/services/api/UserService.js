@@ -28,7 +28,8 @@ export class UserService {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }
             });
-            return { error: false, data: response.data.map(mapUserModel) };
+            console.log
+            return { error: false, data: response.data };
         } catch (error) {
             return { error: true, message: error.message };
         }
@@ -131,7 +132,7 @@ export class UserService {
         if (response.error) {
             return { error: true, message: response.message };
         }
-        const users = response.data;
+        const users = response.data.map(mapUserModel);
         const userStats = {
             total: users.length,
             banned: users.filter((user) => !!user.banDate).length,

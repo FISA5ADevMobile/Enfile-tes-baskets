@@ -15,7 +15,7 @@ export class PostService {
                     }
                 }
             );
-            return { error: false, data: response.data.map(mapPostModel) };
+            return { error: false, data: response.data.length ? response.data.map(mapPostModel) : [] };
         } catch (error) {
             return { error: true, message: error.message };
         }
@@ -60,9 +60,35 @@ export class PostService {
         }
     }
 
-    async deletePostById(id) {
+    // async deletePostById(id) {
+    //     try {
+    //         const response = await axios.delete(`${this.apiUrl}/api/post/delete/${id}`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${Cookies.get('token')}`,
+    //             }
+    //         });
+    //         return { error: false, data: response.data };
+    //     } catch (error) {
+    //         return { error: true, message: error.message };
+    //     }
+    // }
+
+    // async makeVisiblePost(id) {
+    //     try {
+    //         const response = await axios.put(`${this.apiUrl}/api/post/visible/${id}`, {}, {
+    //             headers: {
+    //                 Authorization: `Bearer ${Cookies.get('token')}`,
+    //             }
+    //         });
+    //         return { error: false, data: response.data };
+    //     } catch (error) {
+    //         return { error: true, message: error.message };
+    //     }
+    // }
+
+    async makeInvisiblePost(id) {
         try {
-            const response = await axios.delete(`${this.apiUrl}/api/post/delete/${id}`, {
+            const response = await axios.put(`${this.apiUrl}/api/post/invisible/${id}`, {}, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }

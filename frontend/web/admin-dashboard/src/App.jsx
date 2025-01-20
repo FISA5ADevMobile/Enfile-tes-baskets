@@ -23,9 +23,12 @@ import PostEditEmbeddedPage from "./pages/post-publication/PostEditEmbeddedPage"
 import PostsPage from "./pages/post-publication/PostsPage";
 import TagEditEmbeddedPage from "./pages/orientation-courses/TagEditEmbeddedPage";
 import TagCreatePage from "./pages/orientation-courses/TagCreatePage";
-import TagsPage from "./pages/orientation-courses/TagsPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import ProtectedRoute from "./ProtectedRoute";
+import OrientationCoursesPage from "./pages/orientation-courses/OrientationCoursesPage";
+import ClassCreatePage from "./pages/orientation-courses/ClassCreatePage";
+import ClassEditEmbeddedPage from "./pages/orientation-courses/ClassEditEmbeddedPage";
+import UpdateTagsOfClassPage from "./pages/orientation-courses/UpdateTagsOfClassPage";
 
 function App() {
   const darkTheme = createTheme({
@@ -132,8 +135,8 @@ function App() {
                 element={<SettingsPage />}
               />
               <Route
-                path="/parcours-orientation/balises"
-                element={<TagsPage />}
+                path="/parcours-orientation"
+                element={<OrientationCoursesPage />}
               />
               <Route
                 path="/parcours-orientation/balises/:tagId"
@@ -142,6 +145,18 @@ function App() {
               <Route
                 path="/nouvelle-balise"
                 element={<TagCreatePage />}
+              />
+              <Route
+                path="/parcours-orientation/classes/:classId"
+                element={<ClassEditEmbeddedPage />}
+              />
+              <Route
+                path="/nouvelle-classe"
+                element={<ClassCreatePage />}
+              />
+              <Route
+                path="/parcours-orientation/mettre-a-jour-balises-classe/:classId"
+                element={<UpdateTagsOfClassPage />}
               />
             </Route>
           </Routes>

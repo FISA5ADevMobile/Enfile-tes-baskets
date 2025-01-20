@@ -93,8 +93,12 @@ const CommunityCreatePage = () => {
       console.error(response.message);
       return;
     }
-    dispatchToast("Categorie créée! Vous pouvez maintenant la choisir");
-    await getCategories();
+    dispatchToast(
+      "success",
+      "Categorie créée! Vous pouvez maintenant la choisir"
+    );
+    getCategories();
+    Promise.all([getCategories()]);
   };
 
   React.useEffect(() => {
@@ -145,7 +149,7 @@ const CommunityCreatePage = () => {
 
           <Autocomplete
             disablePortal
-            options={categories}
+            options={categories ?? []}
             // disabled
             fullWidth
             onChange={(event, newValue) => {

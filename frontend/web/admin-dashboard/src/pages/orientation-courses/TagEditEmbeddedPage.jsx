@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import { TextField, Button, Checkbox } from "@mui/material";
 import Header from "../../components/common/Header";
-import { Add, Delete, Edit, LockOpen, Save } from "@mui/icons-material";
+import { Add, Cancel, Delete, Edit, LockOpen, Save } from "@mui/icons-material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import { dispatchToast, handleFormatDateTime } from "../../utils/helper";
 import { ToastContainer, toast } from "react-toastify";
 import { AppContext } from "../../services/context/AppContext";
+import { TIMEOUT_REFRESH } from "../../utils/constants";
 
 const TagEditEmbeddedPage = () => {
   const { tagId } = useParams();
@@ -53,8 +54,8 @@ const TagEditEmbeddedPage = () => {
     console.log("Suppression de la balise");
     dispatchToast("success", "Balise supprimée");
     setTimeout(() => {
-      navigate("/parcours-orientation/balises");
-    }, 2000);
+      navigate("/parcours-orientation");
+    }, TIMEOUT_REFRESH);
   };
 
   const getTagById = async () => {
@@ -72,6 +73,29 @@ const TagEditEmbeddedPage = () => {
     });
   };
 
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    handleReset();
+    getTagById();
+  };
+
+  const handleUpdate = async () => {
+    setIsLoading(true);
+    const response = await orientationCourseService.updateTagById(
+      tagId,
+      values
+    );
+    setIsLoading(false);
+    if (response.error) {
+      console.error(response.message);
+      dispatchToast("error", response.message);
+      return;
+    }
+    dispatchToast("success", "Modifications enregistrées");
+    setIsEditing(false);
+    getTagById();
+  };
+
   useEffect(() => {
     getTagById();
   }, []);
@@ -84,14 +108,22 @@ const TagEditEmbeddedPage = () => {
         <div className="flex justify-end mb-4 space-x-4">
           {!isLoading && (
             <>
-              {/* <Link to="/nouveau-utilisateur">
+              <Button
+                variant="text"
+                startIcon={<Edit />}
+                onClick={() => setIsEditing(!isEditing)}
+              >
+                Modifier
+              </Button>
+
+              <Link to="/nouvelle-balise">
                 <Button
                   variant="text"
                   startIcon={<Add />}
                 >
-                  Créer un nouveau
+                  Créer une nouvelle balise
                 </Button>
-              </Link> */}
+              </Link>
             </>
           )}
         </div>
@@ -117,7 +149,7 @@ const TagEditEmbeddedPage = () => {
             name="name"
             value={values.name}
             onChange={handleChange}
-            disabled
+            disabled={!isEditing}
           />
           <TextField
             label="Description"
@@ -126,7 +158,7 @@ const TagEditEmbeddedPage = () => {
             name="description"
             value={values.description}
             onChange={handleChange}
-            disabled
+            disabled={!isEditing}
           />
         </div>
 
@@ -137,15 +169,33 @@ const TagEditEmbeddedPage = () => {
             <CircularProgress />
           ) : (
             <>
-              {/* Bouton Supprimer */}
-              <Button
+              {isModified && isEditing && (
+                <Button
+                  variant="outlined"
+                  onClick={handleCancelEdit}
+                  startIcon={<Cancel />}
+                >
+                  Annuler
+                </Button>
+              )}
+              {isModified && isEditing && (
+                <Button
+                  variant="outlined"
+                  onClick={handleUpdate}
+                  startIcon={<Save />}
+                >
+                  Enregistrer
+                </Button>
+              )}
+
+              {/* <Button
                 variant="outlined"
                 onClick={handleDelete}
                 color="error"
                 startIcon={<Delete />}
               >
                 Supprimer
-              </Button>
+              </Button> */}
             </>
           )}
         </div>

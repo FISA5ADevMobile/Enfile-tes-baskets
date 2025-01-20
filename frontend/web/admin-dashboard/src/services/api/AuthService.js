@@ -12,7 +12,7 @@ export class AuthService {
                 email: email,
                 password: password
             });
-            if (response.status === 200) {
+            if (response.data.token && response.status === 200) {
                 Cookies.set('token', response.data.token, { expires: rememberMe ? 7 : null });
                 Cookies.set('userId', response.data.id);
                 axios.defaults.headers.common[
@@ -20,7 +20,7 @@ export class AuthService {
                 ] = `Bearer ${response.data.token}`;
                 return { error: false, data: response.data };
             }
-            return { error: false, message: response.data.message };
+            return { error: true, message: response.data.message };
         } catch (error) {
             return { error: true, message: error.message };
         }
