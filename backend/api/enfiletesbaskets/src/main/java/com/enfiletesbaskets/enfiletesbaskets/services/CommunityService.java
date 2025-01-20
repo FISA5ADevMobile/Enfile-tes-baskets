@@ -20,6 +20,7 @@ import jakarta.annotation.Resource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,19 +42,29 @@ public class CommunityService {
     @Resource
     private JwtTokenProvider jwtTokenProvider;
 
-    public List<CommunityDTO> getAllCommunities() {
+    public List<CommunityDTO> getAllCommunities(Authentication auth) {
+        // Récupérer l'utilisateur connecté
+        UserModel currentUser = userService.authenticate(auth);
+
+        // Récupérer toutes les communautés
         List<CommunityModel> communities = communityRepository.findAll();
         if (communities.isEmpty()) {
             throw new NoContentException("No community found.");
         }
-        return communities.stream().map(CommunityMapper::toDTO).collect(Collectors.toList());
+
+        // Mapper chaque communauté avec un indicateur si l'utilisateur a rejoint
+        return communities.stream()
+                .map(community -> CommunityMapper.toDTO(community, currentUser))
+                .collect(Collectors.toList());
     }
 
-    public CommunityDTO getCommunityById(Long id) {
+
+    public CommunityDTO getCommunityById(Long id, Authentication auth) {
+        UserModel currentUser = userService.authenticate(auth);
         CommunityModel community = communityRepository.findById(id)
                 .orElseThrow(() -> new NoContentException("Community with ID " + id + " not found."));
 
-        return CommunityMapper.toDTO(community);
+        return CommunityMapper.toDTO(community, currentUser);
     }
 
     public CommunityDTO createPostInCommunity(Long communityId, CreatePostDTO dto, Authentication auth) {
@@ -61,6 +72,10 @@ public class CommunityService {
                 .orElseThrow(() -> new NoContentException("Community with ID " + communityId + " not found."));
 
         UserModel creator = userService.authenticate(auth);
+
+        if (!community.getUsers().contains(creator)) {
+            throw new UserNotFound("User " + creator + " doesn't belong to the community.");
+        }
 
         PostModel relatedPost = null;
         if (dto.getRelatedPostId() != null) {
@@ -81,7 +96,7 @@ public class CommunityService {
         community.getPosts().add(newPost);
         communityRepository.save(community);
 
-        return CommunityMapper.toDTO(community);
+        return CommunityMapper.toDTO(community, creator);
     }
 
     public CommunityDTO createCommunity(CreateCommunityDTO dto, Authentication auth) {
@@ -93,6 +108,9 @@ public class CommunityService {
                     .orElseThrow(() -> new IllegalArgumentException("Category with ID " + dto.getCategoryId() + " not found."));
         }
 
+        List<UserModel> listUsers = new ArrayList<>();
+        listUsers.add(admin);
+
         CommunityModel community = new CommunityModel();
         community.setNom(dto.getNom());
         community.setDescription(dto.getDescription());
@@ -100,13 +118,25 @@ public class CommunityService {
         community.setAdmin(admin);
         community.setImage(dto.getImage());
         community.setCategory(category);
+        community.setUsers(listUsers);
 
         CommunityModel savedCommunity = communityRepository.save(community);
 
-        return CommunityMapper.toDTO(savedCommunity);
+        return CommunityMapper.toDTO(savedCommunity, admin);
     }
 
-    public CommunityDTO removePostFromCommunity(Long communityId, Long postId) {
+    public CommunityDTO joinCommunity(Long communityId, Authentication auth) {
+        UserModel user = userService.authenticate(auth);
+
+        CommunityModel result = communityRepository.findById(communityId).orElseThrow(() -> new NoContentException("Community with ID " + communityId + " not found."));
+        List<UserModel> list = result.getUsers();
+        list.add(user);
+        result.setUsers(list);
+        return CommunityMapper.toDTO(communityRepository.save(result), user);
+    }
+
+    public CommunityDTO removePostFromCommunity(Long communityId, Long postId, Authentication auth) {
+        UserModel user = userService.authenticate(auth);
         CommunityModel community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new NoContentException("Community with ID " + communityId + " not found."));
 
@@ -120,10 +150,11 @@ public class CommunityService {
         community.getPosts().remove(post);
         communityRepository.save(community);
 
-        return CommunityMapper.toDTO(community);
+        return CommunityMapper.toDTO(community, user);
     }
 
-    public CommunityDTO updateCommunity(Long communityId, UpdateCommunityDTO dto) {
+    public CommunityDTO updateCommunity(Long communityId, UpdateCommunityDTO dto, Authentication auth) {
+        UserModel user = userService.authenticate(auth);
         CommunityModel community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new NoContentException("Community with ID " + communityId + " not found."));
 
@@ -144,7 +175,7 @@ public class CommunityService {
 
         CommunityModel updatedCommunity = communityRepository.save(community);
 
-        return CommunityMapper.toDTO(updatedCommunity);
+        return CommunityMapper.toDTO(updatedCommunity, user);
     }
 
     public void deleteCommunity(Long communityId) {

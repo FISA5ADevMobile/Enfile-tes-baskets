@@ -20,9 +20,9 @@ public class CommunityController {
     private CommunityService communityService;
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllCommunities() {
+    public ResponseEntity<?> getAllCommunities(Authentication auth) {
         try {
-            List<CommunityDTO> res = communityService.getAllCommunities();
+            List<CommunityDTO> res = communityService.getAllCommunities(auth);
             return ResponseEntity.ok(res);
         } catch (NoContentException e){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
@@ -32,9 +32,9 @@ public class CommunityController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCommunityById(@PathVariable Long id) {
+    public ResponseEntity<?> getCommunityById(@PathVariable Long id, Authentication auth) {
         try {
-            CommunityDTO communityDTO = communityService.getCommunityById(id);
+            CommunityDTO communityDTO = communityService.getCommunityById(id, auth);
             return ResponseEntity.ok(communityDTO);
         } catch (NoContentException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
@@ -47,6 +47,18 @@ public class CommunityController {
     public ResponseEntity<?> createCommunity(@RequestBody CreateCommunityDTO dto, Authentication auth) {
         try {
             CommunityDTO newCommunity = communityService.createCommunity(dto, auth);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newCommunity);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/join/{communityId}")
+    public ResponseEntity<?> joinCommunity(@RequestBody Long communityId, Authentication auth) {
+        try {
+            CommunityDTO newCommunity = communityService.joinCommunity(communityId, auth);
             return ResponseEntity.status(HttpStatus.CREATED).body(newCommunity);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -71,9 +83,9 @@ public class CommunityController {
     }
 
     @DeleteMapping("/{communityId}/post/{postId}")
-    public ResponseEntity<?> removePostFromCommunity(@PathVariable Long communityId, @PathVariable Long postId) {
+    public ResponseEntity<?> removePostFromCommunity(@PathVariable Long communityId, @PathVariable Long postId, Authentication auth) {
         try {
-            CommunityDTO updatedCommunity = communityService.removePostFromCommunity(communityId, postId);
+            CommunityDTO updatedCommunity = communityService.removePostFromCommunity(communityId, postId, auth);
             return ResponseEntity.ok(updatedCommunity);
         } catch (NoContentException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
@@ -85,9 +97,9 @@ public class CommunityController {
     }
 
     @PutMapping("/{communityId}")
-    public ResponseEntity<?> updateCommunity(@PathVariable Long communityId, @RequestBody UpdateCommunityDTO dto) {
+    public ResponseEntity<?> updateCommunity(@PathVariable Long communityId, @RequestBody UpdateCommunityDTO dto, Authentication auth) {
         try {
-            CommunityDTO updatedCommunity = communityService.updateCommunity(communityId, dto);
+            CommunityDTO updatedCommunity = communityService.updateCommunity(communityId, dto, auth);
             return ResponseEntity.ok(updatedCommunity);
         } catch (NoContentException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
