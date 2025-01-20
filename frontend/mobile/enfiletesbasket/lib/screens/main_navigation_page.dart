@@ -7,7 +7,9 @@ import '../widgets/custom_bottom_navigation_bar.dart';
 import '../widgets/custom_app_bar.dart';
 
 class MainNavigationPage extends StatefulWidget {
-  const MainNavigationPage({super.key});
+  final int initialIndex;
+
+  const MainNavigationPage({Key? key, this.initialIndex = 0}) : super(key: key);
 
   static void navigateToActualityDetails(BuildContext context, int actualityId) {
     final state = context.findAncestorStateOfType<_MainNavigationPageState>();
@@ -19,7 +21,7 @@ class MainNavigationPage extends StatefulWidget {
 }
 
 class _MainNavigationPageState extends State<MainNavigationPage> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
   int? _selectedActualityId;
 
   final List<Widget> _screens = [
@@ -27,6 +29,11 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     const CommunitiesPage(),
     ClassesPage(),
   ];
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
 
   void _onItemTapped(int index) {
     setState(() {

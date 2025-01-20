@@ -7,7 +7,7 @@ import '../services/auth_provider.dart';
 import '../services/tags_provider.dart';
 import '../widgets/filter_buttons.dart';
 import '../widgets/tag_card.dart';
-import 'communities_page.dart';
+import 'main_navigation_page.dart';
 
 class TagsPage extends StatelessWidget {
   final String className;
@@ -147,16 +147,12 @@ class TagsPage extends StatelessWidget {
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: 2,
         onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/main-navigation');
-          } else if (index == 1) {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const CommunitiesPage()),
-            );;
-          } else if (index == 2) {
-            Navigator.pop(context);
-          }
+              MaterialPageRoute(
+                builder: (context) => MainNavigationPage(initialIndex: index),
+              ),
+            );
         },
       ),
     );
