@@ -25,12 +25,13 @@ export class OrientationCourseService {
 
     async getAllTags() {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/tags/all`,
+            const response = await axios.get(`${this.apiUrl}/api/tags`,
                 {
                     headers: {
                         Authorization: `Bearer ${Cookies.get('token')}`,
                     }
                 }
+
             );
             return { error: false, data: response.data.map(mapTagModel) };
         } catch (error) {
@@ -42,7 +43,7 @@ export class OrientationCourseService {
 
     async deleteTagById(id) {
         try {
-            const response = await axios.delete(`${this.apiUrl}/api/tags/${id}`,
+            const response = await axios.delete(`${this.apiUrl}/api/tags/${id}/delete`,
                 {
                     headers: {
                         Authorization: `Bearer ${Cookies.get('token')}`,
@@ -58,7 +59,7 @@ export class OrientationCourseService {
 
     async createTag(tag) {
         try {
-            const response = await axios.post(`${this.apiUrl}/api/tags/add_tag`, tag,
+            const response = await axios.post(`${this.apiUrl}/api/tags`, tag,
                 {
                     headers: {
                         Authorization: `Bearer ${Cookies.get('token')}`,
@@ -87,15 +88,18 @@ export class OrientationCourseService {
     // STATS
     async getOrientationCourseStats() {
         const responseTags = await this.getAllTags();
-        const responseClasses = await this.getAllClasses();
+        // const responseClasses = await this.getAllClasses();
 
-        if (responseTags.error || responseClasses.error) {
-            return { error: true, message: responseTags.message || responseClasses.message };
+        // if (responseTags.error || responseClasses.error) {
+        //     return { error: true, message: responseTags.message || responseClasses.message };
+        // }
+        if (responseTags.error) {
+            return { error: true, message: responseTags.message };
         }
 
         const stats = {
             totalTags: responseTags.data.length,
-            totalClasses: responseClasses.data,
+            // totalClasses: responseClasses.data,
         };
         return { error: false, data: stats };
     }

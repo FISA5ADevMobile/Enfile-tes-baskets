@@ -16,7 +16,7 @@ const CommunityCreatePage = () => {
   const defaultValues = {
     name: "",
     description: "",
-    isPublic: false,
+    isPublic: true,
     adminToken: "",
     categoryId: "",
   };
@@ -50,7 +50,7 @@ const CommunityCreatePage = () => {
       nom: values.name,
       description: values.description,
       isPublic: values.isPublic,
-      categoryId: "",
+      categoryId: values.categoryId,
       adminToken: Cookies.get("token"),
     });
     setIsLoading(false);
@@ -59,7 +59,7 @@ const CommunityCreatePage = () => {
       dispatchToast("error", response.message);
       return;
     }
-    dispatchToast("success", "Actualité créée");
+    dispatchToast("success", "Communauté créée");
     handleReset();
   };
 
@@ -72,10 +72,11 @@ const CommunityCreatePage = () => {
       return;
     }
     const data = response.data;
+    // console.log(data);
     const categoriesData = data.map((category) => {
       return {
         label: `${category.name} [${category.id}]`,
-        value: user.id,
+        value: category.id,
       };
     });
     setCategories(categoriesData);
@@ -96,9 +97,9 @@ const CommunityCreatePage = () => {
     await getCategories();
   };
 
-  // React.useEffect(() => {
-  //   getCategories();
-  // }, []);
+  React.useEffect(() => {
+    getCategories();
+  }, []);
 
   return (
     <div className="flex-1 overflow-auto relative z-10">
@@ -137,6 +138,7 @@ const CommunityCreatePage = () => {
               onChange={(e) =>
                 setValues({ ...values, isPublic: e.target.checked })
               }
+              disabled
             />
             <p className="text-white-600">C'est une communauté public ?</p>
           </div>
@@ -144,18 +146,19 @@ const CommunityCreatePage = () => {
           <Autocomplete
             disablePortal
             options={categories}
-            disabled
+            // disabled
             fullWidth
             onChange={(event, newValue) => {
-              setValues({ ...values, categoryId: newValue?.value });
+              //console.log(newValue?.value);
+              setValues({ ...values, categoryId: Number(newValue?.value) });
             }}
-            value={
-              values.categoryId
-                ? categories.find(
-                    (category) => category.value === values.categoryId
-                  )
-                : null
-            }
+            // value={
+            //   values.categoryId
+            //     ? categories.find(
+            //         (category) => category.value === values.categoryId
+            //       )
+            //     : null
+            // }
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -173,7 +176,7 @@ const CommunityCreatePage = () => {
             variant="outlined"
             fullWidth
             name="name"
-            disabled
+            // disabled
             value={categoryCreationNameField}
             onChange={(e) => setCategoryCreationNameField(e.target.value)}
           />

@@ -54,9 +54,9 @@ const UserEditEmbeddedPage = () => {
       dispatchToast("error", response.message);
       return;
     }
-    handleReset();
-    console.log("Suppression du profil");
-    dispatchToast("success", "Suppression du profil");
+    //handleReset();
+    console.log("Suppression de l'utilisateur");
+    dispatchToast("success", "Utilisateur supprimé");
     setTimeout(() => {
       navigate("/utilisateurs");
     }, 2000);
@@ -104,11 +104,13 @@ const UserEditEmbeddedPage = () => {
       id: user.id,
       pseudo: user.pseudo,
       firstName: user.firstName,
-      name: user.lastName,
+      name: user.name,
       email: user.email,
       role: user.role,
       nbPostDeleted: user.nbPostDeleted,
-      banDate: handleFormatDateTime(new Date(user.banDate)),
+      banDate: user?.banDate
+        ? handleFormatDateTime(new Date(user.banDate))
+        : "",
     });
   };
 
@@ -125,7 +127,7 @@ const UserEditEmbeddedPage = () => {
       dispatchToast("error", response.message);
       return;
     }
-    dispatchToast("success", `Code ${code} envoyé par email`);
+    dispatchToast("success", `Code ${code} à envoyer à l'utilisateur`);
   };
 
   useEffect(() => {
@@ -246,7 +248,7 @@ const UserEditEmbeddedPage = () => {
 
               {/* Bouton Bannir */}
 
-              {!values.banDate ? (
+              {values.banDate === "" ? (
                 <Button
                   variant="outlined"
                   onClick={handleBan}

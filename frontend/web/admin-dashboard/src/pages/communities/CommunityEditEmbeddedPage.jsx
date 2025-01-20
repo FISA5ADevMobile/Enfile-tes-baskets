@@ -16,7 +16,7 @@ const CommunityEditEmbeddedPage = () => {
   const { communityId } = useParams();
   const navigate = useNavigate();
 
-  const { communityService } = useContext(AppContext);
+  const { communityService, categoryService } = useContext(AppContext);
   // Default values
   const defaultValues = {
     id: "",
@@ -25,6 +25,7 @@ const CommunityEditEmbeddedPage = () => {
     isPublic: handleFormatBoolean(false),
     categoryId: "",
     banDate: "",
+    categoryName: "",
   };
 
   // States
@@ -88,8 +89,24 @@ const CommunityEditEmbeddedPage = () => {
     });
   };
 
+  const getCategoryById = async () => {
+    if (!values.categoryId) {
+      return;
+    }
+    const response = await categoryService.getCategoryById(values.categoryId);
+    if (response.error) {
+      console.error(response.message);
+      dispatchToast("error", response.message);
+      return;
+    }
+    const category = response.data;
+    setValues({ ...values, categoryName: category.name });
+  };
+
   useEffect(() => {
-    getCommunityById();
+    getCommunityById().then(() => {
+      getCategoryById();
+    });
   }, []);
 
   return (
@@ -158,7 +175,16 @@ const CommunityEditEmbeddedPage = () => {
             variant="outlined"
             fullWidth
             name="category"
-            value={values.category}
+            value={values.categoryId}
+            onChange={handleChange}
+            disabled
+          />
+          <TextField
+            label="Categorie"
+            variant="outlined"
+            fullWidth
+            name="categoryName"
+            value={values.categoryName}
             onChange={handleChange}
             disabled
           />

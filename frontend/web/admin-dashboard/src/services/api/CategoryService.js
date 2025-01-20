@@ -9,7 +9,7 @@ export class CategoryService {
     // CRUD operations
     async getAllCategories() {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/category`, {
+            const response = await axios.get(`${this.apiUrl}/categories/all`, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }
@@ -20,9 +20,22 @@ export class CategoryService {
         }
     }
 
+    async getCategoryById(id) {
+        try {
+            const response = await axios.get(`${this.apiUrl}/categories/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
+            return { error: false, data: response.data };
+        } catch (error) {
+            return { error: true, message: error.message };
+        }
+    }
+
     async createCategory(category) {
         try {
-            const response = await axios.post(`${this.apiUrl}/api/category`, category, {
+            const response = await axios.post(`${this.apiUrl}/categories/create`, category, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }

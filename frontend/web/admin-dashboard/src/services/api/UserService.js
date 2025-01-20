@@ -36,7 +36,7 @@ export class UserService {
 
     async getUserById(id) {
         try {
-            const response = await axios.get(`${this.apiUrl}/api/users/get_1/${id}`, {
+            const response = await axios.get(`${this.apiUrl}/api/users/${id}`, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }
@@ -88,7 +88,7 @@ export class UserService {
 
     async deleteUserById(id) {
         try {
-            const response = await axios.delete(`${this.apiUrl}/api/users/delete/${id}`, {}, {
+            const response = await axios.put(`${this.apiUrl}/api/users/delete/${id}`, {}, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }
@@ -107,8 +107,6 @@ export class UserService {
             }, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
-                    "Content-Length": 58,
-                    "Content-Type": "application/json"
                 }
             });
             return { error: false, data: response.data };

@@ -10,7 +10,7 @@ export const mapActualityModel = (actuality) => {
         description: actuality.description,
         image: actuality.image,
         event: actuality.event,
-        publicationDate: new Date(actuality.publicationDate[0], actuality.publicationDate[1] - 1, actuality.publicationDate[2], actuality.publicationDate[3], actuality.publicationDate[4], actuality.publicationDate[5], Math.floor(actuality.publicationDate[6] / 1e6)),
+        publicationDate: new Date(actuality.publicationDate),
     }
 }
 
@@ -23,7 +23,7 @@ export const mapUserModel = (user) => {
         name: user.name,
         role: user.role,
         nbPostDeleted: user.nbPostDeleted,
-        banDate: new Date(user.banDate),
+        banDate: user.banDate ? new Date(user.banDate) : null,
         code: user.code,
         tags: user.tags,
         courses: user.courses
@@ -104,9 +104,6 @@ export const mapTagModel = (tag) => {
         description: tag.description,
         xPos: tag.xPos,
         yPos: tag.yPos,
-        classes: tag.classes.map(mapClassModel),
-        courses: tag.courses.map(mapCourseModel),
-        user: mapUserModel(tag.user)
     }
 }
 
@@ -165,6 +162,5 @@ export const mapTagForDataGrid = (tag) => {
         id: mapModel.id,
         name: mapModel.name,
         description: mapModel.description,
-        ownerPseudo: mapModel.user?.pseudo
     }
 }

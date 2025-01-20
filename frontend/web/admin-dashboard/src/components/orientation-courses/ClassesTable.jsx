@@ -54,7 +54,7 @@ const columns = [
           onClick={() => {
             console.log("id : " + id);
             console.log("row : " + JSON.stringify(row));
-            window.location.href = `/parcours-orientation/balises/${id}`;
+            window.location.href = `/parcours-orientation/classes/${id}`;
           }}
         />,
       ];
@@ -95,27 +95,27 @@ const rows = [
   },
 ];
 
-const TagsTable = () => {
-  const [tagsData, setTagsData] = useState([]); // to uncomment during the integration
-  // const [tagsData, setTagsData] = useState(rows); //to comment during the integration
+const ClassesTable = () => {
+  const [classesData, setclassesData] = useState([]); // to uncomment during the integration
+  // const [classesData, setclassesData] = useState(rows); //to comment during the integration
 
   const { orientationCourseService } = useContext(AppContext);
 
   // to uncomment during the integration
 
-  const getAllTags = async () => {
-    const response = await orientationCourseService.getAllTags();
+  const getAllClasses = async () => {
+    const response = await orientationCourseService.getAllClasses();
     if (response.error) {
       console.error(response.message);
       dispatchToast("error", response.message);
     } else {
-      const tags = response.data;
-      setTagsData(tags.map(mapTagForDataGrid));
+      const classes = response.data;
+      setclassesData(classes.map(mapTagForDataGrid));
     }
   };
 
   useEffect(() => {
-    getAllTags();
+    getAllClasses();
   }, []);
 
   return (
@@ -128,11 +128,11 @@ const TagsTable = () => {
       <ToastContainer />
       <div>
         <DataGridComponent
-          rows={tagsData}
+          rows={classesData}
           columns={columns}
         />
       </div>
     </motion.div>
   );
 };
-export default TagsTable;
+export default ClassesTable;

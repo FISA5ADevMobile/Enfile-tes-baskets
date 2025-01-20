@@ -53,7 +53,7 @@ const TagEditEmbeddedPage = () => {
     console.log("Suppression de la balise");
     dispatchToast("success", "Balise supprimée");
     setTimeout(() => {
-      navigate("/parcours-orientation-balises");
+      navigate("/parcours-orientation/balises");
     }, 2000);
   };
 

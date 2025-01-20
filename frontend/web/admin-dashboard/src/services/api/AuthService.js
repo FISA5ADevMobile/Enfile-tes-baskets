@@ -48,8 +48,12 @@ export class AuthService {
             if (!userId) {
                 return { error: true, message: "User not found" };
             }
-            const response = await axios.get(`${this.apiUrl}/api/users/${userId}`);
-            return { error: false, data: mapUserModel(response.data) };
+            const response = await axios.get(`${this.apiUrl}/api/users/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                }
+            });
+            return { error: false, data: response.data };
         }
         catch (error) {
             return { error: true, message: error.message };

@@ -16,7 +16,7 @@ import { dispatchToast } from "../../utils/helper";
 const TagsPage = () => {
   return (
     <div className="flex-1 overflow-auto relative z-10">
-      <Header title="Actualités" />
+      <Header title="Parcours d'orientation - Balises" />
 
       <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
         {/* STATS */}
@@ -91,12 +91,12 @@ export const TagStats = ({ title }) => {
           color="#6366F1"
         />
 
-        <StatCard
+        {/* <StatCard
           name="Total Classes"
           icon={Shapes}
           value={tagStats.totalClasses}
           color="#10B981"
-        />
+        /> */}
       </motion.div>
     </>
   );
