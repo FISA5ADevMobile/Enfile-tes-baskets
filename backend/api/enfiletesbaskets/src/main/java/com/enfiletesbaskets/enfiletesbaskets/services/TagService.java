@@ -88,4 +88,15 @@ public class TagService {
         return TagDTO.toDTO(updatedTag);
     }
 
+    public TagDTO getTagById(Long tagId) {
+        TagModel tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new RuntimeException("Tag non trouvé avec l'ID : " + tagId));
+        TagDTO dto = new TagDTO();
+        dto.setId(tag.getId());
+        dto.setName(tag.getName());
+        dto.setDescription(tag.getDescription());
+        return dto;
+    }
+
+
 }
