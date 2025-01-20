@@ -2,6 +2,7 @@ package com.enfiletesbaskets.enfiletesbaskets.services;
 
 import com.enfiletesbaskets.enfiletesbaskets.dto.TagDTO;
 import com.enfiletesbaskets.enfiletesbaskets.models.TagModel;
+import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,4 +89,18 @@ public class TagService {
         return TagDTO.toDTO(updatedTag);
     }
 
+    public TagDTO getTagById(Long id) {
+        return tagRepository.findById(id).map(tag -> {
+            TagDTO dto = new TagDTO();
+            dto.setId(tag.getId());
+            dto.setName(tag.getName());
+            dto.setDescription(tag.getDescription());
+            return dto;
+        })
+                .orElse(null);
+    }
+
+    public void deleteTag(Long id) {
+        tagRepository.deleteById(id);
+    }
 }
