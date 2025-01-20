@@ -20,10 +20,10 @@ class ClassesService {
         final List<dynamic> data = json.decode(response.body);
         return data.map((json) => Course.fromJson(json)).toList();
       } else {
-        throw Exception("Failed to load subscribed classes");
+        throw Exception("Impossible de récupérer nos parcours");
       }
     } catch (e) {
-      throw Exception("Error fetching subscribed classes: $e");
+      throw Exception("Impossible de récupérer nos parcours : $e");
     }
   }
 

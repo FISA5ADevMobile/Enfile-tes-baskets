@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import '../screens/tag_details_page.dart';
 import '../services/tags_service.dart';
 import '../models/tag.dart';
 
 class TagsProvider extends ChangeNotifier {
   final TagsService _tagsService = TagsService();
+  Tag? _currentTag;
+  Tag? get currentTag => _currentTag;
 
   List<Tag> _tags = [];
   String _filter = "Toutes";
@@ -30,6 +33,17 @@ class TagsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void onTagScanned(BuildContext context, int tagId, int courseId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TagDetailsPage(tagId: tagId, courseId: courseId),
+      ),
+    );
+  }
+
+
+
   /// Active ou désactive la caméra
   void toggleCamera() {
     _isCameraActive = !_isCameraActive;
@@ -43,7 +57,7 @@ class TagsProvider extends ChangeNotifier {
       print('Balise récupérée dans le provider : $_tags');
       notifyListeners();
     } catch (e) {
-      print('Error fetching tags: $e');
+      print('Erreur lors de la récupération des balises : $e');
     }
   }
 
@@ -56,7 +70,7 @@ class TagsProvider extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print('Error resetting tags: $e');
+      print('Erreur lors de la réinitialisation : $e');
     }
   }
 
@@ -83,31 +97,14 @@ class TagsProvider extends ChangeNotifier {
       print('Erreur lors de la validation de la balise : $e');
     }
   }
+
   /// Traite une balise scannée
-  Future<void> processScannedTag(String tagId, int classId, int courseId) async {
+  Future<void> processScannedTag(int tagId, String token) async {
     try {
-      final parsedTagId = int.tryParse(tagId);
-      if (parsedTagId == null) {
-        print('ID de la balise invalide : $tagId');
-        return;
-      }
-      final tag = _tags.firstWhere(
-            (tag) => tag.id == parsedTagId,
-        orElse: () => Tag(
-          id: parsedTagId,
-          name: "Balise inconnue ",
-          description: "Balise non trouvée",
-          validated: false,
-          xPos: 0.0,
-          yPos: 0.0,
-        ),
-      );
-      if (tag.id != -1) {
-        tag.validated = true; // Met à jour comme validée
-        notifyListeners();
-      }
+      _currentTag = await _tagsService.fetchTagById(tagId, token);
+      notifyListeners();
     } catch (e) {
-      print('Erreur lors du traitement de la balise : $e');
+      print('Erreur lors de la récupération des détails de la balise : $e');
     }
   }
 }

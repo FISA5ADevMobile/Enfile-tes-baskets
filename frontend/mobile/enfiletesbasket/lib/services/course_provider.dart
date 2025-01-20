@@ -14,8 +14,8 @@ class CourseProvider extends ChangeNotifier {
       _myCourses = await _courseService.fetchMyClasses(token);
       notifyListeners();
     } catch (e) {
-      print("Error fetching my classes: $e");
-      throw Exception("Failed to fetch my classes");
+      print("Erreur lors de la récupération du parcours : $e");
+      throw Exception("Echec lors de la récupération de mes parcours");
     }
   }
 
@@ -27,8 +27,8 @@ class CourseProvider extends ChangeNotifier {
       notifyListeners();
       return responseMessage;
     } catch (e) {
-      print("Error subscribing to course with password: $e");
-      return "Failed to subscribe to the course.";
+      print("Erreur lors de l'inscription au parcours avec mot de passe : $e");
+      return "Impossible de s'inscrire au parcours.";
     }
   }
 }
