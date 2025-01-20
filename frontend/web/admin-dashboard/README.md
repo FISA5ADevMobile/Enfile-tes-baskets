@@ -1,6 +1,6 @@
 # 📊 Admin Dashboard
 
-### 🧰 Stack
+### 🧰 Stack technique
 
 - React
 - Tailwind CSS
