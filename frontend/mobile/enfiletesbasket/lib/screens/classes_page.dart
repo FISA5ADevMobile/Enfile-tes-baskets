@@ -26,13 +26,13 @@ class ClassesPage extends StatelessWidget {
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Erreur: ${snapshot.error}'));
           }
 
           return Consumer<CourseProvider>(
             builder: (context, courseProvider, child) {
               if (courseProvider.myCourses.isEmpty) {
-                return const Center(child: Text('No courses found.'));
+                return const Center(child: Text('Pas de parcours trouvé.'));
               }
 
               return ListView.builder(
@@ -63,16 +63,16 @@ class ClassesPage extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Join a Course'),
+          title: const Text('Rejoindre un parcours'),
           content: TextField(
             onChanged: (value) => classPassword = value,
             obscureText: true,
-            decoration: const InputDecoration(labelText: 'Class Password'),
+            decoration: const InputDecoration(labelText: 'Mot de passe du parcours'),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: const Text('Annuler'),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -85,7 +85,7 @@ class ClassesPage extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: const Text('Course Subscription'),
+                    title: const Text('Inscription à un parcours'),
                     content: Text(responseMessage),
                     actions: [
                       TextButton(
@@ -96,7 +96,7 @@ class ClassesPage extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Join'),
+              child: const Text('Rejoindre'),
             ),
           ],
         );
