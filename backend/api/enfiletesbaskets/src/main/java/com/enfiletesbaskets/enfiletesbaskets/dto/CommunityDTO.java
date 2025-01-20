@@ -10,7 +10,7 @@ public class CommunityDTO {
     private Date banDate;
     private Boolean isPublic;
     private Long adminId; // ID de l'admin
-    private List<Long> userIds; // Liste des IDs des utilisateurs
+    private boolean joined; // Liste des IDs des utilisateurs
     private List<Long> moderatorIds; // Liste des IDs des modérateurs
     private List<PostDTO> postIds; // Liste des IDs des posts
     private List<Long> bannedUserIds; // Liste des IDs des utilisateurs bannis
@@ -74,12 +74,12 @@ public class CommunityDTO {
         this.adminId = adminId;
     }
 
-    public List<Long> getUserIds() {
-        return userIds;
+    public boolean getJoined() {
+        return joined;
     }
 
-    public void setUserIds(List<Long> userIds) {
-        this.userIds = userIds;
+    public void setJoined(boolean joined) {
+        this.joined = joined;
     }
 
     public List<Long> getModeratorIds() {
