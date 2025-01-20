@@ -36,6 +36,31 @@ class CommunityService {
     }
   }
 
+  Future<Community> joinCommunity(int communityId) async {
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('No token found. User might not be authenticated.');
+    }
+
+    final url = Uri.parse('$_baseUrl/join/$communityId');
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(communityId),
+    );
+
+    if (response.statusCode == 201) {
+      return Community.fromJson(json.decode(response.body));
+    } else if (response.statusCode == 400) {
+      throw Exception('Bad Request: ${response.body}');
+    } else {
+      throw Exception('Failed to join community: ${response.body}');
+    }
+  }
+
   Future<Community?> fetchCommunityById(int id) async {
     final token = await _getToken();
     if (token == null) {
