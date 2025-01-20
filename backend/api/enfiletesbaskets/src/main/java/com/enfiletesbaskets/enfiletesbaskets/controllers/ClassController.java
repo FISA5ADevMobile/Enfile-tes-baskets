@@ -26,6 +26,14 @@ public class ClassController {
     }
 
     /**
+     * Récupère une classe par ID.
+     */
+    @GetMapping("/{id}")
+    public ClassDTO getClassById(@PathVariable Long id) {
+        return classService.getClassById(id);
+    }
+
+    /**
      * Crée une nouvelle classe pour l'utilisateur authentifié.
      */
     @PostMapping
@@ -75,7 +83,6 @@ public class ClassController {
         List<TagDTO> tags = classService.getTagsByClass(classId);
         return ResponseEntity.ok(tags);
     }
-
 
     /**
      * Supprime un ou plusieurs tags d'une classe.

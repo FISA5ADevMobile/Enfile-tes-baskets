@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @ToString
 @Table(name = "users")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
