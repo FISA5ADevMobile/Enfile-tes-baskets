@@ -57,6 +57,27 @@ class CommunityProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> joinCommunity(int communityId) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final updatedCommunity =
+          await _communityService.joinCommunity(communityId);
+      final index =
+          _communities.indexWhere((community) => community.id == communityId);
+      if (index != -1) {
+        _communities[index] =
+            updatedCommunity; // Mettre à jour la communauté dans la liste
+      }
+    } catch (e) {
+      print('Error joining community: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> updateCommunity(int id, Map<String, dynamic> updatedData) async {
     _isLoading = true;
     notifyListeners();

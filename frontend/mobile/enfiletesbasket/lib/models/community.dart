@@ -1,6 +1,5 @@
-import 'dart:convert';
 import 'dart:typed_data';
-import 'package:enfiletesbasket/models/post.dart';
+import 'post.dart';
 
 class Community {
   final int id;
@@ -9,12 +8,12 @@ class Community {
   final DateTime? banDate;
   final bool isPublic;
   final int adminId;
-  final List<int> userIds;
   final List<int> moderatorIds;
   final List<Post> posts;
   final List<int> bannedUserIds;
-  final String categoryName;
+  final String? categoryName;
   final Uint8List? image;
+  final bool joined; // Nouveau champ
 
   Community({
     required this.id,
@@ -23,12 +22,12 @@ class Community {
     this.banDate,
     required this.isPublic,
     required this.adminId,
-    required this.userIds,
     required this.moderatorIds,
     required this.posts,
     required this.bannedUserIds,
-    required this.categoryName,
+    this.categoryName,
     this.image,
+    required this.joined, // Initialisé dans le constructeur
   });
 
   factory Community.fromJson(Map<String, dynamic> json) {
@@ -39,8 +38,6 @@ class Community {
       banDate: json['banDate'] != null ? DateTime.parse(json['banDate']) : null,
       isPublic: json['isPublic'] as bool,
       adminId: json['adminId'] as int,
-      userIds:
-          (json['userIds'] as List<dynamic>).map((id) => id as int).toList(),
       moderatorIds: (json['moderatorIds'] as List<dynamic>)
           .map((id) => id as int)
           .toList(),
@@ -50,8 +47,11 @@ class Community {
       bannedUserIds: (json['bannedUserIds'] as List<dynamic>)
           .map((id) => id as int)
           .toList(),
-      categoryName: json['categoryName'] as String,
-      image: json['image'] != null ? base64Decode(json['image']) : null,
+      categoryName: json['categoryName'] as String?,
+      image: json['image'] != null
+          ? Uint8List.fromList(List<int>.from(json['image']))
+          : null,
+      joined: json['joined'] as bool, // Récupéré depuis le backend
     );
   }
 
@@ -63,12 +63,12 @@ class Community {
       'banDate': banDate?.toIso8601String(),
       'isPublic': isPublic,
       'adminId': adminId,
-      'userIds': userIds,
       'moderatorIds': moderatorIds,
       'posts': posts.map((post) => post.toJson()).toList(),
       'bannedUserIds': bannedUserIds,
       'categoryName': categoryName,
-      'image': image != null ? base64Encode(image!) : null,
+      'image': image != null ? image!.toList() : null,
+      'joined': joined, // Inclure dans la sérialisation
     };
   }
 }
