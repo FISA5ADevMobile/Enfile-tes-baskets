@@ -23,6 +23,14 @@ public class TagController {
     }
 
     /**
+     * Récupère un tag par son ID.
+     */
+    @GetMapping("/{id}")
+    public TagDTO getTagById(@PathVariable Long id) {
+        return tagService.getTagById(id);
+    }
+
+    /**
      * Crée un nouveau tag.
      */
     @PostMapping
@@ -56,4 +64,11 @@ public class TagController {
     }
 
 
+    /**
+     * Supprime un tag.
+     */
+    @DeleteMapping("/{id}/delete")
+    public void deleteTag(@PathVariable Long id) {
+        tagService.deleteTag(id);
+    }
 }

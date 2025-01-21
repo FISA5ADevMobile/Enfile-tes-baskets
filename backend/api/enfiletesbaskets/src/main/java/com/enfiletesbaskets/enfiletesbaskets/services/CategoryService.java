@@ -22,11 +22,21 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     public List<CategoryModel> getAllCategories() {
-        return categoryRepository.findAll();
+        return categoryRepository.findAll().stream().map(category -> {
+            CategoryModel categoryModel = new CategoryModel();
+            categoryModel.setId(category.getId());
+            categoryModel.setName(category.getName());
+            return categoryModel;
+        }).toList();
     }
 
     public CategoryModel getCategoryById(Long id) {
-        return categoryRepository.findById(id).orElse(null);
+        return categoryRepository.findById(id).map(category -> {
+            CategoryModel categoryModel = new CategoryModel();
+            categoryModel.setId(category.getId());
+            categoryModel.setName(category.getName());
+            return categoryModel;
+        }).orElse(null);
     }
 
     public CreateCategoryDTO createCategory(CreateCategoryDTO dto, Authentication auth) {
