@@ -1,0 +1,103 @@
+{
+  "company": {
+    "name": "ETB",
+    "logo": "/assets/etb-images/app-logo.png"
+  },
+  "navigation": [
+    {
+      "name": "Juste, Enfiles Tes Baskets",
+      "href": "product"
+    },
+    {
+      "name": "Fonctionnalités",
+      "href": "features"
+    }
+  ],
+  "callToAction": {
+    "text": "Téléchager",
+    "href": "#",
+    "isDownloadable": false
+  },
+  "mainHero": {
+    "title": "Enfile Tes Baskets : Transformez votre quotidien ",
+    "subtitle": "avec le sport !",
+    "description": "Rejoignez une communauté dynamique dédiée au sport et à la santé sur le campus. Avec Enfile Tes Baskets, trouvez votre motivation, découvrez des événements sportifs, et partagez vos réussites !",
+    "img": "/assets/etb-images/image2.png",
+    "primaryAction": {
+      "text": "Téléchager",
+      "href": "#",
+      "isDownloadable": false
+    },
+    "secondaryAction": {
+      "text": "Nous Contacter",
+      "href": "mailto:"
+    }
+  },
+  "product": {
+    "title": "Explorez ce que Enfile Tes Baskets peut faire pour vous",
+    "items": [
+      {
+        "title": "Parcours d’orientation interactif",
+        "description": "Suivez le parcours sportif du campus grâce à une ligne bleue dédiée. Ce circuit balisé est parfait pour vos sessions de course ou de marche et vous permet de profiter pleinement des infrastructures sportives tout au long du chemin.",
+        "img": "/assets/etb-images/app-screenshots/parcours-orientation.png"
+      },
+      {
+        "title": "Restez informé en temps réel",
+        "description": "Accédez aux dernières actualités sportives du campus : compétitions, cours collectifs, défis, et plus encore. Ne manquez jamais un événement !",
+        "img": "/assets/etb-images/app-screenshots/actualite.png"
+      },
+      {
+        "title": "Connectez-vous à la communauté sportive",
+        "description": "Rejoignez des groupes sportifs, participez à des défis collectifs, et partagez vos progrès avec d'autres étudiants passionnés. Une plateforme idéale pour trouver des partenaires d'entraînement.",
+        "img": "/assets/etb-images/app-screenshots/communaute.png"
+      }
+    ]
+  },
+  "features": {
+    "title": "Enfile Tes Baskets",
+    "subtitle": "Une application, une multitude de possibilités",
+    "img": "/assets/etb-images/image3.png",
+    "description": "Tout ce dont vous avez besoin pour intégrer le sport dans votre quotidien",
+    "items": [
+      {
+        "name": "Parcours d'orientation sportif",
+        "description": "Découvrez facilement les installations sportives et suivez des itinéraires personnalisés pour vos entraînements comme la ligne bleue",
+        "emoji": "📍"
+      },
+      {
+        "name": "Défis et progressions",
+        "description": "Relevez des défis personnels ou en groupe, et partagez votre progression avec d'autres sportifs",
+        "emoji": "🔥"
+      },
+      {
+        "name": "Communauté et interaction",
+        "description": "Connectez-vous avec d'autres sportifs du campus, échangez des astuces et trouvez des partenaires pour vos activités préférées",
+        "emoji": "💬"
+      },
+      {
+        "name": "Événements et actualités sportives",
+        "description": "Consultez le calendrier sportif, inscrivez-vous à des événements et recevez des notifications en temps réel pour ne rien manquer",
+        "emoji": "🗓️"
+      }
+    ]
+  },
+  "about": {
+    "sections": [
+      {
+        "name": "Juste, Enfiles Tes Baskets",
+        "href": "#product",
+        "content": ""
+      },
+      {
+        "name": "Fonctionnalités",
+        "href": "#features",
+        "content": ""
+      }
+    ],
+    "socialMedia": {
+      "github": "",
+      "twitter": "",
+      "linkedin": ""
+    }
+  }
+}
