@@ -35,7 +35,17 @@ public class ClassService {
     }
 
     /**
-     * Crée une nouvelle classe avec le propriétaire authentifié et vérifie que le mot de passe est unique.
+     * Récupère une classe par son ID et la transforme en DTO.
+     */
+    public ClassDTO getClassById(Long classId) {
+        ClassModel clazz = classRepository.findById(classId)
+                .orElseThrow(() -> new RuntimeException("Classe non trouvée"));
+        return ClassDTO.toDTO(clazz);
+    }
+
+    /**
+     * Crée une nouvelle classe avec le propriétaire authentifié et vérifie que le
+     * mot de passe est unique.
      */
     public ClassDTO createClass(ClassDTO classDTO, Authentication authentication) {
         UserModel owner = userService.authenticate(authentication);
@@ -91,7 +101,8 @@ public class ClassService {
     }
 
     /**
-     * Supprime une classe par ID si elle appartient à l'utilisateur authentifié ou à un administrateur.
+     * Supprime une classe par ID si elle appartient à l'utilisateur authentifié ou
+     * à un administrateur.
      */
     public void deleteClassById(Long classId, Authentication authentication) {
         ClassModel clazz = classRepository.findById(classId)

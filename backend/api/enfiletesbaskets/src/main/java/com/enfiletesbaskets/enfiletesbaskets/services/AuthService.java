@@ -58,10 +58,10 @@ public class AuthService {
         // Générer un token JWT
         String token = jwtTokenProvider.generateToken(user);
         return ResponseEntity.ok(Map.of(
+                "id", user.getId(),
                 "token", token,
                 "role", user.getRole(),
-                "isBanned", user.getBanDate() != null
-        ));
+                "isBanned", user.getBanDate() != null));
     }
 
     public ResponseEntity<?> logout() {

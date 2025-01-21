@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -30,25 +31,48 @@ public class UserService implements UserDetailsService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-
     public List<UserModel> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAll().stream().map(user -> {
+            UserModel userModel = new UserModel();
+            userModel.setId(user.getId());
+            userModel.setPseudo(user.getPseudo());
+            userModel.setEmail(user.getEmail());
+            userModel.setName(user.getName());
+            userModel.setFirstName(user.getFirstName());
+            userModel.setRole(user.getRole());
+            userModel.setBanDate(user.getBanDate());
+            userModel.setNbPostDeleted(user.getNbPostDeleted());
+            userModel.setCode(user.getCode());
+            return userModel;
+        }).collect(Collectors.toList());
     }
 
     public UserModel getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).map(user -> {
+            UserModel userModel = new UserModel();
+            userModel.setId(user.getId());
+            userModel.setPseudo(user.getPseudo());
+            userModel.setEmail(user.getEmail());
+            userModel.setName(user.getName());
+            userModel.setFirstName(user.getFirstName());
+            userModel.setRole(user.getRole());
+            userModel.setBanDate(user.getBanDate());
+            userModel.setNbPostDeleted(user.getNbPostDeleted());
+            userModel.setCode(user.getCode());
+            return userModel;
+        }).orElse(null);
     }
 
-    public void deleteUser (Long id) {
+    public void deleteUser(Long id) {
         UserModel user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'ID : " + id));
 
-//        Erase all the user's personnal data to comply with GDPR
-        user.setPseudo("deleted_"+user.getId());
-        user.setEmail("deleted_"+user.getId());
-        user.setPassword("deleted_"+user.getId());
-        user.setName("deleted_"+user.getId());
-        user.setFirstName("deleted_"+user.getId());
+        // Erase all the user's personnal data to comply with GDPR
+        user.setPseudo("deleted_" + user.getId());
+        user.setEmail("deleted_" + user.getId());
+        user.setPassword("deleted_" + user.getId());
+        user.setName("deleted_" + user.getId());
+        user.setFirstName("deleted_" + user.getId());
 
         // Save the updated user to the database
         userRepository.save(user);
@@ -61,7 +85,8 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User  not found with username: " + username));
 
         // Créez et retournez un objet UserDetails
-        return new org.springframework.security.core.userdetails.User(user.getPseudo(), user.getPassword(), user.getAuthorities());
+        return new org.springframework.security.core.userdetails.User(user.getPseudo(), user.getPassword(),
+                user.getAuthorities());
     }
 
     public UserModel authenticate(Authentication authentication) {

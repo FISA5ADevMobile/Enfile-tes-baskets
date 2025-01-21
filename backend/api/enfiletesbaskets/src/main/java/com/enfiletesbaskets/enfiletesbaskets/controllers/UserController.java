@@ -57,27 +57,26 @@ public class UserController {
                 "id", user.getId(),
                 "pseudo", user.getPseudo(),
                 "email", user.getEmail(),
-                "isAdmin", "ADMIN".equals(user.getRole())
-        );
+                "isAdmin", "ADMIN".equals(user.getRole()));
 
         return ResponseEntity.ok(userDetails);
     }
 
-//    @DeleteMapping("/{id}")
-//    public void deleteUser(@PathVariable Long id) {
-//
-//        UserModel user = userService.getUserById(id);
-//        List<ClassModel> classes = classService.getAllClassesByOwner(user);
-//        for(ClassModel clazz : classes) {
-//            classService.deleteClassAndCourses(clazz.getId(),  SecurityContextHolder.getContext().getAuthentication());
-//        }
-//        userService.deleteUser(id);
-//    }
+    // @DeleteMapping("/{id}")
+    // public void deleteUser(@PathVariable Long id) {
+    //
+    // UserModel user = userService.getUserById(id);
+    // List<ClassModel> classes = classService.getAllClassesByOwner(user);
+    // for(ClassModel clazz : classes) {
+    // classService.deleteClassAndCourses(clazz.getId(),
+    // SecurityContextHolder.getContext().getAuthentication());
+    // }
+    // userService.deleteUser(id);
+    // }
 
     @PutMapping("/delete/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
-
 
 }
