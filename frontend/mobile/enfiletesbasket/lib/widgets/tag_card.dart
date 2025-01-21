@@ -4,10 +4,12 @@ import '../models/tag.dart';
 
 class TagCard extends StatelessWidget {
   final Tag tag;
-  final Function(int tagId) onValidate;
+  final int courseId;
+  final bool onValidate;
 
   const TagCard({
     required this.tag,
+    required this.courseId,
     required this.onValidate,
   });
 
@@ -18,19 +20,32 @@ class TagCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 4,
       child: ListTile(
-        title: Text(tag.name),
-        subtitle: Text(tag.description),
-        trailing: ElevatedButton(
-          onPressed: () => onValidate(tag.id),
-          child: Text(tag.validated ? 'Validé' : 'Valider'),
+        title: Text(
+          tag.name,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        trailing: Container(
+          constraints: const BoxConstraints(
+            minWidth: 100,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: tag.validated ? const Color(0xFFC8A14E) : Colors.grey[400],
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            tag.validated ? 'Validée' : 'Non validée',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: tag.validated ? Colors.white : Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TagDetailsPage(tag: tag),
-            ),
-          );
         },
       ),
     );

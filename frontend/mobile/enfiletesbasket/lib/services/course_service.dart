@@ -25,10 +25,10 @@ class CourseService {
         final List<dynamic> data = json.decode(response.body);
         return data.map((json) => Course.fromJson(json)).toList();
       } else {
-        throw Exception('Failed to fetch my classes: ${response.statusCode}');
+        throw Exception('Impossible de récupérer mes parcours : ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception("Error fetching my classes: $e");
+      throw Exception("Erreur lors de la récupération de mes parcours : $e");
     }
   }
 
@@ -45,13 +45,13 @@ class CourseService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseBody = json.decode(response.body);
-        return responseBody['message'] ?? 'Successfully subscribed to the course!';
+        return responseBody['message'] ?? 'Inscription au parcours réussie !';
       } else {
         final Map<String, dynamic> errorBody = json.decode(response.body);
-        return errorBody['message'] ?? 'Failed to subscribe to the course.';
+        return errorBody['message'] ?? 'Echec lors de l inscription.';
       }
     } catch (e) {
-      throw Exception("Error subscribing to course with password: $e");
+      throw Exception("Erreur lors de l inscription avec mot de passe : $e");
     }
   }
 
@@ -68,10 +68,10 @@ class CourseService {
       if (response.statusCode == 200) {
         return int.tryParse(response.body);
       } else {
-        throw Exception('Failed to fetch courseId: ${response.statusCode}');
+        throw Exception('Impossible de récupérer l ID de la course : ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception("Error fetching courseId for classId $classId: $e");
+      throw Exception("Echec lors de la récupération de l ID de la course pour le parcours $classId: $e");
     }
   }
 

@@ -55,6 +55,14 @@ public class TagController {
             @RequestBody TagDTO tagDTO) {
         return tagService.updateTag(tagId, tagDTO);
     }
+    /**
+     * Récupère les infos d'un tag spécifique par son ID.
+     */
+    @GetMapping("/{tagId}")
+    public TagDTO getTagById(@PathVariable Long tagId) {
+        return tagService.getTagById(tagId);
+    }
+
 
     /**
      * Supprime un tag.

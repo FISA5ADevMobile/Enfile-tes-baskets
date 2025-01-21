@@ -54,4 +54,21 @@ class TagsService {
       throw Exception('Impossible de valider la balise');
     }
   }
+  Future<Tag> fetchTagById(int tagId, String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/tags/$tagId'),
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return Tag.fromJson(data);
+    } else {
+      throw Exception('Impossible de récupérer les détails de la balise');
+    }
+  }
+
 }

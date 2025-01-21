@@ -20,7 +20,7 @@ class FilterButtons extends StatelessWidget {
                 tagsProvider.updateFilter(filter);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: isSelected ? Colors.blue : Colors.grey,
+                backgroundColor: isSelected ?  Color(0xFF0081A1) : Colors.grey,
                 foregroundColor: isSelected ? Colors.white : Colors.black,
               ),
               child: Text(

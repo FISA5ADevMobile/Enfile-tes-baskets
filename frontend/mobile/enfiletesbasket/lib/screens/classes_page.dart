@@ -26,13 +26,13 @@ class ClassesPage extends StatelessWidget {
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Erreur: ${snapshot.error}'));
           }
 
           return Consumer<CourseProvider>(
             builder: (context, courseProvider, child) {
               if (courseProvider.myCourses.isEmpty) {
-                return const Center(child: Text('No courses found.'));
+                return const Center(child: Text('Pas de parcours trouvé.'));
               }
 
               return ListView.builder(
@@ -47,8 +47,9 @@ class ClassesPage extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF0081A1),
         onPressed: () => _showJoinCourseDialog(context),
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color : Colors.white),
       ),
     );
   }
@@ -63,44 +64,77 @@ class ClassesPage extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Join a Course'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          title: const Text(
+            'Rejoindre un parcours',
+            style: TextStyle(color: Color(0xFF0081A1)),
+          ),
           content: TextField(
             onChanged: (value) => classPassword = value,
             obscureText: true,
-            decoration: const InputDecoration(labelText: 'Class Password'),
+            decoration: const InputDecoration(labelText: 'Mot de passe du parcours'),
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final responseMessage = await courseProvider.subscribeToCourseWithPassword(
-                  classPassword,
-                  token,
-                );
-
-                Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Course Subscription'),
-                    content: Text(responseMessage),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('OK'),
-                      ),
-                    ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text(
+                    'Annuler',
+                    style: TextStyle(color: Color(0xFF0081A1)),
                   ),
-                );
-              },
-              child: const Text('Join'),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0081A1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  onPressed: () async {
+                    final responseMessage = await courseProvider.subscribeToCourseWithPassword(
+                      classPassword,
+                      token,
+                    );
+
+                    Navigator.pop(context);
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        title: const Text(
+                          'Inscription à un parcours',
+                          style: TextStyle(color: Color(0xFF0081A1)),
+                        ),
+                        content: Text(responseMessage),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text(
+                              'OK',
+                              style: TextStyle(color: Color(0xFF0081A1)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'Rejoindre',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
             ),
           ],
         );
       },
     );
   }
+
 }

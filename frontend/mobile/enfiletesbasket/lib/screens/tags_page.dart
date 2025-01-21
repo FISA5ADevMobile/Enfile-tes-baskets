@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
+import 'package:enfiletesbasket/widgets/custom_app_bar.dart';
+import 'package:enfiletesbasket/widgets/custom_bottom_navigation_bar.dart';
 import '../services/auth_provider.dart';
 import '../services/tags_provider.dart';
 import '../widgets/filter_buttons.dart';
 import '../widgets/tag_card.dart';
+import 'main_navigation_page.dart';
 
 class TagsPage extends StatelessWidget {
   final String className;
@@ -17,44 +20,47 @@ class TagsPage extends StatelessWidget {
     required this.courseId,
   });
 
+
   @override
   Widget build(BuildContext context) {
     final tagsProvider = Provider.of<TagsProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Parcours d’orientation'),
+      appBar: CustomAppBar(
+        showBackButton: true,
+        onBackButtonPressed: null,
         actions: [
-          Consumer<TagsProvider>(
-            builder: (context, provider, child) {
-              return IconButton(
-                icon: Icon(Icons.refresh),
-                onPressed: () {
-                  final String token = authProvider.token ?? '';
-                  provider.resetTags(courseId,token);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Tags reset successfully')),
-                  );
-                },
+          IconButton(
+            icon: const Icon(
+              Icons.refresh,
+              color: Color(0xFF49454F),
+              size: 28,
+            ),
+            onPressed: () {
+              final String token = authProvider.token ?? '';
+              tagsProvider.resetTags(courseId, token);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Balises réinitialisées avec succès !'),
+                ),
               );
             },
           ),
         ],
       ),
       body: FutureBuilder<void>(
-        future:() async {
-        final String token = authProvider.token ?? '';
-        return tagsProvider.fetchTags(classId, courseId, token);
-      }(),
-
+        future: () async {
+          final String token = authProvider.token ?? '';
+          return tagsProvider.fetchTags(classId, courseId, token);
+        }(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('An error occurred: ${snapshot.error}'));
+            return Center(child: Text('Une erreur s\'est produite : ${snapshot.error}'));
           }
 
           return Consumer<TagsProvider>(
@@ -65,9 +71,9 @@ class TagsPage extends StatelessWidget {
                     if (barcode.barcodes.isNotEmpty) {
                       final idTag = barcode.barcodes.first.rawValue;
                       if (idTag != null) {
-                        provider.processScannedTag(idTag, classId, courseId);
+                        provider.onTagScanned(context, int.parse(idTag), courseId);
                       }
-                      provider.toggleCamera(); // Ferme la caméra après scan
+                      provider.toggleCamera();
                     }
                   },
                 );
@@ -77,11 +83,25 @@ class TagsPage extends StatelessWidget {
 
               return Column(
                 children: [
-                  FilterButtons(
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    child: Text(
+                      'Parcours d’orientation',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF0081A1),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: FilterButtons(),
                   ),
                   if (tags.isEmpty)
-                    Expanded(
-                      child: Center(child: Text('No tags found.')),
+                    const Expanded(
+                      child: Center(child: Text('Aucune balise trouvée.')),
                     )
                   else
                     Expanded(
@@ -91,14 +111,8 @@ class TagsPage extends StatelessWidget {
                           final tag = tags[index];
                           return TagCard(
                             tag: tag,
-                            onValidate: (tagId) {
-                              final String token = authProvider.token ?? '';
-                              provider.validateTag(courseId, tagId,token);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text('Tag ${tag.name} validated!')),
-                              );
-                            },
+                            courseId: courseId,
+                            onValidate: tag.validated,
                           );
                         },
                       ),
@@ -109,12 +123,36 @@ class TagsPage extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: Consumer<TagsProvider>(
-        builder: (context, provider, child) {
-          return FloatingActionButton(
-            onPressed: provider.toggleCamera,
-            child: Icon(provider.isCameraActive ? Icons.close : Icons.qr_code),
-          );
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          tagsProvider.toggleCamera();
+        },
+        backgroundColor: const Color(0xFF0081A1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40),
+        ),
+        child: Consumer<TagsProvider>(
+          builder: (context, provider, child) {
+            return Icon(
+              provider.isCameraActive ? Icons.close : Icons.qr_code,
+              size: 36,
+              color: Colors.white,
+            );
+          },
+        ),
+        elevation: 8,
+        tooltip: 'Scanner une balise',
+      ),
+
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 2,
+        onTap: (index) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MainNavigationPage(initialIndex: index),
+              ),
+            );
         },
       ),
     );

@@ -5,11 +5,13 @@ import 'package:enfiletesbasket/services/auth_provider.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onBackButtonPressed;
   final bool showBackButton;
+  final List<Widget>? actions;
 
   const CustomAppBar({
     Key? key,
     this.showBackButton = false,
     this.onBackButtonPressed,
+    this.actions,
   }) : super(key: key);
 
   @override
@@ -74,9 +76,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
           ),
-          const SizedBox(width: 48),
         ],
       ),
+      actions: actions,
     );
   }
 
