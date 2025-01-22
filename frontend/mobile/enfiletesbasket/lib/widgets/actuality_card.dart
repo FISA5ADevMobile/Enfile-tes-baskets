@@ -24,8 +24,8 @@ class ActualityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String shortenedDescription = truncateText(decodeText(description), 50);
-    final String decodedTitle = decodeText(title);
+    final String shortenedDescription = truncateText(description, 50);
+    final String decodedTitle = title;
     final String formattedDate =
         "${publicationDate.day.toString().padLeft(2, '0')}/${publicationDate.month.toString().padLeft(2, '0')}/${publicationDate.year}";
 
@@ -37,7 +37,7 @@ class ActualityCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color:Color.fromRGBO(0, 0, 0, 0.1),
               blurRadius: 6,
               offset: const Offset(0, 3),
             ),

@@ -34,6 +34,7 @@ class Actuality {
     );
   }
 
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
