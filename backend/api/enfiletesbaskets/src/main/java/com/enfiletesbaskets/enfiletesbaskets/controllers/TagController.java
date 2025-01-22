@@ -23,14 +23,6 @@ public class TagController {
     }
 
     /**
-     * Récupère un tag par son ID.
-     */
-    @GetMapping("/{id}")
-    public TagDTO getTagById(@PathVariable Long id) {
-        return tagService.getTagById(id);
-    }
-
-    /**
      * Crée un nouveau tag.
      */
     @PostMapping
