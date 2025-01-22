@@ -40,6 +40,8 @@ export default PostsPage;
 export const PostStats = ({ title }) => {
   const [postStats, setPostStats] = useState({
     total: "...",
+    visible: "...",
+    invisible: "...",
   });
   const { postService } = useContext(AppContext);
 
@@ -81,6 +83,20 @@ export const PostStats = ({ title }) => {
           icon={MessageSquareDashed}
           value={postStats.total}
           color="#6366F1"
+        />
+
+        <StatCard
+          name="Posts Visibles"
+          icon={MessageSquareDashed}
+          value={postStats.visible}
+          color="#22C55E"
+        />
+
+        <StatCard
+          name="Posts Invisibles (modérés)"
+          icon={MessageSquareDashed}
+          value={postStats.invisible}
+          color="#EF4444"
         />
       </motion.div>
     </>

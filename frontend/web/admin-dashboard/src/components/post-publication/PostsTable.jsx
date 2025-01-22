@@ -47,6 +47,12 @@ const columns = [
     editable: false,
   },
   {
+    field: "visible",
+    headerName: "Visible",
+    width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
+    editable: false,
+  },
+  {
     field: "actions",
     type: "actions",
     headerName: "Actions",

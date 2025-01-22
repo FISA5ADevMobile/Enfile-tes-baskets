@@ -41,6 +41,7 @@ export const mapPostModel = (post) => {
         nbPost: post.nbPost,
         banDate: post.banDate,
         creatorId: post.creatorId,
+        visible: post.visible
     }
 }
 
@@ -152,6 +153,7 @@ export const mapPostForDataGrid = (post) => {
         creatorId: mapModel.creatorId,
         datePost: handleFormatDate(new Date(mapModel.datePost)),
         nbLike: mapModel.nbLike ?? 0,
+        visible: handleFormatBoolean(mapModel.visible),
     }
 }
 
