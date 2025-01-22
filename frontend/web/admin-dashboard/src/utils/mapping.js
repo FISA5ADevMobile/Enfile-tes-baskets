@@ -130,7 +130,10 @@ export const mapActualityForDataGrid = (actuality) => {
 }
 
 export const mapCommunityForDataGrid = (community) => {
-    const mapModel = mapCommunityModel(community);
+    const mapModel = mapCommunityModel({
+        ...community,
+        nom: community.name
+    });
     return {
         id: mapModel.id,
         name: mapModel.name,
