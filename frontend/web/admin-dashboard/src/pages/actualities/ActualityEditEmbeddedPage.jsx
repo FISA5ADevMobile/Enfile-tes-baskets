@@ -113,15 +113,18 @@ const ActualityEditEmbeddedPage = () => {
             borderRadius: "16px",
           }}
         >
-          <div className="flex items-center justify-center mb-6">
-            {/* preview image base64 */}
-            <img
-              src={`data:image/png;base64,${values.image}`}
-              alt={values.title}
-              className="w-full h-full object-cover"
-              style={{ borderRadius: "16px" }}
-            />
-          </div>
+          {values.image && (
+            <div className="flex items-center justify-center mb-6">
+              {/* preview image base64 */}
+
+              <img
+                src={`data:image/png;base64,${values.image}`}
+                alt={values.title}
+                className="w-full h-full object-cover"
+                style={{ borderRadius: "16px" }}
+              />
+            </div>
+          )}
           <TextField
             label="ID"
             variant="outlined"
