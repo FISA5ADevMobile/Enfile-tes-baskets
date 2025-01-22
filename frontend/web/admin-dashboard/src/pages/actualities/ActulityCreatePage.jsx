@@ -19,6 +19,7 @@ const ActualityCreatePage = () => {
     imageFile: null, // Fichier brut
     image: null, // URL pour le preview
     imageByteArray: null,
+    imageBase64: null,
   };
 
   // Function to convert a file to base64
@@ -52,7 +53,7 @@ const ActualityCreatePage = () => {
       title: values.title,
       description: values.description,
       event: values.event,
-      image: values.imageByteArray,
+      image: values.imageBase64,
     });
     setIsLoading(false);
     if (response.error) {
@@ -79,7 +80,8 @@ const ActualityCreatePage = () => {
           ...values,
           image: reader.result, // URL pour le preview
           imageFile: file, // Fichier brut
-          imageByteA: byteArray,
+          imageByteArray: byteArray,
+          imageBase64: reader.result.split(",")[1], // Conversion en base64
         });
       };
       reader.readAsDataURL(file); // Convertit le fichier en Data URL
@@ -130,8 +132,8 @@ const ActualityCreatePage = () => {
             <div className="flex items-center mb-4">
               <img
                 src={values.image}
-                alt="Image"
-                className="w-16 h-16 rounded mr-4"
+                alt={values.imageFile?.name}
+                className="w-48 h-48 object-fit mr-4"
               />
               <div>
                 <p className="text-white-600">{values.imageFile?.name}</p>

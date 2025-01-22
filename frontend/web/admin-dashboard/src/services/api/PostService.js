@@ -109,8 +109,8 @@ export class PostService {
         const posts = response.data;
         const postStats = {
             total: posts.length,
-            // banned: posts.filter((post) => !!post.banDate).length,
-            // active: posts.filter((post) => !post.banDate).length
+            visible: posts.filter((post) => post.visible).length,
+            invisible: posts.filter((post) => !post.visible).length
         };
         return { error: false, data: postStats };
     }

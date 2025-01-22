@@ -29,6 +29,7 @@ import OrientationCoursesPage from "./pages/orientation-courses/OrientationCours
 import ClassCreatePage from "./pages/orientation-courses/ClassCreatePage";
 import ClassEditEmbeddedPage from "./pages/orientation-courses/ClassEditEmbeddedPage";
 import UpdateTagsOfClassPage from "./pages/orientation-courses/UpdateTagsOfClassPage";
+import GuidePage from "./pages/settings/GuidePage";
 
 function App() {
   const darkTheme = createTheme({
@@ -157,6 +158,11 @@ function App() {
               <Route
                 path="/parcours-orientation/mettre-a-jour-balises-classe/:classId"
                 element={<UpdateTagsOfClassPage />}
+              />
+
+              <Route
+                path="/aide"
+                element={<GuidePage />}
               />
             </Route>
           </Routes>

@@ -132,11 +132,13 @@ export class UserService {
         if (response.error) {
             return { error: true, message: response.message };
         }
-        const users = response.data.map(mapUserModel);
+        const nbAccounts = response.data.map(mapUserModel).length;
+        const users = response.data.map(mapUserModel).filter((user) => !(user.name.includes('deleted_') && user.email.includes('deleted_') && user.pseudo.includes('deleted_') && user.firstName.includes('deleted_')));
         const userStats = {
             total: users.length,
             banned: users.filter((user) => !!user.banDate).length,
-            active: users.filter((user) => !user.banDate).length
+            active: users.filter((user) => !user.banDate).length,
+            deleted: nbAccounts - users.length
         };
         return { error: false, data: userStats };
     }
