@@ -1,4 +1,12 @@
-import { Ban, User, UserCheck, UserPlus, UsersIcon, UserX } from "lucide-react";
+import {
+  Ban,
+  Delete,
+  User,
+  UserCheck,
+  UserPlus,
+  UsersIcon,
+  UserX,
+} from "lucide-react";
 import { motion } from "framer-motion";
 
 import Header from "../../components/common/Header";
@@ -8,6 +16,7 @@ import { dispatchToast } from "../../utils/helper";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../services/context/AppContext";
 import { ToastContainer } from "react-toastify";
+import { DeleteForever } from "@mui/icons-material";
 
 const UsersPage = () => {
   return (
@@ -32,6 +41,7 @@ export const UserStats = ({ title }) => {
     total: "...",
     banned: "...",
     active: "...",
+    deleted: "...",
   });
   const { userService } = useContext(AppContext);
 
@@ -84,6 +94,12 @@ export const UserStats = ({ title }) => {
           name="Utilisateurs Bannis"
           icon={Ban}
           value={userStats.banned}
+          color="#EF4444"
+        />
+        <StatCard
+          name="Utilisateurs Supprimés"
+          icon={DeleteForever}
+          value={userStats.deleted}
           color="#EF4444"
         />
       </motion.div>

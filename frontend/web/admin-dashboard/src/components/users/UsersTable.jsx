@@ -149,7 +149,18 @@ const UsersTable = () => {
       dispatchToast("error", response.message);
     } else {
       const users = response.data;
-      setUsersData(users.map(mapUserForDataGrid));
+      setUsersData(
+        users
+          .map(mapUserForDataGrid)
+          .filter(
+            (user) =>
+              !(
+                user.fullName.includes("deleted_") &&
+                user.email.includes("deleted_") &&
+                user.pseudo.includes("deleted_")
+              )
+          )
+      );
     }
   };
 
