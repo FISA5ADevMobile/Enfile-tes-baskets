@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import '../services/actuality_provider.dart';
-import '../utils/text_utils.dart';
 import '../widgets/actuality_card.dart';
 import 'main_navigation_page.dart';
 
@@ -92,8 +91,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: ActualityCard(
                     id: actuality.id,
-                    title: decodeText(actuality.title),
-                    description: decodeText(actuality.description),
+                    title: actuality.title,
+                    description: actuality.description,
                     imageBytes: actuality.imageBytes,
                     isEvent: actuality.isEvent,
                     publicationDate: actuality.publicationDate,

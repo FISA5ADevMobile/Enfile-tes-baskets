@@ -91,10 +91,23 @@ class _ActualityDetailPageState extends State<ActualityDetailPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
-              child: Image.memory(
+              child: actualityProvider.selectedActuality!.imageBytes.isNotEmpty
+                  ? Image.memory(
                 actualityProvider.selectedActuality!.imageBytes,
                 fit: BoxFit.contain,
                 width: double.infinity,
+              )
+                  : Container(
+                color: Colors.grey[200],
+                height: 200,
+                width: double.infinity,
+                child: const Center(
+                  child: Icon(
+                    Icons.image_not_supported,
+                    color: Colors.grey,
+                    size: 50,
+                  ),
+                ),
               ),
             ),
           ),
@@ -122,7 +135,6 @@ class _ActualityDetailPageState extends State<ActualityDetailPage> {
                       textAlign: TextAlign.justify,
                     ),
                     const SizedBox(height: 24),
-
 
                     if (actualityProvider.selectedActuality!.isEvent)
                       Center(

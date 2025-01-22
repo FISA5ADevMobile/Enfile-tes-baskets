@@ -22,12 +22,13 @@ class ActualityService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
+      final String responseBody = utf8.decode(response.bodyBytes);
+      final List<dynamic> data = json.decode(responseBody);
       return data.map((json) => Actuality.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load actualities');
@@ -45,12 +46,13 @@ class ActualityService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
+      final String responseBody = utf8.decode(response.bodyBytes); // Décode UTF-8
+      final Map<String, dynamic> data = json.decode(responseBody);
       return Actuality.fromJson(data);
     } else {
       throw Exception('Failed to load actuality');
@@ -68,7 +70,7 @@ class ActualityService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
@@ -90,7 +92,7 @@ class ActualityService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
