@@ -18,7 +18,7 @@ Ce projet constitue le landing page de l'application mobile `Enfile Tes Baskets`
 
 - 🎉 [TypeScript](https://www.typescriptlang.org)
 
-- 🗂 VSCode configuration: Debug, Settings, Tasks and extension for PostCSS, ESLint, Prettier, TypeScript
+- 🗂 VSCode configuration: Debug, Settings, Tasks et les extensions pour PostCSS, ESLint, Prettier, TypeScript
 
 - 🤖 SEO metadata, JSON-LD et Open Graph Tags pour le SEO
 

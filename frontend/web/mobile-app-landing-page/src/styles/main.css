@@ -7,7 +7,7 @@ a {
 }
 
 a:hover {
-  @apply border-b-2 border-blue-700;
+  @apply border-b-2 border-gray-400;
 }
 
 .content p {

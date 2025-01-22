@@ -14,7 +14,7 @@
     }
   ],
   "callToAction": {
-    "text": "Téléchager",
+    "text": "Télécharger",
     "href": "#",
     "isDownloadable": false
   },
@@ -24,7 +24,7 @@
     "description": "Rejoignez une communauté dynamique dédiée au sport et à la santé sur le campus. Avec Enfile Tes Baskets, trouvez votre motivation, découvrez des événements sportifs, et partagez vos réussites !",
     "img": "/assets/etb-images/image2.png",
     "primaryAction": {
-      "text": "Téléchager",
+      "text": "Télécharger",
       "href": "#",
       "isDownloadable": false
     },
