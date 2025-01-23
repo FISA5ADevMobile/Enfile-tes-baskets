@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:enfiletesbasket/models/user.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class UserService {
-  final String baseUrl = "http://10.0.2.2:8081/api/users";
+  String get _base => dotenv.env['API_BASE_URL'] ?? 'http://10.0.2.2:8081';
+  String get baseUrl => '$_base/api/users';
 
   /// Récupère les informations de l'utilisateur actuel
   Future<User> getMe(String token) async {
@@ -15,8 +17,10 @@ class UserService {
           'Authorization': 'Bearer $token', // Ajout du token JWT
         },
       );
+      print(baseUrl);
       print("Token: $token");
-      print("ResponseStatusCode: ${response.statusCode}");
+      print("Login: ${response.body}");
+      print("Status: ${response.statusCode}");
       if (response.statusCode == 200) {
         print("Response getMe: ${response.body}");
         final Map<String, dynamic> data = json.decode(response.body);

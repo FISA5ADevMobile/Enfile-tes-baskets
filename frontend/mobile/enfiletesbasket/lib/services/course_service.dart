@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/course.dart';
 
 
 class CourseService {
-  final String baseUrl = "http://10.0.2.2:8081/api/courses";
+  String get _base => dotenv.env['API_BASE_URL'] ?? 'http://10.0.2.2:8081';
+  String get baseUrl => '$_base/api/courses';
 
   /// Récupère les cours associés à l'utilisateur connecté
   Future<List<Course>> fetchMyClasses(String token) async {
