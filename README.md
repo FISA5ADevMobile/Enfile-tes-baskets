@@ -1,6 +1,11 @@
 # <img src="readme-images/app-logo.png" width="32" /> Enfile-tes-baskets
 
-Projet développement mobile enfile tes baskets
+Développement d’une application mobile innovante, `Enfile Tes Baskets`, pour promouvoir la pratique sportive au sein du campus de l’UPHF. Ce projet, réalisé en réponse à un appel d’offres du service des sports (2024/2025), vise à fédérer une communauté sportive dynamique grâce à des fonctionnalités telles que :
+
+- un parcours d’orientation (pour la ligne bleue),
+- une communauté interactive
+- un système d'authentification sécurisé
+- une rubrique dédiée aux événements et actualités sportives
 
 ## 🌱 Backend : Spring Boot
 
