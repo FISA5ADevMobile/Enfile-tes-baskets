@@ -18,7 +18,7 @@ dependencies:
   shared_preferences: ^2.3.3
   provider: ^6.1.2
   carousel_slider: ^5.0.0
-
+  flutter_dotenv: ^5.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -29,6 +29,10 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - .env
+    - .env.development
+    - .env.production
+    - .env.staging
 
 # Configuration des icônes de l'application
 flutter_launcher_icons:

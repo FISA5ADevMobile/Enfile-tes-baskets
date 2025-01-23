@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:enfiletesbasket/models/course.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class ClassesService {
-  final String baseUrl = "http://10.0.2.2:8081/classes";
+  String get _base => dotenv.env['API_BASE_URL'] ?? 'http://10.0.2.2:8081';
+  String get baseUrl => '$_base/classes';
 
   /// Fetch classes subscribed by the user and return a list of Course objects
   Future<List<Course>> fetchSubscribedClasses(int idUser, String token) async {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,6 +11,12 @@ import 'package:enfiletesbasket/services/actuality_provider.dart';
 import 'package:enfiletesbasket/app_routes.dart';
 
 Future<void> main() async {
+  // Sélection du fichier .env en fonction d'un argument
+  const String env = String.fromEnvironment('ENV', defaultValue: 'development'); // Par défaut en dev
+
+  print('Environnement: $env');
+
+  await dotenv.load(fileName: '.env.$env');
   WidgetsFlutterBinding.ensureInitialized();
 
   final authProvider = AuthProvider();

@@ -1,10 +1,13 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import '../models/tag.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class TagsService {
 
-  final String baseUrl = "http://10.0.2.2:8081/api";
+  String get _base => dotenv.env['API_BASE_URL'] ?? 'http://10.0.2.2:8081';
+  String get baseUrl => '$_base/api';
 
   Future<List<Tag>> fetchClassTags(int courseId, String token) async {
     final response = await http.get(

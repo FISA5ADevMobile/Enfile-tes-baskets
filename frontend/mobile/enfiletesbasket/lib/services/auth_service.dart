@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthService {
-  final String baseUrl = "http://10.0.2.2:8081/api/auth";
+  String get _base => dotenv.env['API_BASE_URL'] ?? 'http://10.0.2.2:8081';
+  String get baseUrl => '$_base/api/auth';
 
   Future<void> register({
     required String username,
@@ -47,6 +49,8 @@ class AuthService {
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({"email": email, "password": password}),
     );
+
+
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);

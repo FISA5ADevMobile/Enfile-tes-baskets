@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../models/actuality.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ActualityService {
-  static const String _baseUrl = 'http://10.0.2.2:8081/api/actualities';
+
+  String get _base => dotenv.env['API_BASE_URL'] ?? 'http://10.0.2.2:8081';
+  String get _baseUrl => '$_base/api/actualities';
+
 
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
