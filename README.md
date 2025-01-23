@@ -1,6 +1,11 @@
 # <img src="readme-images/app-logo.png" width="32" /> Enfile-tes-baskets
 
-Projet développement mobile enfile tes baskets
+Développement d’une application mobile innovante, `Enfile Tes Baskets`, pour promouvoir la pratique sportive au sein du campus de l’UPHF. Ce projet, réalisé en réponse à un appel d’offres du service des sports (2024/2025), vise à fédérer une communauté sportive dynamique grâce à des fonctionnalités telles que :
+
+- un parcours d’orientation (pour la ligne bleue),
+- une communauté interactive
+- un système d'authentification sécurisé
+- une rubrique dédiée aux événements et actualités sportives
 
 ## 🌱 Backend : Spring Boot
 
@@ -42,9 +47,26 @@ docker-compose up -d
 
 - Flutter
 
+#### 🤩 Web Landing Page
+
+#### 🎆 Aperçu
+
+🔴 [prod] https://enfile-tes-baskets.vercel.app/
+
+![alt text](readme-images/landing-page-overview.png)
+
+#### 🧰 Technos utilisées
+
+- Next.js qui est un framework React, donc ça reste du React
+- Tailwind CSS
+- PostCSS pour le processing de Tailwind CSS
+- TypeScript
+
 ### 📊 Web Admin Dashboard
 
 #### 🎆 Aperçu
+
+🔴 [prod] https://admin-dashboard-etb.vercel.app/
 
 ![alt text](readme-images/admin-dashboard-overview.png)
 
@@ -52,5 +74,7 @@ docker-compose up -d
 
 - React
 - Tailwind CSS
+- Marterial UI
+- React Toastify
 - Recharts
 - Framer Motion

@@ -10,6 +10,8 @@ const Menu = () => {
   const { navigation, company, callToAction } = config;
   const { name: companyName, logo } = company;
 
+  const apkDownloadUrl = process.env.NEXT_PUBLIC_APK_DOWNLOAD_URL;
+
   return (
     <>
       <svg
@@ -60,12 +62,12 @@ const Menu = () => {
               ))}
               <a
                 className={`font-medium text-primary hover:text-secondary`}
-                href={callToAction.href} // Le lien vers ton fichier APK
-                download={
-                  callToAction.isDownloadable ? 'MonApplication.apk' : false
-                } // Téléchargement si disponible
+                href={apkDownloadUrl ?? callToAction.href} // Le lien vers ton fichier APK
+                // download={
+                //   callToAction.isDownloadable ? 'MonApplication.apk' : false
+                // } // Téléchargement si disponible
                 onClick={(e) => {
-                  if (callToAction.href === '#') {
+                  if (!apkDownloadUrl) {
                     e.preventDefault(); // Empêche l'action par défaut
                     alert('Pas encore disponible !');
                   }
