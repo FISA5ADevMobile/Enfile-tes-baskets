@@ -42,9 +42,26 @@ docker-compose up -d
 
 - Flutter
 
+#### 🤩 Web Landing Page
+
+#### 🎆 Aperçu
+
+🔴 [prod] https://enfile-tes-baskets.vercel.app/
+
+![alt text](readme-images/landing-page-overview.png)
+
+#### 🧰 Technos utilisées
+
+- Next.js qui est un framework React, donc ça reste du React
+- Tailwind CSS
+- PostCSS pour le processing de Tailwind CSS
+- TypeScript
+
 ### 📊 Web Admin Dashboard
 
 #### 🎆 Aperçu
+
+🔴 [prod] https://admin-dashboard-etb.vercel.app/
 
 ![alt text](readme-images/admin-dashboard-overview.png)
 
@@ -52,5 +69,7 @@ docker-compose up -d
 
 - React
 - Tailwind CSS
+- Marterial UI
+- React Toastify
 - Recharts
 - Framer Motion
