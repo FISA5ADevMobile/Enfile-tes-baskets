@@ -1,13 +1,18 @@
 # Enfiles Tes Baskets : landing page
 
-### Aperçu 
+### 🎆 Aperçu 
+
+🔴 [prod] https://enfile-tes-baskets.vercel.app/
+
 ![alt text](readme-images/landing-page-overview.png)
 
-### Description
+### 📄 Description
 
 Ce projet constitue le landing page de l'application mobile `Enfile Tes Baskets`. C'est un site web qui présente l'application dans sa globalité et propose le téléchargement de son `apk`, si ce dernier est disponible.
 
-### Technos et fonctionnalités
+L'`apk` peut être stocké n'importe où (comme `Gooogle Drive`) tant qu'il y a une `url` qui permet d'y accéder et de le télécharger.
+
+### 🧰 Technos
 
 - 📱  Responsive design
 - 🔥 [Next.js](https://nextjs.org) qui est un framework `React`, donc ça reste du React
@@ -24,7 +29,11 @@ Ce projet constitue le landing page de l'application mobile `Enfile Tes Baskets`
 
 - 🖱️ Déploiement en un seul clic avec Vercel ou Netlify (ou déploiement manuel pour les autres services d'herbergement)
 
-### Run
+### ⚙️ Run
+
+#### 0. Variable d'environnement
+
+Ne pas oublier de mettre à jour la variable d'environnement `NEXT_PUBLIC_APK_DOWNLOAD_URL` dans le fichier `.env` pour le lien l'apk (si disponible) qui aura la possibilité d'être téléchargé.
 
 #### 1. Lancer le projet
 - Installer les dépendances
