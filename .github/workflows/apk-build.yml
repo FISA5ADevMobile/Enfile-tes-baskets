@@ -23,8 +23,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.24.1
-          dart-version: 3.5.1
+          flutter-version: 3.24.0
       - run: flutter --version
         working-directory: frontend/mobile/enfiletesbasket
       - run: flutter pub get
