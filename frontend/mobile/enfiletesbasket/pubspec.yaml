@@ -1,6 +1,6 @@
 name: enfiletesbasket
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -30,9 +30,6 @@ flutter:
   assets:
     - assets/images/
     - .env
-    - .env.development
-    - .env.production
-    - .env.staging
 
 # Configuration des icônes de l'application
 flutter_launcher_icons:
