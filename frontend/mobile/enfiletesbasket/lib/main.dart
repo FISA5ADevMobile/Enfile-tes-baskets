@@ -12,11 +12,13 @@ import 'package:enfiletesbasket/app_routes.dart';
 
 Future<void> main() async {
   // Sélection du fichier .env en fonction d'un argument
-  const String env = String.fromEnvironment('ENV', defaultValue: 'development'); // Par défaut en dev
+  // const String env = String.fromEnvironment('ENV', defaultValue: 'development'); // Par défaut en dev
+  const String env = String.fromEnvironment('ENV');
 
   print('Environnement: $env');
 
-  await dotenv.load(fileName: '.env.$env');
+  // await dotenv.load(fileName: '.env.$env');
+  await dotenv.load(fileName: '.env');
   WidgetsFlutterBinding.ensureInitialized();
 
   final authProvider = AuthProvider();
@@ -37,6 +39,8 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthProvider>(
