@@ -14,6 +14,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'screens/community_screen.dart';
 import 'services/community_provider.dart';
 import 'services/post_provider.dart';
+import 'screens/community_screen.dart';
+import 'services/community_provider.dart';
+import 'services/post_provider.dart';
 
 Future<void> main() async {
   // Sélection du fichier .env en fonction d'un argument
