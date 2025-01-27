@@ -15,7 +15,7 @@ public class CommunityMapper {
         dto.setBanDate(communityModel.getBanDate());
         dto.setIsPublic(communityModel.getPublic());
         dto.setAdminId(communityModel.getAdmin() != null ? communityModel.getAdmin().getId() : null);
-
+        dto.setImage(communityModel.getImage() != null ? communityModel.getImage() : null);
         // Convertir les listes d'entités en listes d'IDs
         dto.setUserIds(communityModel.getUsers().stream().map(user -> user.getId()).collect(Collectors.toList()));
         dto.setModeratorIds(communityModel.getModerators().stream().map(user -> user.getId()).collect(Collectors.toList()));
