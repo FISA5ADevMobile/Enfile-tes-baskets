@@ -91,7 +91,6 @@ public class CommunityService {
         newPost.setCreator(creator);
         newPost.setRelated(relatedPost);
 
-        newPost = postRepository.save(newPost);
 
         community.getPosts().add(newPost);
         communityRepository.save(community);
@@ -119,6 +118,7 @@ public class CommunityService {
         community.setImage(dto.getImage());
         community.setCategory(category);
         community.setUsers(listUsers);
+        community.setPosts(new ArrayList<>());
 
         CommunityModel savedCommunity = communityRepository.save(community);
 

@@ -149,4 +149,32 @@ class CommunityService {
       throw Exception('Failed to delete community');
     }
   }
+
+  Future<Community> createPostInCommunity(
+      int communityId, Map<String, dynamic> postData) async {
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('No token found. User might not be authenticated.');
+    }
+
+    final url = Uri.parse('$_baseUrl/post/$communityId');
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(postData),
+    );
+
+    if (response.statusCode == 200) {
+      return Community.fromJson(json.decode(response.body));
+    } else if (response.statusCode == 400) {
+      throw Exception('Bad Request: ${response.body}');
+    } else if (response.statusCode == 204) {
+      throw Exception('No Content: ${response.body}');
+    } else {
+      throw Exception('Failed to create post in community: ${response.body}');
+    }
+  }
 }
