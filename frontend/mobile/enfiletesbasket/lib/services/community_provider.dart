@@ -111,4 +111,32 @@ class CommunityProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> createPostInCommunity(
+      int communityId, Map<String, dynamic> postData) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final updatedCommunity =
+          await _communityService.createPostInCommunity(communityId, postData);
+      final index =
+          _communities.indexWhere((community) => community.id == communityId);
+      if (index != -1) {
+        _communities[index] = updatedCommunity; // Mise à jour locale
+      }
+    } catch (e) {
+      print('Error creating post in community: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void selectCommunity(int index) {
+    if (index >= 0 && index < _communities.length) {
+      _selectedCommunity = _communities[index];
+      notifyListeners();
+    }
+  }
 }
