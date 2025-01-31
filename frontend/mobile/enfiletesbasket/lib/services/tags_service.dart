@@ -9,9 +9,10 @@ class TagsService {
   String get _base => dotenv.env['API_BASE_URL'] ?? 'http://10.0.2.2:8081';
   String get baseUrl => '$_base/api';
 
-  Future<List<Tag>> fetchClassTags(int courseId, String token) async {
+  Future<List<Tag>> fetchClassTags(int classId, String token) async {
+    print("Je fetch les tags de la classes: $classId");
     final response = await http.get(
-      Uri.parse('$baseUrl/courses/$courseId/tags'),
+      Uri.parse('$baseUrl/classes/$classId/tags'),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Authorization': 'Bearer $token',
