@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/post.dart';
@@ -7,6 +9,51 @@ class PostCard extends StatelessWidget {
   final Post post;
 
   PostCard({required this.post});
+
+  /// Vérifie si la chaîne est une image encodée en Base64
+  bool _isBase64(String? data) {
+    return data != null && data.startsWith("data:image");
+  }
+
+  /// Récupère l'image sous forme de widget
+  Widget _buildPostImage() {
+    if (post.imageUrl != null && post.imageUrl!.isNotEmpty) {
+      if (_isBase64(post.imageUrl)) {
+        try {
+          // Décoder l'image en base64
+          String base64Data = post.imageUrl!.split(',').last;
+          Uint8List bytes = base64Decode(base64Data);
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.memory(
+              bytes,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.broken_image,
+                    size: 100, color: Colors.grey);
+              },
+            ),
+          );
+        } catch (e) {
+          return const Icon(Icons.broken_image, size: 100, color: Colors.grey);
+        }
+      } else {
+        // Si ce n'est pas du Base64, alors c'est une URL classique
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.network(
+            post.imageUrl!,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.broken_image,
+                  size: 100, color: Colors.grey);
+            },
+          ),
+        );
+      }
+    }
+    return const SizedBox.shrink(); // Ne rien afficher si pas d’image
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,17 +95,7 @@ class PostCard extends StatelessWidget {
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 8),
-            if (post.imageUrl != null && post.imageUrl!.isNotEmpty)
-              Image.network(
-                post.imageUrl!,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.broken_image,
-                      size: 100, color: Colors.grey);
-                },
-              )
-            else
-              const SizedBox.shrink(), // Ne rien afficher si aucune image
+            _buildPostImage(), // Affichage intelligent de l'image
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,

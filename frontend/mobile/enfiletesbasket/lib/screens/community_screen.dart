@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../widgets/logo_bar.dart';
 import '../widgets/section_bar.dart';
@@ -19,17 +22,13 @@ class _CommunityScreenState extends State<CommunityScreen> {
 
   final List<String> _sections = ["Communauté", "Explorer"];
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final communityProvider =
-          Provider.of<CommunityProvider>(context, listen: false);
-      final postProvider = Provider.of<PostProvider>(context, listen: false);
+  Future<void> _fetchData(BuildContext context) async {
+    final communityProvider =
+        Provider.of<CommunityProvider>(context, listen: false);
+    final postProvider = Provider.of<PostProvider>(context, listen: false);
 
-      communityProvider.loadAllCommunities();
-      postProvider.loadAllPosts(); // Charger les posts publics
-    });
+    await communityProvider.loadAllCommunities();
+    await postProvider.loadAllPosts(); // Charger les posts publics
   }
 
   void _onTabSelected(int index) {
@@ -47,23 +46,18 @@ class _CommunityScreenState extends State<CommunityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final communityProvider = Provider.of<CommunityProvider>(context);
-    final postProvider = Provider.of<PostProvider>(context);
-
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (_selectedSectionIndex == 0 && _selectedTabIndex == 0) {
-            // Créer un post public
-            _showCreatePostDialog(context, postProvider, null);
-          } else if (_selectedSectionIndex == 0 &&
-              communityProvider.selectedCommunity != null) {
-            // Créer un post dans une communauté
+            _showCreatePostDialog(context, null);
+          } else if (_selectedSectionIndex == 0) {
+            final communityProvider =
+                Provider.of<CommunityProvider>(context, listen: false);
             _showCreatePostDialog(
-                context, postProvider, communityProvider.selectedCommunity!.id);
+                context, communityProvider.selectedCommunity?.id);
           } else {
-            // Créer une communauté
-            _showCreateCommunityDialog(context, communityProvider);
+            _showCreateCommunityDialog(context);
           }
         },
         child: const Icon(Icons.add),
@@ -71,36 +65,54 @@ class _CommunityScreenState extends State<CommunityScreen> {
             ? "Créer un post"
             : "Créer une communauté",
       ),
-      body: Column(
-        children: [
-          LogoBar(),
-          SectionBar(
-            sections: _sections,
-            selectedIndex: _selectedSectionIndex,
-            onSectionSelected: _onSectionSelected,
-          ),
-          CommunityTabBar(
-            tabs: _selectedSectionIndex == 0
-                ? [
-                    "Public",
-                    ...communityProvider.communities.map((c) => c.name).toList()
-                  ]
-                : ["Toutes les communautés"],
-            selectedIndex: _selectedTabIndex,
-            onTabSelected: (index) {
-              _onTabSelected(index);
-              if (index > 0 && _selectedSectionIndex == 0) {
-                // Charger les posts de la communauté sélectionnée
-                communityProvider.selectCommunity(index - 1);
-              }
+      body: FutureBuilder<void>(
+        future: _fetchData(context),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Erreur: ${snapshot.error}'));
+          }
+
+          return Consumer2<CommunityProvider, PostProvider>(
+            builder: (context, communityProvider, postProvider, child) {
+              return Column(
+                children: [
+                  LogoBar(),
+                  SectionBar(
+                    sections: _sections,
+                    selectedIndex: _selectedSectionIndex,
+                    onSectionSelected: _onSectionSelected,
+                  ),
+                  CommunityTabBar(
+                    tabs: _selectedSectionIndex == 0
+                        ? [
+                            "Public",
+                            ...communityProvider.communities
+                                .map((c) => c.name)
+                                .toList()
+                          ]
+                        : ["Toutes les communautés"],
+                    selectedIndex: _selectedTabIndex,
+                    onTabSelected: (index) {
+                      _onTabSelected(index);
+                      if (index > 0 && _selectedSectionIndex == 0) {
+                        communityProvider.selectCommunity(index - 1);
+                      }
+                    },
+                  ),
+                  Expanded(
+                    child: _selectedSectionIndex == 0
+                        ? _buildPostsSection(postProvider, communityProvider)
+                        : _buildCommunitiesSection(communityProvider),
+                  ),
+                ],
+              );
             },
-          ),
-          Expanded(
-            child: _selectedSectionIndex == 0
-                ? _buildPostsSection(postProvider, communityProvider)
-                : _buildCommunitiesSection(communityProvider),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -108,14 +120,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
   Widget _buildPostsSection(
       PostProvider postProvider, CommunityProvider communityProvider) {
     if (_selectedTabIndex == 0) {
-      // Afficher les posts publics
-      if (postProvider.isLoading) {
-        return const Center(child: CircularProgressIndicator());
-      }
       if (postProvider.posts.isEmpty) {
-        return const Center(
-          child: Text('Aucun post disponible.'),
-        );
+        return const Center(child: Text('Aucun post disponible.'));
       }
       return ListView.builder(
         itemCount: postProvider.posts.length,
@@ -124,7 +130,6 @@ class _CommunityScreenState extends State<CommunityScreen> {
         },
       );
     } else {
-      // Afficher les posts de la communauté sélectionnée
       final selectedCommunity = communityProvider.selectedCommunity;
       if (selectedCommunity == null || selectedCommunity.posts.isEmpty) {
         return const Center(
@@ -141,13 +146,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
   }
 
   Widget _buildCommunitiesSection(CommunityProvider communityProvider) {
-    if (communityProvider.isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
     if (communityProvider.communities.isEmpty) {
-      return const Center(
-        child: Text('Aucune communauté trouvée.'),
-      );
+      return const Center(child: Text('Aucune communauté trouvée.'));
     }
     return ListView.builder(
       itemCount: communityProvider.communities.length,
@@ -159,16 +159,29 @@ class _CommunityScreenState extends State<CommunityScreen> {
     );
   }
 
-  void _showCreatePostDialog(
-      BuildContext context, PostProvider postProvider, int? communityId) {
+  void _showCreatePostDialog(BuildContext context, int? communityId) {
     final descriptionController = TextEditingController();
+    File? selectedImage;
+    String? base64Image;
+
+    Future<void> _pickImage() async {
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        selectedImage = File(pickedFile.path);
+        List<int> imageBytes = await selectedImage!.readAsBytes();
+        base64Image = base64Encode(imageBytes);
+      } else {
+        base64Image = null;
+      }
+    }
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text(
-              "Publier un post ${communityId == null ? 'public' : 'dans la communauté'}"),
+              "Publier un post ${communityId == null ? 'public' : 'dans une communauté'}"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -176,6 +189,12 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 controller: descriptionController,
                 decoration: const InputDecoration(labelText: "Contenu du post"),
                 maxLines: 3,
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton.icon(
+                onPressed: _pickImage,
+                icon: const Icon(Icons.image),
+                label: const Text("Publier une photo"),
               ),
             ],
           ),
@@ -186,24 +205,26 @@ class _CommunityScreenState extends State<CommunityScreen> {
             ),
             ElevatedButton(
               onPressed: () {
+                final postProvider =
+                    Provider.of<PostProvider>(context, listen: false);
+                final communityProvider =
+                    Provider.of<CommunityProvider>(context, listen: false);
+
                 final postData = {
                   'description': descriptionController.text,
-                  'image': null, // Gestion des images (si applicable)
+                  'image': base64Image,
                   'visible': true,
                   'relatedPostId': null,
                 };
 
                 if (communityId == null) {
-                  // Publier dans "Public"
                   postProvider.createPost(postData);
                 } else {
-                  // Publier dans une communauté spécifique
-                  final communityProvider =
-                      Provider.of<CommunityProvider>(context, listen: false);
                   communityProvider.createPostInCommunity(
                       communityId, postData);
                 }
 
+                _fetchData(context); // Rafraîchir les données après création
                 Navigator.of(context).pop();
               },
               child: const Text("Publier le post"),
@@ -214,10 +235,23 @@ class _CommunityScreenState extends State<CommunityScreen> {
     );
   }
 
-  void _showCreateCommunityDialog(
-      BuildContext context, CommunityProvider communityProvider) {
+  void _showCreateCommunityDialog(BuildContext context) {
     final nameController = TextEditingController();
     final descriptionController = TextEditingController();
+    File? selectedImage;
+    String? base64Image;
+
+    Future<void> _pickImage() async {
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        selectedImage = File(pickedFile.path);
+        List<int> imageBytes = await selectedImage!.readAsBytes();
+        base64Image = base64Encode(imageBytes);
+      } else {
+        base64Image = null; // Si aucune image n'est sélectionnée, envoyer null
+      }
+    }
 
     showDialog(
       context: context,
@@ -235,6 +269,12 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 controller: descriptionController,
                 decoration: const InputDecoration(labelText: "Description"),
               ),
+              const SizedBox(height: 10),
+              ElevatedButton.icon(
+                onPressed: _pickImage,
+                icon: const Icon(Icons.image),
+                label: const Text("Publier une image"),
+              ),
             ],
           ),
           actions: [
@@ -244,16 +284,22 @@ class _CommunityScreenState extends State<CommunityScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                communityProvider.createCommunity({
+                final communityProvider =
+                    Provider.of<CommunityProvider>(context, listen: false);
+
+                final communityData = {
                   'nom': nameController.text,
                   'description': descriptionController.text,
                   'isPublic': true,
-                  'image': null,
+                  'image': base64Image, // Null si pas d'image sélectionnée
                   'categoryId': null,
-                });
+                };
+
+                communityProvider.createCommunity(communityData);
+                _fetchData(context); // Rafraîchir les données après création
                 Navigator.of(context).pop();
               },
-              child: const Text("Créer"),
+              child: const Text("Créer la communauté"),
             ),
           ],
         );
