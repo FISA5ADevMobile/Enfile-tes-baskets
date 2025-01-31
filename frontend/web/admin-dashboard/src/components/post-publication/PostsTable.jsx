@@ -22,14 +22,14 @@ const columns = [
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
   },
   {
-    field: "description",
-    headerName: "Description",
+    field: "content",
+    headerName: "Contenu",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
   {
-    field: "creatorId",
-    headerName: "ID Utilisateur",
+    field: "username",
+    headerName: "Username",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },

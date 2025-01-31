@@ -31,11 +31,12 @@ const PostEditEmbeddedPage = () => {
   // Default values
   const defaultValues = {
     id: "",
-    description: "",
-    creatorId: "",
+    content: "",
+    username: "",
     datePost: "",
     nbLike: 0,
     visible: false,
+    image: "",
   };
 
   // States
@@ -85,11 +86,12 @@ const PostEditEmbeddedPage = () => {
     const post = response.data;
     setValues({
       id: post.id,
-      description: post.description,
-      creatorId: post.creatorId,
+      content: post.content,
+      username: post.username,
       datePost: handleFormatDateTime(new Date(post.datePost)),
       nbLike: post.nbLike ?? 0,
       visible: post.visible,
+      image: post.image,
     });
   };
 
@@ -148,6 +150,18 @@ const PostEditEmbeddedPage = () => {
             borderRadius: "16px",
           }}
         >
+          {values.image && (
+            <div className="flex items-center justify-center mb-6">
+              {/* preview image base64 */}
+
+              <img
+                src={`data:image/png;base64,${values.image}`}
+                alt={values.title}
+                className="w-full h-full object-cover"
+                style={{ borderRadius: "16px" }}
+              />
+            </div>
+          )}
           <TextField
             label="ID"
             variant="outlined"
@@ -157,21 +171,21 @@ const PostEditEmbeddedPage = () => {
             disabled
           />
           <TextField
-            label="Description"
+            label="Contenu"
             multiline
             variant="outlined"
             fullWidth
-            name="description"
-            value={values.description}
+            name="content"
+            value={values.content}
             onChange={handleChange}
             disabled
           />
           <TextField
-            label="ID Utilisateur"
+            label="Username"
             variant="outlined"
             fullWidth
             name="creatorId"
-            value={values.creatorId}
+            value={values.username}
             onChange={handleChange}
             disabled
           />

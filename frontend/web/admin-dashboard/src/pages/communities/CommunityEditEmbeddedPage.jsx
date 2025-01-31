@@ -24,7 +24,7 @@ const CommunityEditEmbeddedPage = () => {
     name: "",
     description: "",
     isPublic: handleFormatBoolean(false),
-    categoryId: "",
+    categoryName: "",
     banDate: "",
   };
 
@@ -80,7 +80,7 @@ const CommunityEditEmbeddedPage = () => {
       name: community.name,
       description: community.description,
       isPublic: community.isPublic ? "Oui" : "Non",
-      categoryId: community.categoryId,
+      categoryName: community.categoryName,
       banDate: handleFormatDateTime(new Date(community.banDate)),
       //
       //   nbModerators: community.moderators.length,
@@ -172,21 +172,12 @@ const CommunityEditEmbeddedPage = () => {
             disabled
           />
           <TextField
-            label="ID Categorie"
+            label="Categorie"
             variant="outlined"
             fullWidth
             name="category"
-            value={values.categoryId ?? ""}
+            value={values.categoryName ?? ""}
             onChange={handleChange}
-            disabled
-          />
-          <TextField
-            label="Nom de la categorie"
-            variant="outlined"
-            fullWidth
-            name="categoryName"
-            value={category?.name ?? ""}
-            // onChange={(}
             disabled
           />
         </div>

@@ -34,13 +34,13 @@ export const mapUserModel = (user) => {
 export const mapPostModel = (post) => {
     return {
         id: post.id,
-        description: post.description,
-        image: post.image,
+        content: post.content,
+        image: post.imageUrl,
         datePost: post.datePost,
         nbLike: post.nbLike,
         nbPost: post.nbPost,
-        banDate: post.banDate,
-        creatorId: post.creatorId,
+        banDate: post.banDate ? new Date(post.banDate) : null,
+        username: post.username,
         visible: post.visible
     }
 }
@@ -57,16 +57,15 @@ export const mapCategoryModel = (category) => {
 export const mapCommunityModel = (community) => {
     return {
         id: community.id,
-        name: community.nom,
+        name: community.name,
         description: community.description,
         banDate: community.banDate,
         isPublic: handleFormatBoolean(community.isPublic),
         adminId: community.adminId,
-        userIds: community.userIds,
         moderatorIds: community.moderatorIds,
-        postIds: community.postIds,
         bannedUserIds: community.bannedUserIds,
-        categoryId: community.categoryId
+        postIds: community.postIds,
+        categoryName: community.categoryName
     }
 }
 
@@ -133,14 +132,14 @@ export const mapActualityForDataGrid = (actuality) => {
 export const mapCommunityForDataGrid = (community) => {
     const mapModel = mapCommunityModel({
         ...community,
-        nom: community.name
+        name: community.name
     });
     return {
         id: mapModel.id,
         name: mapModel.name,
         description: mapModel.description,
         isPublic: mapModel.isPublic,
-        categoryId: mapModel.categoryId,
+        categoryName: mapModel.categoryName,
     }
 }
 
@@ -149,8 +148,8 @@ export const mapPostForDataGrid = (post) => {
     const mapModel = mapPostModel(post);
     return {
         id: mapModel.id,
-        description: mapModel.description,
-        creatorId: mapModel.creatorId,
+        content: mapModel.content,
+        username: mapModel.username,
         datePost: handleFormatDate(new Date(mapModel.datePost)),
         nbLike: mapModel.nbLike ?? 0,
         visible: handleFormatBoolean(mapModel.visible),
