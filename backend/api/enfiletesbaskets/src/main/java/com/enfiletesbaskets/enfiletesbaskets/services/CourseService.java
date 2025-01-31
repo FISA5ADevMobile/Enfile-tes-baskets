@@ -1,9 +1,6 @@
 package com.enfiletesbaskets.enfiletesbaskets.services;
 
-import com.enfiletesbaskets.enfiletesbaskets.dto.ClassDTO;
-import com.enfiletesbaskets.enfiletesbaskets.dto.CourseDTO;
-import com.enfiletesbaskets.enfiletesbaskets.dto.CourseTagsDTO;
-import com.enfiletesbaskets.enfiletesbaskets.dto.TagDTO;
+import com.enfiletesbaskets.enfiletesbaskets.dto.*;
 import com.enfiletesbaskets.enfiletesbaskets.models.ClassModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.CourseModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.TagModel;
@@ -234,6 +231,20 @@ public class CourseService {
         CourseModel updatedCourse = courseRepository.save(course);
         return CourseDTO.toDTO(updatedCourse);
     }
+
+    /**
+     * Récupère les cours auxquels l'utilisateur authentifié est inscrit avec les détails de la classe associée.
+     */
+    public List<CourseWithClassDTO> getUserCoursesWithClasses(Authentication authentication) {
+        UserModel user = userService.authenticate(authentication);
+
+        List<CourseModel> userCourses = courseRepository.findByUserId(user.getId());
+
+        return userCourses.stream()
+                .map(CourseWithClassDTO::toDTO)
+                .collect(Collectors.toList());
+    }
+
 
 
 
