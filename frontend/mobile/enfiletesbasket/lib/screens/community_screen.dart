@@ -23,12 +23,14 @@ class _CommunityScreenState extends State<CommunityScreen> {
   final List<String> _sections = ["Communauté", "Explorer"];
 
   Future<void> _fetchData(BuildContext context) async {
-    final communityProvider =
-        Provider.of<CommunityProvider>(context, listen: false);
-    final postProvider = Provider.of<PostProvider>(context, listen: false);
+    Future.delayed(Duration.zero, () async {
+      final communityProvider =
+          Provider.of<CommunityProvider>(context, listen: false);
+      final postProvider = Provider.of<PostProvider>(context, listen: false);
 
-    await communityProvider.loadAllCommunities();
-    await postProvider.loadAllPosts(); // Charger les posts publics
+      await communityProvider.loadAllCommunities();
+      await postProvider.loadAllPosts(); // Charger les posts publics
+    });
   }
 
   void _onTabSelected(int index) {
@@ -168,7 +170,9 @@ class _CommunityScreenState extends State<CommunityScreen> {
       final pickedFile =
           await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
-        selectedImage = File(pickedFile.path);
+        setState(() {
+          selectedImage = File(pickedFile.path);
+        });
         List<int> imageBytes = await selectedImage!.readAsBytes();
         base64Image = base64Encode(imageBytes);
       } else {
@@ -204,7 +208,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
               child: const Text("Annuler"),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final postProvider =
                     Provider.of<PostProvider>(context, listen: false);
                 final communityProvider =
@@ -218,14 +222,14 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 };
 
                 if (communityId == null) {
-                  postProvider.createPost(postData);
+                  await postProvider.createPost(postData);
                 } else {
-                  communityProvider.createPostInCommunity(
+                  await communityProvider.createPostInCommunity(
                       communityId, postData);
                 }
 
-                _fetchData(context); // Rafraîchir les données après création
                 Navigator.of(context).pop();
+                _fetchData(context);
               },
               child: const Text("Publier le post"),
             ),

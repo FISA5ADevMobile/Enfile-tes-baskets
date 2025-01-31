@@ -27,23 +27,32 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      id: json['id'] as int,
+      id: json['id'] is int
+          ? json['id']
+          : int.tryParse(json['id'].toString()) ?? 0,
+      nbLike: json['nbLike'] is int
+          ? json['nbLike']
+          : int.tryParse(json['nbLike'].toString()),
+      nbPost: json['nbPost'] is int
+          ? json['nbPost']
+          : int.tryParse(json['nbPost'].toString()),
+      relatedPostId: json['relatedPostId'] is int
+          ? json['relatedPostId']
+          : int.tryParse(json['relatedPostId'].toString()),
       content: json['content'] as String,
       datePost:
           json['datePost'] != null ? DateTime.parse(json['datePost']) : null,
       imageUrl: json['imageUrl'] as String?,
-      nbLike: json['nbLike'] as int?,
-      nbPost: json['nbPost'] as int?,
       visible: json['visible'] as bool,
       banDate: json['banDate'] != null ? DateTime.parse(json['banDate']) : null,
       username: json['username'] as String,
-      relatedPostId: json['relatedPostId'] as int?,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'id': id.toString(),
+      'relatedPostId': relatedPostId?.toString(),
       'content': content,
       'datePost': datePost?.toIso8601String(),
       'imageUrl': imageUrl,
@@ -52,7 +61,6 @@ class Post {
       'visible': visible,
       'banDate': banDate?.toIso8601String(),
       'username': username,
-      'relatedPostId': relatedPostId,
     };
   }
 }

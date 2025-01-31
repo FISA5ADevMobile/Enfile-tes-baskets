@@ -15,7 +15,8 @@ class CommunityProvider extends ChangeNotifier {
 
   Future<void> loadAllCommunities() async {
     _isLoading = true;
-    notifyListeners();
+    Future.delayed(
+        Duration.zero, () => notifyListeners()); // ✅ Retarde l'exécution
 
     try {
       _communities = await _communityService.fetchAllCommunities();
@@ -23,7 +24,8 @@ class CommunityProvider extends ChangeNotifier {
       print('Error fetching communities: $e');
     } finally {
       _isLoading = false;
-      notifyListeners();
+      Future.delayed(
+          Duration.zero, () => notifyListeners()); // ✅ Retarde ici aussi
     }
   }
 
