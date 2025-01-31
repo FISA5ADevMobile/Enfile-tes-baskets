@@ -46,7 +46,9 @@ class PostProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      postData['relatedPostId'] = postData['relatedPostId']?.toString();
+      // ✅ Remplace `null` par `""` pour `relatedPostId`
+      postData['relatedPostId'] = postData['relatedPostId'] ?? "";
+
       final newPost = await _postService.createPost(postData);
       _posts.add(newPost);
     } catch (e) {

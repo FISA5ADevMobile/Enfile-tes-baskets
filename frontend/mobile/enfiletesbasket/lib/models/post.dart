@@ -27,25 +27,21 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      id: json['id'] is int
-          ? json['id']
-          : int.tryParse(json['id'].toString()) ?? 0,
-      nbLike: json['nbLike'] is int
-          ? json['nbLike']
-          : int.tryParse(json['nbLike'].toString()),
-      nbPost: json['nbPost'] is int
-          ? json['nbPost']
-          : int.tryParse(json['nbPost'].toString()),
-      relatedPostId: json['relatedPostId'] is int
-          ? json['relatedPostId']
-          : int.tryParse(json['relatedPostId'].toString()),
+      id: json['id'] as int,
       content: json['content'] as String,
       datePost:
           json['datePost'] != null ? DateTime.parse(json['datePost']) : null,
-      imageUrl: json['imageUrl'] as String?,
+      imageUrl: json['imageUrl']?.toString(),
+      nbLike: json['nbLike'] as int?,
+      nbPost: json['nbPost'] as int?,
       visible: json['visible'] as bool,
       banDate: json['banDate'] != null ? DateTime.parse(json['banDate']) : null,
       username: json['username'] as String,
+      relatedPostId:
+          json['relatedPostId'] != null && json['relatedPostId'] != ""
+              ? int.tryParse(json['relatedPostId']
+                  .toString()) // ✅ Convertir en int si ce n'est pas ""
+              : null,
     );
   }
 

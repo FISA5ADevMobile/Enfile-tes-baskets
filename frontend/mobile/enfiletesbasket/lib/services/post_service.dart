@@ -66,6 +66,14 @@ class PostService {
       throw Exception('No token found. User might not be authenticated.');
     }
 
+    // ✅ Toujours envoyer "" pour `relatedPostId` si vide
+    final requestData = {
+      'description': postData['description'],
+      'image': postData['image'] ?? null,
+      'visible': postData['visible'],
+      'relatedPostId': postData['relatedPostId'] ?? "",
+    };
+
     final url = Uri.parse(_baseUrl);
     final response = await http.post(
       url,
@@ -73,7 +81,7 @@ class PostService {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body: json.encode(postData),
+      body: json.encode(requestData),
     );
 
     if (response.statusCode == 200) {
