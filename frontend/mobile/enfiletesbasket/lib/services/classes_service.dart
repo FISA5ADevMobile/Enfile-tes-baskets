@@ -7,29 +7,6 @@ class ClassesService {
   String get _base => dotenv.env['API_BASE_URL'] ?? 'http://10.0.2.2:8081';
   String get baseUrl => '$_base/classes';
 
-  /// Fetch classes subscribed by the user and return a list of Course objects
-  Future<List<Course>> fetchSubscribedClasses(int idUser, String token) async {
-    try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/subscribed/$idUser'),
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          'Authorization': 'Bearer $token', // Format correct
-        },
-      );
-      if (response.statusCode == 200) {
-        print("FetchSubscribe: ${response.body}");
-        final List<dynamic> data = json.decode(response.body);
-        return data.map((json) => Course.fromJson(json)).toList();
-      } else {
-        throw Exception("Impossible de récupérer nos parcours");
-      }
-    } catch (e) {
-      throw Exception("Impossible de récupérer nos parcours : $e");
-    }
-  }
-
-
   Future<http.Response> resetTags(int courseId) async {
 
     try {
