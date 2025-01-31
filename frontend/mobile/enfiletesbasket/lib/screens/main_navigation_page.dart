@@ -1,7 +1,6 @@
 import 'package:enfiletesbasket/screens/community_screen.dart';
 import 'package:flutter/material.dart';
 import 'classes_page.dart';
-import 'communities_page.dart';
 import 'home_page.dart';
 import 'actuality_details_screen.dart';
 import '../widgets/custom_bottom_navigation_bar.dart';
