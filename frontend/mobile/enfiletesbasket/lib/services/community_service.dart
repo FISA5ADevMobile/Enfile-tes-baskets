@@ -24,12 +24,13 @@ class CommunityService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
+      final String responseBody = utf8.decode(response.bodyBytes);
+      final List<dynamic> data = json.decode(responseBody);
       return data.map((json) => Community.fromJson(json)).toList();
     } else if (response.statusCode == 204) {
       return [];
@@ -49,13 +50,14 @@ class CommunityService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
       },
       body: json.encode(communityId),
     );
 
     if (response.statusCode == 201) {
-      return Community.fromJson(json.decode(response.body));
+      final String responseBody = utf8.decode(response.bodyBytes);
+      return Community.fromJson(json.decode(responseBody));
     } else if (response.statusCode == 400) {
       throw Exception('Bad Request: ${response.body}');
     } else {
@@ -74,12 +76,13 @@ class CommunityService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
     if (response.statusCode == 200) {
-      return Community.fromJson(json.decode(response.body));
+      final String responseBody = utf8.decode(response.bodyBytes);
+      return Community.fromJson(json.decode(responseBody));
     } else {
       throw Exception('Failed to load community');
     }
@@ -96,13 +99,14 @@ class CommunityService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
       },
       body: json.encode(communityData),
     );
 
     if (response.statusCode == 201) {
-      return Community.fromJson(json.decode(response.body));
+      final String responseBody = utf8.decode(response.bodyBytes);
+      return Community.fromJson(json.decode(responseBody));
     } else {
       throw Exception('Failed to create community');
     }
@@ -120,7 +124,7 @@ class CommunityService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
       },
       body: json.encode(updatedData),
     );
@@ -143,7 +147,7 @@ class CommunityService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
@@ -164,7 +168,7 @@ class CommunityService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
       },
       body: json.encode(postData),
     );

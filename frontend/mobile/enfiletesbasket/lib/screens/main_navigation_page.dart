@@ -9,7 +9,7 @@ import '../widgets/custom_app_bar.dart';
 class MainNavigationPage extends StatefulWidget {
   final int initialIndex;
 
-  const MainNavigationPage({Key? key, this.initialIndex = 0}) : super(key: key);
+  const MainNavigationPage({super.key, this.initialIndex = 0});
 
   static void navigateToActualityDetails(
       BuildContext context, int actualityId) {

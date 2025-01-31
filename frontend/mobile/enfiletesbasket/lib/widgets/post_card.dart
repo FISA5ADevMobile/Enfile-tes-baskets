@@ -8,17 +8,29 @@ import '../services/post_provider.dart';
 class PostCard extends StatelessWidget {
   final Post post;
 
-  PostCard({required this.post});
+  const PostCard({super.key, required this.post});
 
-  /// Vérifie si la chaîne est une image encodée en Base64
-  bool _isBase64(String? data) {
-    return data != null && data.startsWith("data:image");
+  bool isUrl(String? data) {
+    return data != null && Uri.parse(data).isAbsolute;
   }
 
   /// Récupère l'image sous forme de widget
   Widget _buildPostImage() {
     if (post.imageUrl != null && post.imageUrl!.isNotEmpty) {
-      if (_isBase64(post.imageUrl)) {
+      if (isUrl(post.imageUrl)) {
+        // Si ce n'est pas du Base64, alors c'est une URL classique
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.network(
+            post.imageUrl!,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.broken_image,
+                  size: 100, color: Colors.grey);
+            },
+          ),
+        );
+      } else {
         try {
           // Décoder l'image en base64
           String base64Data = post.imageUrl!.split(',').last;
@@ -37,19 +49,6 @@ class PostCard extends StatelessWidget {
         } catch (e) {
           return const Icon(Icons.broken_image, size: 100, color: Colors.grey);
         }
-      } else {
-        // Si ce n'est pas du Base64, alors c'est une URL classique
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.network(
-            post.imageUrl!,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return const Icon(Icons.broken_image,
-                  size: 100, color: Colors.grey);
-            },
-          ),
-        );
       }
     }
     return const SizedBox.shrink(); // Ne rien afficher si pas d’image

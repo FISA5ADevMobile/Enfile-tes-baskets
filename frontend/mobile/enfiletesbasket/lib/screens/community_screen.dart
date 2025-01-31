@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../widgets/logo_bar.dart';
 import '../widgets/section_bar.dart';
 import '../widgets/community_tab_bar.dart';
 import '../widgets/post_card.dart';
@@ -12,6 +12,8 @@ import '../services/community_provider.dart';
 import '../services/post_provider.dart';
 
 class CommunityScreen extends StatefulWidget {
+  const CommunityScreen({super.key});
+
   @override
   _CommunityScreenState createState() => _CommunityScreenState();
 }
@@ -62,10 +64,10 @@ class _CommunityScreenState extends State<CommunityScreen> {
             _showCreateCommunityDialog(context);
           }
         },
-        child: const Icon(Icons.add),
         tooltip: _selectedSectionIndex == 0
             ? "Créer un post"
             : "Créer une communauté",
+        child: const Icon(Icons.add),
       ),
       body: FutureBuilder<void>(
         future: _fetchData(context),
@@ -82,7 +84,6 @@ class _CommunityScreenState extends State<CommunityScreen> {
             builder: (context, communityProvider, postProvider, child) {
               return Column(
                 children: [
-                  LogoBar(),
                   SectionBar(
                     sections: _sections,
                     selectedIndex: _selectedSectionIndex,
@@ -92,9 +93,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                     tabs: _selectedSectionIndex == 0
                         ? [
                             "Public",
-                            ...communityProvider.communities
-                                .map((c) => c.name)
-                                .toList()
+                            ...communityProvider.communities.map((c) => c.name)
                           ]
                         : ["Toutes les communautés"],
                     selectedIndex: _selectedTabIndex,
@@ -166,7 +165,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
     File? selectedImage;
     String? base64Image;
 
-    Future<void> _pickImage() async {
+    Future<void> pickImage() async {
       final pickedFile =
           await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
@@ -196,7 +195,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
               ),
               const SizedBox(height: 10),
               ElevatedButton.icon(
-                onPressed: _pickImage,
+                onPressed: pickImage,
                 icon: const Icon(Icons.image),
                 label: const Text("Publier une photo"),
               ),
@@ -245,15 +244,17 @@ class _CommunityScreenState extends State<CommunityScreen> {
     File? selectedImage;
     String? base64Image;
 
-    Future<void> _pickImage() async {
+    Future<void> pickImage() async {
       final pickedFile =
           await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
-        selectedImage = File(pickedFile.path);
+        setState(() {
+          selectedImage = File(pickedFile.path);
+        });
         List<int> imageBytes = await selectedImage!.readAsBytes();
         base64Image = base64Encode(imageBytes);
       } else {
-        base64Image = null; // Si aucune image n'est sélectionnée, envoyer null
+        base64Image = null;
       }
     }
 
@@ -274,11 +275,11 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 decoration: const InputDecoration(labelText: "Description"),
               ),
               const SizedBox(height: 10),
-              ElevatedButton.icon(
-                onPressed: _pickImage,
-                icon: const Icon(Icons.image),
-                label: const Text("Publier une image"),
-              ),
+              // ElevatedButton.icon(
+              //   onPressed: pickImage,
+              //   icon: const Icon(Icons.image),
+              //   label: const Text("Publier une image"),
+              // ),
             ],
           ),
           actions: [

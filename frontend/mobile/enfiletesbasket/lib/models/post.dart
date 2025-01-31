@@ -1,3 +1,8 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:enfiletesbasket/utils/image_utils.dart';
+
 class Post {
   final int id;
   final String content;
@@ -25,61 +30,39 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      id: (json['id']) as int,
-      nbLike: _parseInt(json['nbLike']),
-      nbPost: _parseInt(json['nbPost']),
-      relatedPostId: _parseInt(json['relatedPostId']),
-      content: json['content']?.toString() ?? '',
-      datePost: _parseDate(json['datePost']),
-      imageUrl: json['imageUrl']?.toString(),
-      visible: json['visible'] ?? false,
-      banDate: _parseDate(json['banDate']),
-      username: json['username']?.toString() ?? 'Unknown',
+      id: json['id'] as int,
+      content: json['content'] as String,
+      datePost: json['datePost'] != null
+          ? (json['datePost'] is int
+              ? DateTime.fromMillisecondsSinceEpoch(json['datePost'])
+              : DateTime.tryParse(json['datePost']))
+          : null,
+      imageUrl: json['imageUrl'] as String?,
+      nbLike: json['nbLike'] as int?,
+      nbPost: json['nbPost'] as int?,
+      visible: json['visible'] as bool,
+      banDate:
+          json['banDate'] != null ? DateTime.tryParse(json['banDate']) : null,
+      username: json['username'] as String,
+      relatedPostId: json['relatedPostId'] != null
+          ? int.tryParse(json['relatedPostId'].toString())
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id.toString(),
-      'relatedPostId': relatedPostId?.toString(),
+      'id': id,
       'content': content,
-      'datePost': _formatDate(datePost),
+      'datePost':
+          datePost?.millisecondsSinceEpoch, // Convertir `DateTime` en timestamp
       'imageUrl': imageUrl,
       'nbLike': nbLike,
       'nbPost': nbPost,
       'visible': visible,
-      'banDate': _formatDate(banDate),
+      'banDate': banDate?.toIso8601String(),
       'username': username,
+      'relatedPostId': relatedPostId,
     };
-  }
-
-  /// Fonction pour parser les entiers de façon sécurisée
-  static int? _parseInt(dynamic value) {
-    if (value == null) return null;
-    if (value is int) return value;
-    return int.tryParse(value.toString());
-  }
-
-  /// Fonction pour parser les dates de façon sécurisée
-  static DateTime? _parseDate(dynamic value) {
-    if (value == null) return null;
-    try {
-      if (value is int) {
-        return DateTime.fromMillisecondsSinceEpoch(value); // ✅ Gère les timestamps
-      } else if (value is String) {
-        return DateTime.parse(value); // ✅ Gère les formats ISO 8601
-      }
-    } catch (e) {
-      print('Erreur de parsing de la date: $value');
-    }
-    return null;
-  }
-
-  /// Fonction pour formater la date en "DD/MM/AAAA"
-  static String _formatDate(DateTime? date) {
-    if (date == null) return "";
-    return "${date.day.toString().padLeft(2, '0')}/"
-        "${date.month.toString().padLeft(2, '0')}/"
-        "${date.year}";
   }
 }

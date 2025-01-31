@@ -24,7 +24,7 @@ class PostService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json, charset=UTF-8',
       },
     );
 
@@ -69,7 +69,7 @@ class PostService {
     // ✅ Toujours envoyer "" pour `relatedPostId` si vide
     final requestData = {
       'description': postData['description'],
-      'image': postData['image'] ?? null,
+      'image': postData['image'],
       'visible': postData['visible'],
       'relatedPostId': postData['relatedPostId'] ?? "",
     };
