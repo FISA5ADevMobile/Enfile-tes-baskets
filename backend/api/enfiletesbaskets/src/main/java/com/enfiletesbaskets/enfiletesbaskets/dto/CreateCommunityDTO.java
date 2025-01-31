@@ -5,6 +5,7 @@ public class CreateCommunityDTO {
     private String description;
     private Boolean isPublic;
     private Long categoryId; // Catégorie associée
+    private byte[] image;
 
     // Getters et Setters
     public String getNom() {
@@ -21,6 +22,14 @@ public class CreateCommunityDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public Boolean getIsPublic() {

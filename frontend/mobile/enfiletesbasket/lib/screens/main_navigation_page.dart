@@ -1,6 +1,6 @@
+import 'package:enfiletesbasket/screens/community_screen.dart';
 import 'package:flutter/material.dart';
 import 'classes_page.dart';
-import 'communities_page.dart';
 import 'home_page.dart';
 import 'actuality_details_screen.dart';
 import '../widgets/custom_bottom_navigation_bar.dart';
@@ -9,9 +9,10 @@ import '../widgets/custom_app_bar.dart';
 class MainNavigationPage extends StatefulWidget {
   final int initialIndex;
 
-  const MainNavigationPage({Key? key, this.initialIndex = 0}) : super(key: key);
+  const MainNavigationPage({super.key, this.initialIndex = 0});
 
-  static void navigateToActualityDetails(BuildContext context, int actualityId) {
+  static void navigateToActualityDetails(
+      BuildContext context, int actualityId) {
     final state = context.findAncestorStateOfType<_MainNavigationPageState>();
     state?._showActualityDetails(actualityId);
   }
@@ -26,7 +27,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
 
   final List<Widget> _screens = [
     const HomePage(),
-    const CommunitiesPage(),
+    CommunityScreen(),
     ClassesPage(),
   ];
   @override
