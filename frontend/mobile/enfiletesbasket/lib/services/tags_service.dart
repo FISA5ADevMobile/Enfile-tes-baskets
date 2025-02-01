@@ -9,10 +9,10 @@ class TagsService {
   String get _base => dotenv.env['API_BASE_URL'] ?? 'http://10.0.2.2:8081';
   String get baseUrl => '$_base/api';
 
-  Future<List<Tag>> fetchClassTags(int classId, String token) async {
-    print("Je fetch les tags de la classes: $classId");
+  Future<List<Tag>> fetchClassTags(int courseId, String token) async {
+    print("Je fetch les tags de la course: $courseId");
     final response = await http.get(
-      Uri.parse('$baseUrl/classes/$classId/tags'),
+      Uri.parse('$baseUrl/courses/$courseId/tags'),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Authorization': 'Bearer $token',
@@ -21,7 +21,7 @@ class TagsService {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      print('Fetched Tags: ${response.body}');
+      print('Voici les tags que je récupère : ${response.body}');
       return (data as List).map((e) => Tag.fromJson(e)).toList();
     } else {
       throw Exception('Impossible de récupérer les balises');

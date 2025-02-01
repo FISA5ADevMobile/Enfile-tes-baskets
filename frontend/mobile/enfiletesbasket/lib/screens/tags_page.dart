@@ -53,7 +53,7 @@ class TagsPage extends StatelessWidget {
       body: FutureBuilder<void>(
         future: () async {
           final String token = authProvider.token ?? '';
-          return tagsProvider.fetchTags( classId, token);
+          return tagsProvider.fetchTags( courseId, token);
         }(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
