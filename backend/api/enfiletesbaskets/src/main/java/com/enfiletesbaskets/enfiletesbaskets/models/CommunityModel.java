@@ -15,6 +15,7 @@ public class CommunityModel {
     private String description;
     private Date banDate;
     private Boolean isPublic;
+    private byte[] image;
 
     @ManyToOne
     @JoinColumn(name = "admin_id")
@@ -51,6 +52,14 @@ public class CommunityModel {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<UserModel> bannedUsers = new ArrayList<>();
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
     @ManyToOne
     @JoinColumn(name = "category_id")

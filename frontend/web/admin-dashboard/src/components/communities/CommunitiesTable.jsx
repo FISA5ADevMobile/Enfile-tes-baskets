@@ -43,8 +43,8 @@ const columns = [
     editable: false,
   },
   {
-    field: "categoryId",
-    headerName: "ID Categorie",
+    field: "categoryName",
+    headerName: "Categorie",
     width: DATA_GRID_COLUMN_DEFAULT_WIDTH,
     editable: false,
   },
