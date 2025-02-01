@@ -29,7 +29,8 @@ class PostService {
     );
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
+      final String responseBody = utf8.decode(response.bodyBytes);
+      final List<dynamic> data = json.decode(responseBody);
       return data.map((json) => Post.fromJson(json)).toList();
     } else if (response.statusCode == 204) {
       return [];
@@ -49,12 +50,13 @@ class PostService {
       url,
       headers: {
         'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json, charset=UTF-8',
       },
     );
 
     if (response.statusCode == 200) {
-      return Post.fromJson(json.decode(response.body));
+      final String responseBody = utf8.decode(response.bodyBytes);
+      return Post.fromJson(json.decode(responseBody));
     } else {
       throw Exception('Failed to load post');
     }

@@ -16,16 +16,15 @@ export const mapActualityModel = (actuality) => {
 
 export const mapUserModel = (user) => {
     return {
-        id: user.id,
-        email: user.email,
-        pseudo: user.pseudo,
-        firstName: user.firstName,
-        name: user.name,
-        role: user.role,
-        nbPostDeleted: user.nbPostDeleted,
+        id: user.id ?? "",
+        email: user.email ?? "",
+        pseudo: user.pseudo ?? "",
+        firstName: user.firstName ?? "",
+        name: user.name ?? "",
+        role: user.role ?? "",
+        nbPostDeleted: user.nbPostDeleted ?? 0,
         banDate: user.banDate ? new Date(user.banDate) : null,
-        code: user.code,
-        tags: user.tags ?? [],
+        code: user.code ?? "",
         courses: user.courses ?? [],
     }
 }
