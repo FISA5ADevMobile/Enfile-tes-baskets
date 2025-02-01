@@ -18,10 +18,10 @@ class TagsService {
         'Authorization': 'Bearer $token',
       },
     );
-
+    final String responseBody = utf8.decode(response.bodyBytes);
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      print('Voici les tags que je récupère : ${response.body}');
+      final data = json.decode(responseBody);
+      print('Tags: $responseBody');
       return (data as List).map((e) => Tag.fromJson(e)).toList();
     } else {
       throw Exception('Impossible de récupérer les balises');
@@ -53,7 +53,6 @@ class TagsService {
         'Authorization': 'Bearer $token',
       },
     );
-
     if (response.statusCode != 200) {
       throw Exception('Impossible de valider la balise');
     }
@@ -66,9 +65,10 @@ class TagsService {
         'Authorization': 'Bearer $token',
       },
     );
+    final String responseBody = utf8.decode(response.bodyBytes);
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+      final data = json.decode(responseBody);
       return Tag.fromJson(data);
     } else {
       throw Exception('Impossible de récupérer les détails de la balise');
