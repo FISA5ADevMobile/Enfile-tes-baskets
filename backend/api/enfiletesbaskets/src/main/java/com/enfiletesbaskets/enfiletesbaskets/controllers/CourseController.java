@@ -1,9 +1,6 @@
 package com.enfiletesbaskets.enfiletesbaskets.controllers;
 
-import com.enfiletesbaskets.enfiletesbaskets.dto.ClassDTO;
-import com.enfiletesbaskets.enfiletesbaskets.dto.CourseDTO;
-import com.enfiletesbaskets.enfiletesbaskets.dto.CourseTagsDTO;
-import com.enfiletesbaskets.enfiletesbaskets.dto.TagDTO;
+import com.enfiletesbaskets.enfiletesbaskets.dto.*;
 import com.enfiletesbaskets.enfiletesbaskets.models.CourseModel;
 import com.enfiletesbaskets.enfiletesbaskets.models.UserModel;
 import com.enfiletesbaskets.enfiletesbaskets.repositories.CourseRepository;
@@ -74,13 +71,14 @@ public class CourseController {
     }
 
     /**
-     * Récupère les classes auxquelles l'utilisateur authentifié est inscrit.
+     * Récupère les cours auxquels l'utilisateur authentifié est inscrit avec les détails de la classe.
      */
     @GetMapping("/my-classes")
-    public ResponseEntity<List<ClassDTO>> getUserClasses(Authentication authentication) {
-        List<ClassDTO> classes = courseService.getUserClasses(authentication);
-        return ResponseEntity.ok(classes);
+    public ResponseEntity<List<CourseWithClassDTO>> getUserCoursesWithClasses(Authentication authentication) {
+        List<CourseWithClassDTO> courses = courseService.getUserCoursesWithClasses(authentication);
+        return ResponseEntity.ok(courses);
     }
+
 
     /**
      * Récupère les classes d'un utilisateur spécifique (admin seulement).

@@ -19,10 +19,10 @@ class CourseCard extends StatelessWidget {
       elevation: 4,
       child: ListTile(
         title: Text(
-          course.name,
+          course.className,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(course.description),
+        subtitle: Text(course.classDescription),
         trailing: const Icon(Icons.chevron_right),
         onTap: () => _navigateToTagsPage(context, course),
       ),
@@ -43,9 +43,9 @@ class CourseCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => TagsPage(
-              className: course.name,
-              classId: course.id,
-              courseId: courseId,
+              className: course.className,
+              courseId: course.id,
+              classId: course.classId,
             ),
           ),
         );

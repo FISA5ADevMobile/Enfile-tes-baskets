@@ -11,13 +11,13 @@ import 'main_navigation_page.dart';
 
 class TagsPage extends StatelessWidget {
   final String className;
-  final int classId;
   final int courseId;
+  final int classId;
 
   const TagsPage({
     required this.className,
-    required this.classId,
     required this.courseId,
+    required this.classId
   });
 
 
@@ -25,6 +25,7 @@ class TagsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final tagsProvider = Provider.of<TagsProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    print ("Init page: Course id:${courseId} - Classe Id: ${classId}");
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -52,7 +53,7 @@ class TagsPage extends StatelessWidget {
       body: FutureBuilder<void>(
         future: () async {
           final String token = authProvider.token ?? '';
-          return tagsProvider.fetchTags(classId, courseId, token);
+          return tagsProvider.fetchTags( courseId, token);
         }(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

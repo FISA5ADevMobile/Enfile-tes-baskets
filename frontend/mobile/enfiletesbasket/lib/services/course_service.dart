@@ -21,10 +21,12 @@ class CourseService {
         },
       );
 
-      print("Body: ${response.body}");
+      final String responseBody = utf8.decode(response.bodyBytes);
+
+      print("Body: $responseBody");
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+        final List<dynamic> data = json.decode(responseBody);
         return data.map((json) => Course.fromJson(json)).toList();
       } else {
         throw Exception('Impossible de récupérer mes parcours : ${response.statusCode}');

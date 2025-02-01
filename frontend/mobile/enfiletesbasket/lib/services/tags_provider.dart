@@ -51,7 +51,7 @@ class TagsProvider extends ChangeNotifier {
   }
 
   /// Récupère toutes les balises pour une classe et un cours
-  Future<void> fetchTags(int classId, int courseId, String token) async {
+  Future<void> fetchTags( int courseId, String token) async {
     try {
       _tags = await _tagsService.fetchClassTags(courseId, token);
       print('Balise récupérée dans le provider : $_tags');
