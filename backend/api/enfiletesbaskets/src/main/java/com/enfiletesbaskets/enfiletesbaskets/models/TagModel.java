@@ -22,7 +22,7 @@ public class TagModel {
 
     @Column(nullable = false)
     private String name;
-
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "xpos")
