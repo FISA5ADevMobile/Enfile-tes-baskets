@@ -16,7 +16,7 @@ class PostService {
   Future<List<Post>> fetchAllPosts() async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/all');
@@ -35,14 +35,14 @@ class PostService {
     } else if (response.statusCode == 204) {
       return [];
     } else {
-      throw Exception('Failed to load posts');
+      throw Exception('Échec du chargement des posts');
     }
   }
 
   Future<Post?> fetchPostById(int id) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/$id');
@@ -58,14 +58,14 @@ class PostService {
       final String responseBody = utf8.decode(response.bodyBytes);
       return Post.fromJson(json.decode(responseBody));
     } else {
-      throw Exception('Failed to load post');
+      throw Exception('Échec du chargement du post');
     }
   }
 
   Future<Post> createPost(Map<String, dynamic> postData) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     // ✅ Toujours envoyer "" pour `relatedPostId` si vide
@@ -89,14 +89,14 @@ class PostService {
     if (response.statusCode == 200) {
       return Post.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to create post');
+      throw Exception('Échec de la création du post');
     }
   }
 
   Future<Post> likePost(int postId) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/like/$postId');
@@ -111,14 +111,14 @@ class PostService {
     if (response.statusCode == 200) {
       return Post.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to like post');
+      throw Exception('Échec du like sur le post');
     }
   }
 
   Future<Post> updatePost(int postId, Map<String, dynamic> updatedData) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/$postId');
@@ -134,7 +134,7 @@ class PostService {
     if (response.statusCode == 200) {
       return Post.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to update post');
+      throw Exception('Échec de la mise à jour du post');
     }
   }
 }

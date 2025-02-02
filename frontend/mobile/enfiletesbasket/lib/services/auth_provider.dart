@@ -56,7 +56,6 @@ class AuthProvider extends ChangeNotifier {
     return prefs.getBool('remember_me') ?? false;
   }
 
-
   Future<void> autoLogin() async {
     final rememberMe = await loadRememberMe();
     if (rememberMe) {
@@ -99,7 +98,6 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('jwt_token', token);
@@ -111,7 +109,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<String> getToken() async {
-    if(token == null) await loadToken();
+    if (token == null) await loadToken();
     return _token!;
   }
 
@@ -128,5 +126,4 @@ class AuthProvider extends ChangeNotifier {
       throw Exception("Token invalide ou expiré.");
     }
   }
-
 }

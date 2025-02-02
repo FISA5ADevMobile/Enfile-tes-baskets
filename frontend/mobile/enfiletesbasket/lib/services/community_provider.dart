@@ -16,16 +16,16 @@ class CommunityProvider extends ChangeNotifier {
   Future<void> loadAllCommunities() async {
     _isLoading = true;
     Future.delayed(
-        Duration.zero, () => notifyListeners()); // ✅ Retarde l'exécution
+        Duration.zero, () => notifyListeners()); // Retarde l'exécution
 
     try {
       _communities = await _communityService.fetchAllCommunities();
     } catch (e) {
-      print('Error fetching communities: $e');
+      print('Erreur lors de la récupération des communautés : $e');
     } finally {
       _isLoading = false;
       Future.delayed(
-          Duration.zero, () => notifyListeners()); // ✅ Retarde ici aussi
+          Duration.zero, () => notifyListeners()); // Retarde ici aussi
     }
   }
 
@@ -36,7 +36,7 @@ class CommunityProvider extends ChangeNotifier {
     try {
       _selectedCommunity = await _communityService.fetchCommunityById(id);
     } catch (e) {
-      print('Error fetching community: $e');
+      print('Erreur lors de la récupération de la communauté : $e');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -52,7 +52,7 @@ class CommunityProvider extends ChangeNotifier {
           await _communityService.createCommunity(communityData);
       _communities.add(newCommunity);
     } catch (e) {
-      print('Error creating community: $e');
+      print('Erreur lors de la création de la communauté : $e');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -73,7 +73,7 @@ class CommunityProvider extends ChangeNotifier {
             updatedCommunity; // Mettre à jour la communauté dans la liste
       }
     } catch (e) {
-      print('Error joining community: $e');
+      print('Erreur lors de la participation à la communauté : $e');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -92,7 +92,7 @@ class CommunityProvider extends ChangeNotifier {
         _communities[index] = updatedCommunity;
       }
     } catch (e) {
-      print('Error updating community: $e');
+      print('Erreur lors de la mise à jour de la communauté : $e');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -107,7 +107,7 @@ class CommunityProvider extends ChangeNotifier {
       await _communityService.deleteCommunity(id);
       _communities.removeWhere((community) => community.id == id);
     } catch (e) {
-      print('Error deleting community: $e');
+      print('Erreur lors de la suppression de la communauté : $e');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -128,7 +128,7 @@ class CommunityProvider extends ChangeNotifier {
         _communities[index] = updatedCommunity; // Mise à jour locale
       }
     } catch (e) {
-      print('Error creating post in community: $e');
+      print('Erreur lors de la création d\'un post dans la communauté : $e');
     } finally {
       _isLoading = false;
       notifyListeners();

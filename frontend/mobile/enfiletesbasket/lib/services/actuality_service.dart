@@ -18,7 +18,7 @@ class ActualityService {
   Future<List<Actuality>> fetchAllActualities() async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/get_all');
@@ -35,14 +35,14 @@ class ActualityService {
       final List<dynamic> data = json.decode(responseBody);
       return data.map((json) => Actuality.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to load actualities');
+      throw Exception('Échec du chargement des actualités');
     }
   }
 
   Future<Actuality?> fetchActualityById(int id) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/get_1/$id');
@@ -59,14 +59,14 @@ class ActualityService {
       final Map<String, dynamic> data = json.decode(responseBody);
       return Actuality.fromJson(data);
     } else {
-      throw Exception('Failed to load actuality');
+      throw Exception('Échec du chargement de l\'actualité');
     }
   }
 
   Future<bool> checkIfSubscribed(int id) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/is_subscribed/$id');
@@ -81,14 +81,14 @@ class ActualityService {
     if (response.statusCode == 200) {
       return response.body == 'true';
     } else {
-      throw Exception('Failed to check subscription status');
+      throw Exception('Échec de la vérification du statut d\'inscription');
     }
   }
 
   Future<void> subscribeToEvent(int id) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/subscribe/$id');
@@ -101,9 +101,9 @@ class ActualityService {
     );
 
     if (response.statusCode == 200) {
-      print('Successfully subscribed to the event.');
+      print('Inscription à l\'événement réussie.');
     } else {
-      throw Exception('Failed to subscribe to the event');
+      throw Exception('Échec de l\'inscription à l\'événement');
     }
   }
 }
