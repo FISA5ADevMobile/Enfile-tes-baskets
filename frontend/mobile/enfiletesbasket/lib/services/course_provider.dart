@@ -23,7 +23,7 @@ class CourseProvider extends ChangeNotifier {
   Future<String> subscribeToCourseWithPassword(String classPassword, String token) async {
     try {
       final String responseMessage = await _courseService.subscribeToCourseWithPassword(classPassword, token);
-      await fetchMyClasses(token); // Rafraîchir les cours après inscription
+      await fetchMyClasses(token);
       notifyListeners();
       return responseMessage;
     } catch (e) {

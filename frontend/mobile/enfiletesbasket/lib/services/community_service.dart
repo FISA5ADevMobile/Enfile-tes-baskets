@@ -16,7 +16,7 @@ class CommunityService {
   Future<List<Community>> fetchAllCommunities() async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/all');
@@ -35,14 +35,14 @@ class CommunityService {
     } else if (response.statusCode == 204) {
       return [];
     } else {
-      throw Exception('Failed to load communities');
+      throw Exception('Échec du chargement des communautés');
     }
   }
 
   Future<Community> joinCommunity(int communityId) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/join/$communityId');
@@ -59,16 +59,16 @@ class CommunityService {
       final String responseBody = utf8.decode(response.bodyBytes);
       return Community.fromJson(json.decode(responseBody));
     } else if (response.statusCode == 400) {
-      throw Exception('Bad Request: ${response.body}');
+      throw Exception('Requête incorrecte : ${response.body}');
     } else {
-      throw Exception('Failed to join community: ${response.body}');
+      throw Exception('Échec de la participation à la communauté : ${response.body}');
     }
   }
 
   Future<Community?> fetchCommunityById(int id) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/$id');
@@ -84,14 +84,14 @@ class CommunityService {
       final String responseBody = utf8.decode(response.bodyBytes);
       return Community.fromJson(json.decode(responseBody));
     } else {
-      throw Exception('Failed to load community');
+      throw Exception('Échec du chargement de la communauté');
     }
   }
 
   Future<Community> createCommunity(Map<String, dynamic> communityData) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse(_baseUrl);
@@ -108,15 +108,14 @@ class CommunityService {
       final String responseBody = utf8.decode(response.bodyBytes);
       return Community.fromJson(json.decode(responseBody));
     } else {
-      throw Exception('Failed to create community');
+      throw Exception('Échec de la création de la communauté');
     }
   }
 
-  Future<Community> updateCommunity(
-      int id, Map<String, dynamic> updatedData) async {
+  Future<Community> updateCommunity(int id, Map<String, dynamic> updatedData) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/$id');
@@ -132,14 +131,14 @@ class CommunityService {
     if (response.statusCode == 200) {
       return Community.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to update community');
+      throw Exception('Échec de la mise à jour de la communauté');
     }
   }
 
   Future<void> deleteCommunity(int id) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/$id');
@@ -152,15 +151,14 @@ class CommunityService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to delete community');
+      throw Exception('Échec de la suppression de la communauté');
     }
   }
 
-  Future<Community> createPostInCommunity(
-      int communityId, Map<String, dynamic> postData) async {
+  Future<Community> createPostInCommunity(int communityId, Map<String, dynamic> postData) async {
     final token = await _getToken();
     if (token == null) {
-      throw Exception('No token found. User might not be authenticated.');
+      throw Exception('Aucun jeton trouvé. L\'utilisateur n\'est peut-être pas authentifié.');
     }
 
     final url = Uri.parse('$_baseUrl/post/$communityId');
@@ -176,11 +174,11 @@ class CommunityService {
     if (response.statusCode == 200) {
       return Community.fromJson(json.decode(response.body));
     } else if (response.statusCode == 400) {
-      throw Exception('Bad Request: ${response.body}');
+      throw Exception('Requête incorrecte : ${response.body}');
     } else if (response.statusCode == 204) {
-      throw Exception('No Content: ${response.body}');
+      throw Exception('Aucun contenu : ${response.body}');
     } else {
-      throw Exception('Failed to create post in community: ${response.body}');
+      throw Exception('Échec de la création du post dans la communauté : ${response.body}');
     }
   }
 }
