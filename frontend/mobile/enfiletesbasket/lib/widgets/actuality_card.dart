@@ -25,7 +25,7 @@ class ActualityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String shortenedDescription = truncateText(description, 50);
-    final String decodedTitle = title;
+    final String decodedTitle = truncateText(title, 20);
     final String formattedDate =
         "${publicationDate.day.toString().padLeft(2, '0')}/${publicationDate.month.toString().padLeft(2, '0')}/${publicationDate.year}";
 

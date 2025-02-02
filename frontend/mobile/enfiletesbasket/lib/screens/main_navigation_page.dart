@@ -49,10 +49,6 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     });
   }
 
-  bool _shouldShowBackButton() {
-    return _selectedIndex != 0 || _selectedActualityId != null;
-  }
-
   Widget _getCurrentScreen() {
     if (_selectedActualityId != null) {
       return ActualityDetailPage(actualityId: _selectedActualityId!);
@@ -72,7 +68,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        showBackButton: _shouldShowBackButton(),
+        showBackButton: false,
         onBackButtonPressed: () {
           setState(() {
             if (_selectedActualityId != null) {
