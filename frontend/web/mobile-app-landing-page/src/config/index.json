@@ -14,8 +14,8 @@
     }
   ],
   "callToAction": {
-    "text": "Télécharger",
-    "href": "#",
+    "text": "Nous Contacter",
+    "href": "mailto:",
     "isDownloadable": false
   },
   "mainHero": {
@@ -24,13 +24,13 @@
     "description": "Rejoignez une communauté dynamique dédiée au sport et à la santé sur le campus. Avec Enfile Tes Baskets, trouvez votre motivation, découvrez des événements sportifs, et partagez vos réussites !",
     "img": "/assets/etb-images/image2.png",
     "primaryAction": {
-      "text": "Télécharger",
+      "text": "Télécharger l'APK (Android)",
       "href": "#",
       "isDownloadable": false
     },
     "secondaryAction": {
-      "text": "Nous Contacter",
-      "href": "mailto:"
+      "text": "Tester sur TestFlight (iOS)",
+      "href": "https://testflight.apple.com/join/9YRnSKbD"
     }
   },
   "product": {
