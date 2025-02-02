@@ -114,8 +114,7 @@ const Menu = () => {
               </div>
               <a
                 className="block w-full px-5 py-3 text-center font-medium text-primary bg-gray-50 hover:bg-gray-100"
-                href={callToAction.href}                
-                rel="noreferrer"
+                href={callToAction.href}
               >
                 {callToAction.text}
               </a>
