@@ -33,7 +33,6 @@ const MainHero = () => {
                   alert('Pas encore disponible !');
                 }
               }}
-              rel="noreferrer"
               target="_blank"
             >
               {mainHero.primaryAction.text}
@@ -48,7 +47,7 @@ const MainHero = () => {
                   alert('Pas encore disponible !');
                 }
               }}
-              target='_blank'
+              target="_blank"
               className={`w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md border-primary text-primary bg-background hover:bg-border hover:text-primary md:py-4 md:text-lg md:px-10`}
             >
               {mainHero.secondaryAction.text}
