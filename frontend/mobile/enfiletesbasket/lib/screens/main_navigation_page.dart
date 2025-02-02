@@ -72,7 +72,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        showBackButton: _shouldShowBackButton(),
+        showBackButton: false,
         onBackButtonPressed: () {
           setState(() {
             if (_selectedActualityId != null) {
