@@ -49,10 +49,6 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     });
   }
 
-  bool _shouldShowBackButton() {
-    return _selectedIndex != 0 || _selectedActualityId != null;
-  }
-
   Widget _getCurrentScreen() {
     if (_selectedActualityId != null) {
       return ActualityDetailPage(actualityId: _selectedActualityId!);
