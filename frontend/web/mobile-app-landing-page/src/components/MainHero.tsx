@@ -6,6 +6,7 @@ const MainHero = () => {
   const { mainHero } = config;
 
   const apkDownloadUrl = process.env.NEXT_PUBLIC_APK_DOWNLOAD_URL;
+  const testFlightUrl = process.env.NEXT_PUBLIC_TEST_FLIGHT_URL;
   return (
     <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
       <div className="sm:text-center lg:text-left">
@@ -32,15 +33,23 @@ const MainHero = () => {
                   alert('Pas encore disponible !');
                 }
               }}
-              rel="noreferrer"
               target="_blank"
+              rel="noopener noreferrer"
             >
               {mainHero.primaryAction.text}
             </a>
           </div>
           <div className="mt-3 sm:mt-0 sm:ml-3">
             <a
-              href={mainHero.secondaryAction.href}
+              href={testFlightUrl ?? mainHero.secondaryAction.href}
+              onClick={(e) => {
+                if (!testFlightUrl) {
+                  e.preventDefault(); // Empêche l'action par défaut
+                  alert('Pas encore disponible !');
+                }
+              }}
+              target="_blank"
+              rel="noopener noreferrer"
               className={`w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md border-primary text-primary bg-background hover:bg-border hover:text-primary md:py-4 md:text-lg md:px-10`}
             >
               {mainHero.secondaryAction.text}
